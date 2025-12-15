@@ -1,19 +1,33 @@
 import { createSlice } from "@reduxjs/toolkit";
+import { PokeTypesState } from "../../features/TypeSelection/types/PokeTypesState";
+import { fetchAllPokeTypes } from "../../features/TypeSelection/thunks/fetchAllPokeTypes";
 
-const initialState = {
+const initialState: PokeTypesState = {
   pokeTypes: [],
+  status: "idle",
+  error: null,
 };
 
 const pokeTypesSlice = createSlice({
-  name: "players",
+  name: "pokeTypes",
   initialState,
-  reducers: {
-    getAllPokeTypes: (state) => {
-      return await insta
-    },
+  reducers: {},
+  extraReducers: (builder) => {
+    builder
+      .addCase(fetchAllPokeTypes.pending, (state) => {
+        state.status = "loading";
+        state.error = null;
+      })
+      .addCase(fetchAllPokeTypes.fulfilled, (state, action) => {
+        state.status = "succeeded";
+        state.pokeTypes = action.payload;
+      })
+      .addCase(fetchAllPokeTypes.rejected, (state, action) => {
+        state.status = "failed";
+        state.error =
+          (action.payload as string) ?? action.error.message ?? "Unknown error";
+      });
   },
 });
-
-export const { getAllPokeTypes } = pokeTypesSlice.actions;
 
 export default pokeTypesSlice.reducer;
