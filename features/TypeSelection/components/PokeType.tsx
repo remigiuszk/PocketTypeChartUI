@@ -1,9 +1,14 @@
-import { View, Image } from "react-native";
+import { View, Image, Text } from "react-native";
+import { PokeType } from "../types/PokeType";
 
-export const PokeType = () => {
+type PokeTypeProps = {
+  pokeType: PokeType;
+};
+
+export const PokeType = ({ pokeType }: PokeTypeProps) => {
   return (
     <View>
-      <Image></Image>
+      <Text>{pokeType.name}</Text>
     </View>
   );
 };

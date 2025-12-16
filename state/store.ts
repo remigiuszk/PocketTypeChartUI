@@ -1,8 +1,13 @@
 import { configureStore } from "@reduxjs/toolkit";
-import pokeTypesReducer from "./pokeTypes/pokeTypesSlice";
+
+import { pokeTypesApi } from "../features/TypeSelection/query";
 
 export const store = configureStore({
   reducer: {
-    pokeTypes: pokeTypesReducer,
+    [pokeTypesApi.reducerPath]: pokeTypesApi.reducer,
   },
+  middleware: (getDefaultMiddleware: any) =>
+    getDefaultMiddleware({
+      serializableCheck: false,
+    }).concat(pokeTypesApi.middleware),
 });
