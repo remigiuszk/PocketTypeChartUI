@@ -1,39 +1,37 @@
-import { useEffect } from "react";
-import { FlatList, Text, View } from "react-native";
-import { useGetAllPokeTypesQuery } from "../query";
+import { FlatList, StyleSheet, Text, View } from "react-native";
 import { PokeType } from "./PokeType";
+import { Loading } from "../../../shared/components/Loading";
+import { CardWithHeader } from "../../../shared/ui/CardWithHeader";
+import { Error } from "../../../shared/components/Error";
+import { useGetAllPokeTypesQuery } from "../query";
+import { MARGIN_HORIZONTAL } from "../../../constants";
 
 export const PokeTypeList = () => {
-  const {
-    data, // odpowiedź (po transformResponse)
-    isLoading, // pierwszy load
-    isFetching, // każde odświeżanie (np. refetch)
-    error,
-    refetch,
-  } = useGetAllPokeTypesQuery();
-
-  if (isLoading) {
-    return <Text>Loading...</Text>;
-  }
-
-  if (error) {
-    return (
-      <View>
-        <Text>Coś poszło nie tak.</Text>
-        <Text onPress={() => refetch()}>Spróbuj ponownie</Text>
-      </View>
-    );
-  }
+  const { data, isLoading, isFetching, error, refetch } =
+    useGetAllPokeTypesQuery();
 
   return (
-    <View style={{ flex: 1 }}>
-      {isFetching ? <Text>Odświeżam…</Text> : null}
-
-      <FlatList
-        data={data ?? []}
-        keyExtractor={(item) => String(item.id)}
-        renderItem={({ item }) => <PokeType pokeType={item}></PokeType>}
-      />
-    </View>
+    <CardWithHeader
+      title="Select poke type(s)"
+      subtitle="Choose up to two types"
+      style={styles.container}
+    >
+      {isLoading ? (
+        <Loading />
+      ) : error ? (
+        <Error onRetry={refetch} />
+      ) : (
+        <FlatList
+          data={data ?? []}
+          keyExtractor={(item) => String(item.id)}
+          renderItem={({ item }) => <PokeType pokeType={item}></PokeType>}
+          numColumns={3}
+        />
+      )}
+    </CardWithHeader>
   );
 };
+
+const styles = StyleSheet.create({
+  container: { flex: 1 },
+});

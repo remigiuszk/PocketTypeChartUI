@@ -1,11 +1,12 @@
 import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
 import { BASE_URL, POKETYPES_ENDPOINT } from "../../constants";
 import { PokeTypeModel } from "./types";
-import { baseQueryWithLogging } from "../../shared/baseQueryWithLogging";
 
 export const pokeTypesApi = createApi({
   reducerPath: "pokeTypes",
-  baseQuery: baseQueryWithLogging,
+  baseQuery: fetchBaseQuery({
+    baseUrl: `${BASE_URL}`,
+  }),
   endpoints: (builder) => ({
     getAllPokeTypes: builder.query<PokeTypeModel[], void>({
       query: () => {
@@ -14,7 +15,10 @@ export const pokeTypesApi = createApi({
           method: "GET",
         };
       },
-      transformResponse: (res: any) => res.data as PokeTypeModel[],
+      transformResponse: (res: any) => {
+        console.log(res);
+        return res as PokeTypeModel[];
+      },
     }),
   }),
 });
