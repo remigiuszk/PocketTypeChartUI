@@ -35,7 +35,7 @@ const styles = StyleSheet.create({
   attackingTypeHeader: {
     flexDirection: "row",
     gap: 4,
-    alignItems: "flex-start",
+    alignItems: "center",
     justifyContent: "flex-start",
     marginBottom: PADDING / 2,
     borderRadius: 6,

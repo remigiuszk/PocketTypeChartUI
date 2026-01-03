@@ -23,7 +23,7 @@ export const Relations = ({ selectedTypes }: Props) => {
       ) : error ? (
         <Error onRetry={refetch}></Error>
       ) : (
-        <View>
+        <View style={styles.container}>
           <CardWithHeaderRelations
             title="Defensive Relations"
             subtitle="POKEMON ARE:"

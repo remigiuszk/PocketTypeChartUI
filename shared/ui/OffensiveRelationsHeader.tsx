@@ -1,5 +1,5 @@
 import { StyleSheet, View } from "react-native";
-import { TEXT_100, WARNING } from "../../constants";
+import { TEXT_100, TEXT_300, WARNING } from "../../constants";
 import Feather from "@expo/vector-icons/Feather";
 import { Subtitle } from "../typohraphy/Subtitle";
 
@@ -72,7 +72,7 @@ const styles = StyleSheet.create({
   },
   titleTextStyle: {
     fontSize: 16,
-    color: TEXT_100,
+    color: TEXT_300,
     fontWeight: 200,
   },
   subTitileTextStyle: {
