@@ -5,9 +5,13 @@ import { BG_100 } from "../constants";
 import { TopBar } from "../shared/components/TopBar";
 import { useMemo, useState } from "react";
 import { PokeTypeModel } from "../features/TypeSelection/types";
+import { NoTypesSelected } from "../shared/components/NoTypesSelected";
+import { useGetAllPokeTypesQuery } from "../features/TypeSelection/query";
 
 export const Typing = () => {
   const [selectedType, setSelectedType] = useState<PokeTypeModel[]>([]);
+  const { data, isLoading, isFetching, error, refetch } =
+    useGetAllPokeTypesQuery();
 
   const toggleType = (type: PokeTypeModel) => {
     setSelectedType((prev) => {
@@ -31,10 +35,22 @@ export const Typing = () => {
     <View style={styles.container}>
       <TopBar></TopBar>
       <View style={{ padding: 10, flex: 1, gap: 16 }}>
-        <PokeTypeList selectedTypes={normalizedSelected} onToggle={toggleType} />
-        <ScrollView>
-          <Relations selectedTypes={normalizedSelected}></Relations>
-        </ScrollView>
+        <PokeTypeList
+          data={data}
+          isFetching={isFetching}
+          error={error}
+          isLoading={isLoading}
+          refetch={refetch}
+          selectedTypes={normalizedSelected}
+          onToggle={toggleType}
+        />
+        {selectedType.length > 0 ? (
+          <ScrollView>
+            <Relations selectedTypes={normalizedSelected}></Relations>
+          </ScrollView>
+        ) : data && data.length > 0 && (
+          <NoTypesSelected></NoTypesSelected>
+        )}
       </View>
     </View>
   );

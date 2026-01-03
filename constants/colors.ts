@@ -1,7 +1,7 @@
 export const BG_100: string = "#0d1012ff";
 export const BG_200: string = "#15181bff";
 export const BG_500: string = "#171d20ff";
-export const BG_600: string = "#1e2629ff";
+export const BG_600: string = "#1a2e35ff";
 export const BG_800: string = "#2c383dff";
 
 export const TEXT_100: string = "#A0A3BD";

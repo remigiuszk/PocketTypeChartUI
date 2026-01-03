@@ -9,7 +9,7 @@ type Props = {
 
 export const DefensiveDamageRelation = ({ damageRelation }: Props) => {
   const formatMultiplier = (value: number) =>
-    value < 1 && value > 0
+    value < 0.5 && value > 0
       ? value.toString().replace(/^0\./, ".")
       : value.toString();
 
@@ -67,8 +67,10 @@ const styles = StyleSheet.create({
     width: 32,
   },
   multiplierText: {
-    fontWeight: 800,
-    fontSize: 12,
+    fontWeight: 900,
+    fontSize: 13,
     color: BG_800,
+    paddingHorizontal: 1,
+    letterSpacing:0.1
   },
 });

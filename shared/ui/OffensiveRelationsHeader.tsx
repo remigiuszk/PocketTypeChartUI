@@ -1,5 +1,5 @@
 import { StyleSheet, View } from "react-native";
-import { TEXT_100, TEXT_300, WARNING } from "../../constants";
+import { TEXT_100, WARNING } from "../../constants";
 import Feather from "@expo/vector-icons/Feather";
 import { Subtitle } from "../typohraphy/Subtitle";
 
@@ -23,7 +23,7 @@ export const OffensiveRelationsHeader = ({ multiplier }: Props) => {
             <View style={[styles.textContainer]}>
               <View style={styles.headerContainer}>
                 <Subtitle style={styles.titleTextStyle}>SUPER EFFECTIVE AGAINST: </Subtitle>
-                <Subtitle style={styles.subTitileTextStyle}>(4x | 2x)</Subtitle>
+                <Subtitle style={styles.subTitileTextStyle}>(2x)</Subtitle>
               </View>
             </View>
           ) : multiplier == 0.5 || multiplier == 0.25 ? (
@@ -31,7 +31,7 @@ export const OffensiveRelationsHeader = ({ multiplier }: Props) => {
               <View style={styles.headerContainer}>
                 <Subtitle style={styles.titleTextStyle}>NOT VERY EFFECTIVE AGAINST: </Subtitle>
                 <Subtitle style={styles.subTitileTextStyle}>
-                  (0.5x | 0.25x)
+                  (0.5x)
                 </Subtitle>
               </View>
             </View>

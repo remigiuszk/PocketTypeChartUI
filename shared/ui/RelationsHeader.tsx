@@ -1,5 +1,5 @@
 import { StyleSheet, View } from "react-native";
-import { TEXT_100, TEXT_300, WARNING } from "../../constants";
+import { TEXT_300, WARNING } from "../../constants";
 import Feather from "@expo/vector-icons/Feather";
 import { Subtitle } from "../typohraphy/Subtitle";
 
@@ -29,7 +29,7 @@ export const RelationsHeader = ({ multiplier }: Props) => {
           ) : multiplier == 0.5 || multiplier == 0.25 ? (
             <View style={[styles.textContainer]}>
               <View style={styles.headerContainer}>
-                <Subtitle style={styles.titleTextStyle}>RESISTS: </Subtitle>
+                <Subtitle style={styles.titleTextStyle}>RESIST: </Subtitle>
                 <Subtitle style={styles.subTitileTextStyle}>
                   (0.5x | 0.25x)
                 </Subtitle>
@@ -72,10 +72,11 @@ const styles = StyleSheet.create({
   },
   titleTextStyle: {
     fontSize: 16,
-    color: TEXT_100,
+    color: TEXT_300,
     fontWeight: 200,
   },
   subTitileTextStyle: {
-    fontSize: 10,
+    fontSize: 11,
+    fontWeight: 600,
   },
 });

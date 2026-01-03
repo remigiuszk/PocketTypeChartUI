@@ -1,6 +1,6 @@
-import { View, Image, Text, StyleSheet, Pressable } from "react-native";
+import { Image, StyleSheet, Pressable } from "react-native";
 import { PokeTypeModel } from "../types";
-import { ACCENT, PRIMARY } from "../../../constants";
+import { ACCENT } from "../../../constants";
 
 type PokeTypeProps = {
   pokeType: PokeTypeModel;

@@ -8,18 +8,16 @@ import {
 import { ACCENT } from "../../constants";
 
 type Props = {
-  onPress: () => void;
+  click: () => void;
   children: any;
   style?: StyleProp<ViewStyle>;
 };
 
-const DefaultButton = ({ onPress, children, style }: Props) => {
+const DefaultButton = ({ click, children, style }: Props) => {
   return (
     <View style={[styles.container, style]}>
       <Pressable
-        onPress={() => {
-          onPress();
-        }}
+        onPress={click}
         style={styles.pressable}
       >
         {children}
@@ -37,11 +35,11 @@ const styles = StyleSheet.create({
     shadowColor: "#000000",
     shadowOffset: {
       width: 0,
-      height: 6,
+      height: 1,
     },
-    shadowOpacity: 0.2,
-    shadowRadius: 5.62,
-    elevation: 8,
+    shadowOpacity: 0.16,
+    shadowRadius: 1.51,
+    elevation: 2,
     height: 40,
     width: "40%",
   },

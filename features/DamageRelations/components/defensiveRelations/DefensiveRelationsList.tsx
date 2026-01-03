@@ -21,7 +21,6 @@ export const DefensiveRelationsList = ({ relationList, selectedTypeSprites }: Pr
 
   return (
     <View style={styles.container}>
-      <TwoTypesHeader sprites={selectedTypeSprites}></TwoTypesHeader>
       {superEffective.length > 0 && (
         <View style={styles.section}>
           <RelationsHeader multiplier={2}></RelationsHeader>
@@ -49,7 +48,7 @@ export const DefensiveRelationsList = ({ relationList, selectedTypeSprites }: Pr
         </View>
       )}
       {immunities.length > 0 && (
-        <View>
+        <View style={styles.section}>
           <RelationsHeader multiplier={0}></RelationsHeader>
           <View style={styles.listContainer}>
             {immunities.map((relation: DefensiveDamageRelationModel) => (

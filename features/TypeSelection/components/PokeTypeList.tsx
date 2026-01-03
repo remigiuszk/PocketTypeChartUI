@@ -1,49 +1,59 @@
-import { FlatList, StyleSheet, Text, View } from "react-native";
+import { FlatList, StyleSheet, View } from "react-native";
 import { PokeType } from "./PokeType";
 import { Loading } from "../../../shared/components/Loading";
 import { CardWithHeader } from "../../../shared/ui/CardWithHeader";
 import { Error } from "../../../shared/components/Error";
 import { useGetAllPokeTypesQuery } from "../query";
-import { PADDING } from "../../../constants";
 import { PokeTypeModel } from "../types";
+import { FetchBaseQueryError } from "@reduxjs/toolkit/query";
+import { SerializedError } from "@reduxjs/toolkit";
 
 type PokeTypeListProps = {
   selectedTypes: PokeTypeModel[];
+  data: PokeTypeModel[] | undefined;
+  isLoading: boolean;
+  isFetching: boolean;
+  error: FetchBaseQueryError | SerializedError | undefined;
+  refetch: () => any;
   onToggle: (pokeType: PokeTypeModel) => void;
 };
 
 export const PokeTypeList = ({
   selectedTypes,
+  data,
+  isLoading,
+  isFetching,
+  error,
+  refetch,
   onToggle,
 }: PokeTypeListProps) => {
-  const { data, isLoading, isFetching, error, refetch } =
-    useGetAllPokeTypesQuery();
-
   return (
-    <CardWithHeader
-      title="Select poke type(s)"
-      subtitle="Choose up to two types"
-      style={styles.container}
-    >
-      {isLoading ? (
+    <View>
+      {isLoading || isFetching ? (
         <Loading />
       ) : error ? (
         <Error onRetry={refetch} />
       ) : (
-        <FlatList
-          data={data ?? []}
-          keyExtractor={(item) => String(item.id)}
-          renderItem={({ item }) => (
-            <PokeType
-              pokeType={item}
-              isSelected={selectedTypes?.some((x) => x.id === item.id)}
-              onPress={() => onToggle(item)}
-            ></PokeType>
-          )}
-          numColumns={3}
-        />
+        <CardWithHeader
+          title="Select poke type(s)"
+          subtitle="Choose up to two types"
+          style={styles.container}
+        >
+          <FlatList
+            data={data ?? []}
+            keyExtractor={(item) => String(item.id)}
+            renderItem={({ item }) => (
+              <PokeType
+                pokeType={item}
+                isSelected={selectedTypes?.some((x) => x.id === item.id)}
+                onPress={() => onToggle(item)}
+              ></PokeType>
+            )}
+            numColumns={3}
+          />
+        </CardWithHeader>
       )}
-    </CardWithHeader>
+    </View>
   );
 };
 

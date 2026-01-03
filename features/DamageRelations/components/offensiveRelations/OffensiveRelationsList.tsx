@@ -1,15 +1,10 @@
-import { FlatList, Image, StyleSheet, View } from "react-native";
-import {
-  DefensiveDamageRelationModel,
-  OffensiveDamageRelationModel,
-} from "../../types";
-import { RelationsHeader } from "../../../../shared/ui/RelationsHeader";
-import { BG_800, BORDER_100, PADDING } from "../../../../constants";
+import { StyleSheet, View } from "react-native";
+import { OffensiveDamageRelationModel } from "../../types";
+import { BORDER_100 } from "../../../../constants";
 import { PokeTypeModel } from "../../../TypeSelection/types";
 import { OffensiveDamageRelation } from "./OffensiveDamageRelation";
 import { OffensiveRelationsHeader } from "../../../../shared/ui/OffensiveRelationsHeader";
-import { Subtitle } from "../../../../shared/typohraphy/Subtitle";
-import { TypeHeader } from "../../../../shared/ui/TypeHeader";
+import { CardWithHeaderRelations } from "../../../../shared/ui/CardWithHeaderRelations";
 
 type Props = {
   relationList: OffensiveDamageRelationModel[];
@@ -48,8 +43,13 @@ export const OffensiveRelationsList = ({ relationList }: Props) => {
   return (
     <View style={styles.container}>
       {Object.values(groupedBuckets).map((bucket) => (
-        <View key={bucket.attackingType.id}>
-          <TypeHeader sprite={bucket.attackingType.sprite}></TypeHeader>
+        <CardWithHeaderRelations
+          title="Offensive Relations"
+          subtitle="TYPE MOVES ARE:"
+          iconName="sword"
+          sprites={[bucket.attackingType.sprite]}
+          key={bucket.attackingType.id}
+        >
           {bucket.superEffective.length > 0 && (
             <View style={styles.section}>
               <OffensiveRelationsHeader
@@ -101,14 +101,14 @@ export const OffensiveRelationsList = ({ relationList }: Props) => {
               </View>
             </View>
           )}
-        </View>
+        </CardWithHeaderRelations>
       ))}
     </View>
   );
 };
 
 const styles = StyleSheet.create({
-  container: {},
+  container: { gap: 15 },
   section: {
     marginBottom: 8,
     borderBottomColor: BORDER_100,

@@ -1,5 +1,5 @@
 import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
-import { BASE_URL, DAMAGERELATIONS_ENDPOINT, POKETYPES_ENDPOINT } from "../../constants";
+import { BASE_URL, DAMAGERELATIONS_ENDPOINT } from "../../constants";
 import { TypingEffectivenessModel } from "./types";
 
 export const damageRelationsApi = createApi({

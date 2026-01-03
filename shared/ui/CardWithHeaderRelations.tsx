@@ -1,6 +1,7 @@
 import { StyleProp, StyleSheet, View, ViewStyle } from "react-native";
 import {
   BG_500,
+  BG_600,
   BORDER_100,
   PADDING,
   TEXT_300,
@@ -8,7 +9,7 @@ import {
 import FontAwesome from "@expo/vector-icons/FontAwesome";
 import MaterialCommunityIcons from "@expo/vector-icons/MaterialCommunityIcons";
 import { Title } from "../typohraphy/Title";
-import { Subtitle } from "../typohraphy/Subtitle";
+import { TwoTypesHeader } from "./TwoTypesHeader";
 
 type CardProps = {
   title: string;
@@ -16,14 +17,16 @@ type CardProps = {
   iconName?: string;
   children: any;
   style?: StyleProp<ViewStyle>;
+  sprites: string[];
 };
 
-export const CardWithHeader = ({
+export const CardWithHeaderRelations = ({
   title,
   subtitle,
   iconName,
   children,
   style,
+  sprites,
 }: CardProps) => {
   return (
     <View style={[styles.card, style]}>
@@ -33,13 +36,29 @@ export const CardWithHeader = ({
           iconName !== undefined
             ? { alignItems: "flex-start" }
             : { alignItems: "center" },
+          iconName == "sword" ? { paddingLeft: 8 } : {},
         ]}
       >
-        <View style={styles.titleContainer}>
+        <View
+          style={[
+            styles.titleContainer,
+            iconName == "sword" ? { gap: 6 } : { gap: 12 },
+          ]}
+        >
           {iconName == "shield" ? (
-            <FontAwesome name="shield" size={36} color={TEXT_300} />
+            <FontAwesome
+              style={styles.iconShield}
+              name="shield"
+              size={40}
+              color={TEXT_300}
+            />
           ) : iconName == "sword" ? (
-            <MaterialCommunityIcons name="sword" size={36} color={TEXT_300} />
+            <MaterialCommunityIcons
+              style={styles.iconSword}
+              name="sword"
+              size={42}
+              color={TEXT_300}
+            />
           ) : null}
           <View
             style={[
@@ -50,7 +69,10 @@ export const CardWithHeader = ({
             ]}
           >
             <Title>{title}</Title>
-            <Subtitle>{subtitle}</Subtitle>
+            <TwoTypesHeader
+              sprites={sprites}
+              message={subtitle}
+            ></TwoTypesHeader>
           </View>
         </View>
       </View>
@@ -78,14 +100,22 @@ const styles = StyleSheet.create({
     flexDirection: "column",
     borderBottomWidth: 1,
     borderBottomColor: BORDER_100,
+    backgroundColor: BG_600,
+    borderTopLeftRadius: 16,
+    borderTopRightRadius: 16,
+    padding: PADDING / 2,
+    paddingHorizontal: PADDING,
+  },
+  iconShield: {
+    marginTop: 5,
+  },
+  iconSword:{
+    marginTop: 3,
   },
   titleContainer: {
     alignItems: "flex-start",
     justifyContent: "center",
     flexDirection: "row",
-    gap: 12,
-    padding: PADDING / 2,
-    paddingHorizontal: PADDING,
   },
   textContainer: {
     justifyContent: "center",
