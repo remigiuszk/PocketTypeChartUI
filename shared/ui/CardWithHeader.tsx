@@ -7,6 +7,7 @@ import {
   MARGIN_HORIZONTAL,
   PADDING,
   TEXT_100,
+  TEXT_300,
 } from "../../constants";
 import FontAwesome from "@expo/vector-icons/FontAwesome";
 import MaterialCommunityIcons from "@expo/vector-icons/MaterialCommunityIcons";
@@ -26,9 +27,10 @@ export const CardWithHeader = ({
   subtitle,
   iconName,
   children,
+  style,
 }: CardProps) => {
   return (
-    <View style={styles.card}>
+    <View style={[styles.card, style]}>
       <View
         style={[
           styles.headerContainer,
@@ -39,9 +41,9 @@ export const CardWithHeader = ({
       >
         <View style={styles.titleContainer}>
           {iconName == "shield" ? (
-            <FontAwesome name="shield" size={36} color={ACCENT} />
+            <FontAwesome name="shield" size={36} color={TEXT_300} />
           ) : iconName == "sword" ? (
-            <MaterialCommunityIcons name="sword" size={36} color={ACCENT} />
+            <MaterialCommunityIcons name="sword" size={36} color={TEXT_300} />
           ) : null}
           <View
             style={[
@@ -69,31 +71,30 @@ const styles = StyleSheet.create({
     shadowColor: "#000000",
     shadowOffset: {
       width: 0,
-      height: 6,
+      height: 1,
     },
-    shadowOpacity: 0.2,
-    shadowRadius: 5.62,
-    elevation: 8,
+    shadowOpacity: 0.16,
+    shadowRadius: 1.51,
+    elevation: 2,
   },
   headerContainer: {
     justifyContent: "center",
     flexDirection: "column",
-    padding: PADDING,
+    borderBottomWidth: 1,
+    borderBottomColor: BORDER_100,
   },
   titleContainer: {
     alignItems: "flex-start",
     justifyContent: "center",
     flexDirection: "row",
     gap: 12,
+    padding: PADDING / 2,
+    paddingHorizontal: PADDING,
   },
   textContainer: {
     justifyContent: "center",
     alignItems: "flex-start",
     flexDirection: "column",
   },
-  content: {
-    padding: PADDING,
-    borderTopWidth: 1,
-    borderTopColor: BORDER_100,
-  },
+  content: { padding: PADDING / 2 },
 });

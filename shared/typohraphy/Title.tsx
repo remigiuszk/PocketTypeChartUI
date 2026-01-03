@@ -1,5 +1,5 @@
 import { StyleSheet, Text, View } from "react-native";
-import {  TEXT_100, TEXT_300 } from "../../constants/colors";
+import {  TEXT_100, TEXT_300, TEXT_500 } from "../../constants/colors";
 import { TITLE_FONT_SIZE } from "../../constants";
 
 export const Title = ({ children }: any) => {
@@ -17,7 +17,7 @@ const styles = StyleSheet.create({
     fontWeight: "600",
     fontFamily: "System",
     textAlign: "center",
-    color: TEXT_300,
+    color: TEXT_500,
     fontSize: TITLE_FONT_SIZE,
     letterSpacing: 1.5,
     textTransform: "uppercase",

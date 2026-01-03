@@ -1,15 +1,14 @@
 import { Image, StyleSheet, Switch, View } from "react-native";
-import { BG_200, BG_500, PADDING, PRIMARY } from "../../constants";
+import { ACCENT, BG_500, BG_800, TEXT_300 } from "../../constants";
 import { Subtitle } from "../typohraphy/Subtitle";
-import { useState } from "react";
 
 export const TopBar = () => {
-  const [isEnabled, setIsEnabled] = useState(false);
-
   return (
     <View style={styles.container}>
       <View style={styles.appName}>
-        <Subtitle>PocketTypeChart</Subtitle>
+        <Subtitle style={styles.nameText}>POCKET</Subtitle>
+        <Subtitle style={styles.nameText}>TYPE</Subtitle>
+        <Subtitle style={styles.nameText}>CHART</Subtitle>
       </View>
       <View style={styles.icon}>
         <Image
@@ -17,30 +16,33 @@ export const TopBar = () => {
           source={require("../../assets/img/poke.png")}
         ></Image>
       </View>
-      <View style={styles.options}>
-        <Switch
-          trackColor={{ false: BG_200, true: BG_200 }}
-          thumbColor={PRIMARY}
-          ios_backgroundColor={BG_500}
-        ></Switch>
-      </View>
+      <View style={styles.options}></View>
     </View>
   );
 };
 
 const styles = StyleSheet.create({
   container: {
-    height: "5%",
+    height: "8%",
     width: "100%",
     flexDirection: "row",
     backgroundColor: BG_500,
-    paddingHorizontal:10,
-    paddingVertical:6
+    paddingHorizontal: 10,
+    paddingVertical: 8,
   },
   appName: {
     flex: 1,
     justifyContent: "center",
     alignItems: "flex-start",
+    alignContent: "center",
+    flexDirection: "column",
+    padding:6
+  },
+  nameText: {
+    fontSize: 14,
+    color: TEXT_300,
+    fontWeight: "ultralight",
+    fontFamily: "Raleway-Thin",
   },
   icon: {
     flex: 1,
@@ -54,6 +56,9 @@ const styles = StyleSheet.create({
   options: {
     flex: 1,
     justifyContent: "center",
-    alignItems: "flex-end",
+    alignItems: "center",
+    flexDirection: "row",
+    flexWrap: "wrap",
+    height: "100%",
   },
 });

@@ -4,9 +4,18 @@ import { Loading } from "../../../shared/components/Loading";
 import { CardWithHeader } from "../../../shared/ui/CardWithHeader";
 import { Error } from "../../../shared/components/Error";
 import { useGetAllPokeTypesQuery } from "../query";
-import { MARGIN_HORIZONTAL } from "../../../constants";
+import { PADDING } from "../../../constants";
+import { PokeTypeModel } from "../types";
 
-export const PokeTypeList = () => {
+type PokeTypeListProps = {
+  selectedTypes: PokeTypeModel[];
+  onToggle: (pokeType: PokeTypeModel) => void;
+};
+
+export const PokeTypeList = ({
+  selectedTypes,
+  onToggle,
+}: PokeTypeListProps) => {
   const { data, isLoading, isFetching, error, refetch } =
     useGetAllPokeTypesQuery();
 
@@ -24,7 +33,13 @@ export const PokeTypeList = () => {
         <FlatList
           data={data ?? []}
           keyExtractor={(item) => String(item.id)}
-          renderItem={({ item }) => <PokeType pokeType={item}></PokeType>}
+          renderItem={({ item }) => (
+            <PokeType
+              pokeType={item}
+              isSelected={selectedTypes?.some((x) => x.id === item.id)}
+              onPress={() => onToggle(item)}
+            ></PokeType>
+          )}
           numColumns={3}
         />
       )}
@@ -33,5 +48,5 @@ export const PokeTypeList = () => {
 };
 
 const styles = StyleSheet.create({
-  container: { flex: 1 },
+  container: {},
 });

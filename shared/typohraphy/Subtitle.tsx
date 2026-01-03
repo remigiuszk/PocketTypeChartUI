@@ -1,18 +1,28 @@
-import { StyleSheet, Text, View } from "react-native";
+import {
+  StyleProp,
+  StyleSheet,
+  Text,
+  TextStyle,
+  View,
+} from "react-native";
 import { TEXT_100 } from "../../constants/colors";
 import { SUBTITLE_FONT_SIZE } from "../../constants";
 
-export const Subtitle = ({ children }: any) => {
+type Props = {
+  children: any;
+  style?: StyleProp<TextStyle>;
+};
+
+export const Subtitle = ({ children, style }: Props) => {
   return (
-    <View style={styles.container}>
-      <Text style={styles.text}>{children}</Text>
+    <View style={[styles.container, style]}>
+      <Text style={[styles.text, style]}>{children}</Text>
     </View>
   );
 };
 
 const styles = StyleSheet.create({
-  container: {
-  },
+  container: {},
   text: {
     fontWeight: "400",
     fontFamily: "System",
