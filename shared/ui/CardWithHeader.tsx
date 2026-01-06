@@ -1,6 +1,7 @@
 import { StyleProp, StyleSheet, View, ViewStyle } from "react-native";
 import {
   BG_500,
+  BG_600,
   BORDER_100,
   PADDING,
   TEXT_300,
@@ -78,6 +79,9 @@ const styles = StyleSheet.create({
     flexDirection: "column",
     borderBottomWidth: 1,
     borderBottomColor: BORDER_100,
+    backgroundColor:BG_600,
+    borderTopLeftRadius: 16,
+    borderTopRightRadius: 16,
   },
   titleContainer: {
     alignItems: "flex-start",

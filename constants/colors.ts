@@ -10,7 +10,9 @@ export const TEXT_500: string = "#f6f7ffff";
 
 export const BORDER_100: string = "#324046ff";
 
-export const PRIMARY: string = "#7067CF";
+export const SELECTION: string = "#ffffffff";
+
+export const PRIMARY: string = "#5fbfdaff";
 export const ACCENT: string = "#f3f2d0ff";
 
 export const WARNING: string = "#ffce85";

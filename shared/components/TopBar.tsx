@@ -1,8 +1,14 @@
-import { Image, StyleSheet, Switch, View } from "react-native";
-import { ACCENT, BG_500, BG_800, TEXT_300 } from "../../constants";
+import { Image, StyleSheet, View } from "react-native";
+import { BG_100, BG_500, TEXT_300 } from "../../constants";
 import { Subtitle } from "../typohraphy/Subtitle";
+import DefaultButton from "../ui/DefaultButton";
 
-export const TopBar = () => {
+type Props = {
+  typesSelected: boolean;
+  clearSelection: () => void;
+};
+
+export const TopBar = ({ typesSelected, clearSelection }: Props) => {
   return (
     <View style={styles.container}>
       <View style={styles.appName}>
@@ -13,10 +19,16 @@ export const TopBar = () => {
       <View style={styles.icon}>
         <Image
           style={styles.iconImg}
-          source={require("../../assets/img/poke.png")}
+          source={require("../../assets/img/icon.png")}
         ></Image>
       </View>
-      <View style={styles.options}></View>
+      <View style={styles.options}>
+        {typesSelected && (
+          <DefaultButton style={styles.button} click={clearSelection}>
+            <Subtitle style={styles.buttonText}>CLEAR SELECTED</Subtitle>
+          </DefaultButton>
+        )}
+      </View>
     </View>
   );
 };
@@ -28,7 +40,6 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     backgroundColor: BG_500,
     paddingHorizontal: 10,
-    paddingVertical: 8,
   },
   appName: {
     flex: 1,
@@ -36,10 +47,10 @@ const styles = StyleSheet.create({
     alignItems: "flex-start",
     alignContent: "center",
     flexDirection: "column",
-    padding:6
+    padding: 6,
   },
   nameText: {
-    fontSize: 14,
+    fontSize: 18,
     color: TEXT_300,
     fontWeight: "ultralight",
     fontFamily: "Raleway-Thin",
@@ -56,9 +67,10 @@ const styles = StyleSheet.create({
   options: {
     flex: 1,
     justifyContent: "center",
-    alignItems: "center",
-    flexDirection: "row",
+    alignItems: "flex-end",
     flexWrap: "wrap",
     height: "100%",
   },
+  button: { width: "90%", padding: 4 },
+  buttonText: { color: BG_100, fontWeight: 800, fontSize: 12 },
 });

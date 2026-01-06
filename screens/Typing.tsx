@@ -31,9 +31,13 @@ export const Typing = () => {
     [selectedType]
   );
 
+  const clearSelection = () => {
+    setSelectedType(() => []);
+  };
+
   return (
     <View style={styles.container}>
-      <TopBar></TopBar>
+      <TopBar typesSelected={selectedType && selectedType.length > 0} clearSelection={clearSelection}></TopBar>
       <View style={{ padding: 10, flex: 1, gap: 16 }}>
         <PokeTypeList
           data={data}
@@ -48,8 +52,8 @@ export const Typing = () => {
           <ScrollView>
             <Relations selectedTypes={normalizedSelected}></Relations>
           </ScrollView>
-        ) : data && data.length > 0 && (
-          <NoTypesSelected></NoTypesSelected>
+        ) : (
+          data && data.length > 0 && <NoTypesSelected></NoTypesSelected>
         )}
       </View>
     </View>

@@ -5,7 +5,7 @@ import {
   View,
   ViewStyle,
 } from "react-native";
-import { ACCENT } from "../../constants";
+import { ACCENT, PRIMARY } from "../../constants";
 
 type Props = {
   click: () => void;
@@ -18,7 +18,7 @@ const DefaultButton = ({ click, children, style }: Props) => {
     <View style={[styles.container, style]}>
       <Pressable
         onPress={click}
-        style={styles.pressable}
+        style={({ pressed }) => [styles.pressable, pressed && styles.pressed]}
       >
         {children}
       </Pressable>
@@ -28,7 +28,7 @@ const DefaultButton = ({ click, children, style }: Props) => {
 
 const styles = StyleSheet.create({
   container: {
-    backgroundColor: ACCENT,
+    backgroundColor: PRIMARY,
     borderRadius: 5,
     justifyContent: "center",
     alignItems: "center",
@@ -48,6 +48,10 @@ const styles = StyleSheet.create({
     width: "100%",
     justifyContent: "center",
     alignItems: "center",
+  },
+  pressed: {
+    opacity: 0.85,
+    transform: [{ scale: 0.98 }],
   },
 });
 

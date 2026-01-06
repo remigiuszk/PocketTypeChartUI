@@ -1,6 +1,6 @@
-import { Image, StyleSheet, Pressable } from "react-native";
+import { Image, StyleSheet, Pressable, View } from "react-native";
 import { PokeTypeModel } from "../types";
-import { ACCENT } from "../../../constants";
+import { ACCENT, PRIMARY, SELECTION } from "../../../constants";
 
 type PokeTypeProps = {
   pokeType: PokeTypeModel;
@@ -24,6 +24,7 @@ export const PokeType = ({ pokeType, isSelected, onPress }: PokeTypeProps) => {
           uri: pokeType.sprite,
         }}
       ></Image>
+      {isSelected && <View style={styles.selectedOverlay} />}
     </Pressable>
   );
 };
@@ -51,14 +52,20 @@ const styles = StyleSheet.create({
     height: "100%",
   },
   selected: {
-    backgroundColor: ACCENT,
+    backgroundColor: SELECTION,
     paddingHorizontal: 0,
-    paddingVertical: 1.5,
-    transform: [{ scale: 1.05 }],
-    zIndex:7
+    paddingVertical: 2,
+    borderRadius:6,
+    zIndex: 7,
+    transform: [{ scale: 1.08 }],
   },
   pressed: {
     opacity: 0.85,
     transform: [{ scale: 0.98 }],
+  },
+  selectedOverlay: {
+    ...StyleSheet.absoluteFillObject,
+    backgroundColor: "rgba(255, 255, 255, 0.47)",
+    pointerEvents: "none",
   },
 });
