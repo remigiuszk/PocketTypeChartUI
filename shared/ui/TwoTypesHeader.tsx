@@ -37,7 +37,6 @@ const styles = StyleSheet.create({
     gap: 4,
     alignItems: "center",
     justifyContent: "flex-start",
-    marginBottom: PADDING / 2,
     borderRadius: 6,
     overflow: "hidden",
   },

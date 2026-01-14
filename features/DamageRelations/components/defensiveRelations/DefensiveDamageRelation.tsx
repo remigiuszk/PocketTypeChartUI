@@ -23,7 +23,13 @@ export const DefensiveDamageRelation = ({ damageRelation }: Props) => {
       </View>
 
       <View style={styles.multiplier}>
-        <Subtitle style={styles.multiplierText}>
+        <Subtitle
+          style={
+            damageRelation.multiplier <= 0.5 && damageRelation.multiplier > 0
+              ? styles.multiplierTextSmall
+              : styles.multiplierText
+          }
+        >
           {formatMultiplier(damageRelation.multiplier)}x
         </Subtitle>
       </View>
@@ -71,6 +77,13 @@ const styles = StyleSheet.create({
     fontSize: 13,
     color: BG_800,
     paddingHorizontal: 1,
-    letterSpacing:0.1
+    letterSpacing: 0.1,
+  },
+  multiplierTextSmall: {
+    fontWeight: 900,
+    fontSize: 11,
+    color: BG_800,
+    paddingHorizontal: 1,
+    letterSpacing: 0.1,
   },
 });

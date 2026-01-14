@@ -1,7 +1,5 @@
 import { Image, StyleSheet, View } from "react-native";
-import {
-  OffensiveDamageRelationModel,
-} from "../../types";
+import { OffensiveDamageRelationModel } from "../../types";
 import { Subtitle } from "../../../../shared/typohraphy/Subtitle";
 import { ACCENT, BG_800 } from "../../../../constants";
 
@@ -10,11 +8,6 @@ type Props = {
 };
 
 export const OffensiveDamageRelation = ({ damageRelation }: Props) => {
-  const formatMultiplier = (value: number) =>
-    value < 1 && value > 0
-      ? value.toString().replace(/^0\./, ".")
-      : value.toString();
-
   return (
     <View style={[styles.item]}>
       <View style={styles.typeBox}>
@@ -25,8 +18,14 @@ export const OffensiveDamageRelation = ({ damageRelation }: Props) => {
       </View>
 
       <View style={styles.multiplier}>
-        <Subtitle style={styles.multiplierText}>
-          {formatMultiplier(damageRelation.multiplier)}x
+        <Subtitle
+          style={
+            damageRelation.multiplier <= 0.5 && damageRelation.multiplier > 0
+              ? styles.multiplierTextSmall
+              : styles.multiplierText
+          }
+        >
+          {damageRelation.multiplier}x
         </Subtitle>
       </View>
     </View>
@@ -69,8 +68,17 @@ const styles = StyleSheet.create({
     width: 32,
   },
   multiplierText: {
-    fontWeight: 800,
-    fontSize: 12,
+    fontWeight: 900,
+    fontSize: 13,
     color: BG_800,
+    paddingHorizontal: 1,
+    letterSpacing: 0.1,
+  },
+  multiplierTextSmall: {
+    fontWeight: 900,
+    fontSize: 11,
+    color: BG_800,
+    paddingHorizontal: 1,
+    letterSpacing: 0.1,
   },
 });

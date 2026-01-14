@@ -1,11 +1,5 @@
 import { StyleProp, StyleSheet, View, ViewStyle } from "react-native";
-import {
-  BG_500,
-  BG_600,
-  BORDER_100,
-  PADDING,
-  TEXT_300,
-} from "../../constants";
+import { BG_500, BG_600, BORDER_100, PADDING, TEXT_300 } from "../../constants";
 import FontAwesome from "@expo/vector-icons/FontAwesome";
 import MaterialCommunityIcons from "@expo/vector-icons/MaterialCommunityIcons";
 import { Title } from "../typohraphy/Title";
@@ -49,14 +43,14 @@ export const CardWithHeaderRelations = ({
             <FontAwesome
               style={styles.iconShield}
               name="shield"
-              size={40}
+              size={36}
               color={TEXT_300}
             />
           ) : iconName == "sword" ? (
             <MaterialCommunityIcons
               style={styles.iconSword}
               name="sword"
-              size={42}
+              size={36}
               color={TEXT_300}
             />
           ) : null}
@@ -103,14 +97,13 @@ const styles = StyleSheet.create({
     backgroundColor: BG_600,
     borderTopLeftRadius: 16,
     borderTopRightRadius: 16,
-    padding: PADDING / 2,
+    padding: 0,
     paddingHorizontal: PADDING,
+    paddingVertical: PADDING / 2,
   },
   iconShield: {
-    marginTop: 5,
   },
-  iconSword:{
-    marginTop: 3,
+  iconSword: {
   },
   titleContainer: {
     alignItems: "flex-start",

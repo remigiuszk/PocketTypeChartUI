@@ -18,6 +18,7 @@ type OffensiveBuckets = {
 };
 
 export const OffensiveRelationsList = ({ relationList }: Props) => {
+  console.log
   const groupedBuckets = (relationList ?? []).reduce<
     Record<string, OffensiveBuckets>
   >((acc, rel) => {
@@ -73,7 +74,7 @@ export const OffensiveRelationsList = ({ relationList }: Props) => {
                 multiplier={0.5}
               ></OffensiveRelationsHeader>
               <View style={styles.listContainer}>
-                {bucket.notVeryEffective.map(
+                {bucket.notVeryEffective.sort((a, b) => b.multiplier - a.multiplier).map(
                   (relation: OffensiveDamageRelationModel) => (
                     <OffensiveDamageRelation
                       key={relation.defendingType.id}

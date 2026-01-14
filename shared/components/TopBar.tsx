@@ -50,7 +50,7 @@ const styles = StyleSheet.create({
     padding: 6,
   },
   nameText: {
-    fontSize: 18,
+    fontSize: 16,
     color: TEXT_300,
     fontWeight: "ultralight",
     fontFamily: "Raleway-Thin",

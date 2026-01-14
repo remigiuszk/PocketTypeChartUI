@@ -1,6 +1,6 @@
 {
   "expo": {
-    "name": "pocket-type-chart",
+    "name": "PocketTypeChart",
     "slug": "pocket-type-chart",
     "version": "1.0.0",
     "orientation": "portrait",
@@ -10,18 +10,24 @@
     "splash": {
       "image": "./assets/splash-icon.png",
       "resizeMode": "contain",
-      "backgroundColor": "#ffffff"
+      "backgroundColor": "#0d1012"
     },
     "ios": {
-      "supportsTablet": true
+      "buildNumber": "1",
+      "supportsTablet": false,
+      "bundleIdentifier": "com.remonedev.pockettypechart",
+      "infoPlist": {
+        "ITSAppUsesNonExemptEncryption": false
+      }
     },
     "android": {
       "adaptiveIcon": {
         "foregroundImage": "./assets/adaptive-icon.png",
-        "backgroundColor": "#ffffff"
+        "backgroundColor": "#0d1012"
       },
       "edgeToEdgeEnabled": true,
-      "predictiveBackGestureEnabled": false
+      "predictiveBackGestureEnabled": false,
+      "package": "com.remonedev.pockettypechart"
     },
     "web": {
       "favicon": "./assets/favicon.png"
@@ -29,6 +35,11 @@
     "androidNavigationBar": {
       "backgroundColor": "#000000",
       "barStyle": "light-content"
+    },
+    "extra": {
+      "eas": {
+        "projectId": "acb57690-46c9-45ed-b60e-2c3aa5ff9295"
+      }
     }
   }
 }
