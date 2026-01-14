@@ -1,38 +1,46 @@
-import { Image, StyleSheet, View } from "react-native";
+import { Image, StyleProp, StyleSheet, View, ViewStyle } from "react-native";
 import { Subtitle } from "../typohraphy/Subtitle";
 import { PADDING } from "../../constants";
 
 type Props = {
   sprites: string[];
   message: string;
+  imageHeight?: number;
+  style?: StyleProp<ViewStyle>;
 };
 
-export const TwoTypesHeader = ({ sprites, message }: Props) => {
+export const TwoTypesHeader = ({ sprites, message, imageHeight, style }: Props) => {
   return (
-    <View style={styles.attackingTypeHeader}>
+    <View style={[styles.header, style]}>
       <View style={styles.imagesContainer}>
         <View style={styles.imageContainer}>
           <Image
             source={{ uri: sprites[0] }}
-            style={styles.attackingTypeImage}
+            style={[
+              styles.attackingTypeImage,
+              imageHeight !== undefined ? { height: imageHeight } : undefined,
+            ]}
           ></Image>
         </View>
         {sprites.length == 2 && (
           <View style={styles.imageContainer}>
             <Image
               source={{ uri: sprites[1] }}
-              style={styles.attackingTypeImage}
+              style={[
+                styles.attackingTypeImage,
+                imageHeight !== undefined ? { height: imageHeight } : undefined,
+              ]}
             ></Image>
           </View>
         )}
       </View>
-      <Subtitle style={styles.attackingTypeHeaderText}>{message}</Subtitle>
+      <Subtitle style={styles.headerText}>{message}</Subtitle>
     </View>
   );
 };
 
 const styles = StyleSheet.create({
-  attackingTypeHeader: {
+  header: {
     flexDirection: "row",
     gap: 4,
     alignItems: "center",
@@ -40,7 +48,7 @@ const styles = StyleSheet.create({
     borderRadius: 6,
     overflow: "hidden",
   },
-  attackingTypeHeaderText: {},
+  headerText: {},
   attackingTypeImage: {
     aspectRatio: 200 / 44,
     height: 16,

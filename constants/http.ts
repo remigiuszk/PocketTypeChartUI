@@ -3,3 +3,4 @@
 export const BASE_URL : string = "https://pockettypechart-fjahb0dzb3ebh5dk.polandcentral-01.azurewebsites.net/api"
 export const POKETYPES_ENDPOINT : string = "/poketypes";
 export const DAMAGERELATIONS_ENDPOINT : string = "/damagerelations";
+export const ALL_ENDPOINT : string = "/all";

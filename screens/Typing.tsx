@@ -7,8 +7,13 @@ import { useMemo, useState } from "react";
 import { PokeTypeModel } from "../features/TypeSelection/types";
 import { NoTypesSelected } from "../shared/components/NoTypesSelected";
 import { useGetAllPokeTypesQuery } from "../features/TypeSelection/query";
+import { NavBar } from "../shared/components/NavBar";
 
-export const Typing = () => {
+type Props = {
+  switchViews: () => void;
+};
+
+export const Typing = ({ switchViews }: Props) => {
   const [selectedType, setSelectedType] = useState<PokeTypeModel[]>([]);
   const { data, isLoading, isFetching, error, refetch } =
     useGetAllPokeTypesQuery();
@@ -37,8 +42,11 @@ export const Typing = () => {
 
   return (
     <View style={styles.container}>
-      <TopBar typesSelected={selectedType && selectedType.length > 0} clearSelection={clearSelection}></TopBar>
-      <View style={{ padding: 10, flex: 1, gap: 16 }}>
+      <TopBar
+        typesSelected={selectedType && selectedType.length > 0}
+        clearSelection={clearSelection}
+      ></TopBar>
+      <View style={{ margin: 6, marginBottom: 0, flex: 1, gap: 16 }}>
         <PokeTypeList
           data={data}
           isFetching={isFetching}
@@ -56,6 +64,7 @@ export const Typing = () => {
           data && data.length > 0 && <NoTypesSelected></NoTypesSelected>
         )}
       </View>
+      <NavBar switchViews={switchViews} teamBuilderOpen={false}></NavBar>
     </View>
   );
 };

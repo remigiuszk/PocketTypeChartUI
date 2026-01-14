@@ -1,10 +1,10 @@
 import { Image, StyleSheet, View } from "react-native";
-import { BG_100, BG_500, TEXT_300 } from "../../constants";
+import { BG_100, BG_500, BORDER_100, TEXT_300 } from "../../constants";
 import { Subtitle } from "../typohraphy/Subtitle";
 import DefaultButton from "../ui/DefaultButton";
 
 type Props = {
-  typesSelected: boolean;
+  typesSelected?: boolean;
   clearSelection: () => void;
 };
 
@@ -40,6 +40,9 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     backgroundColor: BG_500,
     paddingHorizontal: 10,
+    borderBottomColor: BORDER_100,
+    borderBottomWidth: 1,
+    marginBottom:1
   },
   appName: {
     flex: 1,
@@ -50,7 +53,7 @@ const styles = StyleSheet.create({
     padding: 6,
   },
   nameText: {
-    fontSize: 16,
+    fontSize: 12,
     color: TEXT_300,
     fontWeight: "ultralight",
     fontFamily: "Raleway-Thin",

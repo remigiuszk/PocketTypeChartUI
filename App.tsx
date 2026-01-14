@@ -3,10 +3,11 @@ import { Platform, StyleSheet, Text, View } from "react-native";
 import { Provider } from "react-redux";
 import { store } from "./state/store";
 import { Typing } from "./screens/Typing";
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { SafeAreaProvider, SafeAreaView } from "react-native-safe-area-context";
 import { BG_100, BG_500 } from "./constants/colors";
 import * as NavigationBar from "expo-navigation-bar";
+import { TeamBuilder } from "./screens/TeamBuilder";
 
 export default function App() {
   useEffect(() => {
@@ -17,6 +18,11 @@ export default function App() {
     })();
   }, []);
 
+  const [teamBuilderOpen, setTeamBuilderOpen] = useState<boolean>(false);
+  const switchViews = () => {
+    setTeamBuilderOpen(!teamBuilderOpen);
+  };
+
   return (
     <SafeAreaProvider>
       <Provider store={store}>
@@ -25,7 +31,11 @@ export default function App() {
           edges={["top", "left", "right", "bottom"]}
           style={[styles.container]}
         >
-          <Typing />
+          {teamBuilderOpen ? (
+            <TeamBuilder switchViews={switchViews}></TeamBuilder>
+          ) : (
+            <Typing switchViews={switchViews}></Typing>
+          )}
         </SafeAreaView>
       </Provider>
     </SafeAreaProvider>
@@ -35,6 +45,6 @@ export default function App() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor:BG_100,
+    backgroundColor: BG_500,
   },
 });

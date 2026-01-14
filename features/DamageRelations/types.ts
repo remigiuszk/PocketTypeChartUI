@@ -17,3 +17,10 @@ export interface TypingEffectivenessModel {
   defensiveDamageRelations: DefensiveDamageRelationModel[];
   offensiveDamageRelations: OffensiveDamageRelationModel[];
 }
+
+export interface DamageRelationFullModel {
+  id: string;
+  attackingTypeId: number;
+  defendingTypeId: number;
+  multiplier: number;
+}
