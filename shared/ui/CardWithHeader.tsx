@@ -96,5 +96,5 @@ const styles = StyleSheet.create({
     alignItems: "flex-start",
     flexDirection: "column",
   },
-  content: { padding: PADDING / 2 },
+  content: { padding: 0 },
 });

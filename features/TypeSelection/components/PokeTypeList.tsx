@@ -37,9 +37,9 @@ export const PokeTypeList = ({
         <CardWithHeader
           title="Select poke type(s)"
           subtitle="Choose up to two types"
-          style={styles.container}
         >
           <FlatList
+            style={styles.container}
             data={data ?? []}
             keyExtractor={(item) => String(item.id)}
             renderItem={({ item }) => (
@@ -58,5 +58,5 @@ export const PokeTypeList = ({
 };
 
 const styles = StyleSheet.create({
-  container: {},
+  container: { padding:6 },
 });

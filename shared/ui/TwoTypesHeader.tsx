@@ -9,7 +9,12 @@ type Props = {
   style?: StyleProp<ViewStyle>;
 };
 
-export const TwoTypesHeader = ({ sprites, message, imageHeight, style }: Props) => {
+export const TwoTypesHeader = ({
+  sprites,
+  message,
+  imageHeight,
+  style,
+}: Props) => {
   return (
     <View style={[styles.header, style]}>
       <View style={styles.imagesContainer}>
@@ -45,8 +50,6 @@ const styles = StyleSheet.create({
     gap: 4,
     alignItems: "center",
     justifyContent: "flex-start",
-    borderRadius: 6,
-    overflow: "hidden",
   },
   headerText: {},
   attackingTypeImage: {
@@ -59,6 +62,8 @@ const styles = StyleSheet.create({
     gap: 4,
     alignItems: "center",
     justifyContent: "flex-start",
+    borderRadius: 6,
+    overflow: "hidden",
   },
   imageContainer: {
     borderRadius: 6,
