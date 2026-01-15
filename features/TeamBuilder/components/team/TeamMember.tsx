@@ -2,12 +2,7 @@ import { StyleSheet, View, Pressable, Platform } from "react-native";
 import { TwoTypesHeader } from "../../../../shared/ui/TwoTypesHeader";
 import {
   ACCENT,
-  BG_100,
   BG_1000,
-  BG_500,
-  BG_800,
-  BORDER_100,
-  PRIMARY,
 } from "../../../../constants";
 import { TeamMemberModel } from "../../types";
 import Feather from "@expo/vector-icons/Feather";
@@ -21,10 +16,7 @@ type Props = {
 export const TeamMember = ({ editMember, deleteMember, member }: Props) => {
   return (
     <View style={styles.container}>
-      {/* Glow (pseudo-poświata) */}
       <View pointerEvents="none" style={styles.glow} />
-
-      {/* Card */}
       <View style={styles.content}>
         <TwoTypesHeader
           imageHeight={28}

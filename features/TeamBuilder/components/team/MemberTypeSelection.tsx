@@ -1,33 +1,39 @@
 import { FlatList, Modal, Pressable, StyleSheet, View } from "react-native";
-import {
-  ACCENT,
-  BG_500,
-  BG_800,
-  PRIMARY,
-  TEXT_300,
-} from "../../../../constants";
+import { ACCENT, BG_500, PRIMARY, TEXT_300 } from "../../../../constants";
 import { Loading } from "../../../../shared/components/Loading";
 import { Error } from "../../../../shared/components/Error";
 import { CardWithHeader } from "../../../../shared/ui/CardWithHeader";
 import { PokeType } from "../../../TypeSelection/components/PokeType";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { PokeTypeModel } from "../../../TypeSelection/types";
 import { useGetAllPokeTypesQuery } from "../../../TypeSelection/query";
 import { Subtitle } from "../../../../shared/typohraphy/Subtitle";
 import { TwoTypesHeader } from "../../../../shared/ui/TwoTypesHeader";
 import { Feather } from "@expo/vector-icons";
+import { TeamMemberModel } from "../../types";
 
 type Props = {
   showModal: boolean;
-  cancel: () => void;
-  confirm: () => void;
+  selectedMember?: TeamMemberModel;
+  onConfirm: (id: string, selectedTypes: PokeTypeModel[]) => void;
+  onClose: () => void;
 };
 
-export const MemberTypeSelection = ({ showModal, cancel, confirm }: Props) => {
+export const MemberTypeSelection = ({
+  showModal,
+  selectedMember,
+  onConfirm,
+  onClose,
+}: Props) => {
+  useEffect(() => {
+    setSelectedTypes(selectedMember?.selectedTypes ?? []);
+  }, [selectedMember]);
+
   const { data, isLoading, isFetching, error, refetch } =
     useGetAllPokeTypesQuery();
 
   const [selectedTypes, setSelectedTypes] = useState<PokeTypeModel[]>([]);
+
   const toggleType = (type: PokeTypeModel) => {
     setSelectedTypes((prev) => {
       const has = prev.some((x) => x.id === type.id);
@@ -39,6 +45,16 @@ export const MemberTypeSelection = ({ showModal, cancel, confirm }: Props) => {
       }
       return [...prev, type];
     });
+  };
+
+  const confirm = () => {
+    if (!selectedMember) return;
+    onConfirm(selectedMember.id, selectedTypes);
+    onClose();
+  };
+
+  const cancel = () => {
+    onClose();
   };
 
   return (

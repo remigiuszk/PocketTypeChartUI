@@ -1,65 +1,69 @@
-import { StyleSheet, View, Pressable } from "react-native";
+import { StyleSheet, View, Pressable, Alert } from "react-native";
 import { CardWithHeader } from "../../../../shared/ui/CardWithHeader";
-import { useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { TeamMemberModel } from "../../types";
 import { TeamMember } from "./TeamMember";
-import MaterialIcons from "@expo/vector-icons/MaterialIcons";
-import {
-  ACCENT,
-  BG_100,
-  BG_1000,
-  BG_500,
-  BG_800,
-  BORDER_100,
-  PRIMARY,
-  TEXT_100,
-  TEXT_300,
-} from "../../../../constants";
+import { ACCENT, BG_800, PRIMARY, TEXT_300 } from "../../../../constants";
 import { Subtitle } from "../../../../shared/typohraphy/Subtitle";
 import { Feather } from "@expo/vector-icons";
 import { MemberTypeSelection } from "./MemberTypeSelection";
+import * as Crypto from "expo-crypto";
+import { PokeTypeModel } from "../../../TypeSelection/types";
+import {
+  loadTeamMembers,
+  saveTeamMembers,
+} from "../../../../shared/storage/teamStorage";
 
 export const TeamList = () => {
   const [showModal, setShowModal] = useState<boolean>(false);
-  const [teamMembers, setTeamMembers] = useState<TeamMemberModel[]>([
-    {
-      id: "dupa",
-      selectedTypes: [
+  const [teamMembers, setTeamMembers] = useState<TeamMemberModel[]>([]);
+  const [selectedMember, setSelectedMember] = useState<TeamMemberModel>();
+  const didLoad = useRef(false);
+
+  useEffect(() => {
+    (async () => {
+      const stored = await loadTeamMembers();
+      if (stored && Array.isArray(stored)) {
+        setTeamMembers(stored);
+      }
+      didLoad.current = true;
+    })();
+  }, []);
+
+  useEffect(() => {
+    if (!didLoad.current) return; // żeby nie nadpisać storage zanim załadujesz
+    saveTeamMembers(teamMembers);
+  }, [teamMembers]);
+
+  const editMember = (member: TeamMemberModel) => {
+    setSelectedMember(member);
+    setShowModal(true);
+  };
+
+  const deleteMember = (member: TeamMemberModel) => {
+    Alert.alert(
+      "Delete team member",
+      "Are you sure you want to delete this team member?",
+      [
         {
-          id: 1,
-          name: "normal",
-          sprite:
-            "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/types/generation-viii/sword-shield/1.png",
+          text: "Yes, delete",
+          onPress: () =>
+            setTeamMembers((prev) => prev.filter((x) => x.id !== member.id)),
         },
         {
-          id: 6,
-          name: "rock",
-          sprite:
-            "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/types/generation-viii/sword-shield/6.png",
+          text: "No",
+          style: "cancel",
         },
-      ],
-    },
-    {
-      id: "sras",
-      selectedTypes: [
-        {
-          id: 2,
-          name: "normal",
-          sprite:
-            "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/types/generation-viii/sword-shield/3.png",
-        },
-        {
-          id: 6,
-          name: "rock",
-          sprite:
-            "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/types/generation-viii/sword-shield/8.png",
-        },
-      ],
-    },
-  ]);
-  const editMember = () => {};
-  const deleteMember = () => {};
+      ]
+    );
+  };
+
   const addMember = () => {
+    const newMember: TeamMemberModel = {
+      id: Crypto.randomUUID(),
+      selectedTypes: [],
+    };
+    setSelectedMember(newMember);
     setShowModal(true);
   };
 
@@ -69,13 +73,26 @@ export const TeamList = () => {
       subtitle="Select your team members' types"
       style={styles.card}
     >
-      <MemberTypeSelection showModal={showModal}></MemberTypeSelection>
+      <MemberTypeSelection
+        onClose={() => setShowModal(false)}
+        onConfirm={(id: string, selectedTypes: PokeTypeModel[]) => {
+          setTeamMembers((prev) => {
+            if (prev.some((x) => x.id === id)) {
+              return prev.map((m) =>
+                m.id === id ? { ...m, selectedTypes: selectedTypes } : m
+              );
+            } else return [...prev, { id, selectedTypes }];
+          });
+        }}
+        selectedMember={selectedMember}
+        showModal={showModal}
+      ></MemberTypeSelection>
       {teamMembers.map((member: TeamMemberModel) => (
         <TeamMember
           member={member}
-          editMember={editMember}
+          editMember={() => editMember(member)}
           key={member.id}
-          deleteMember={deleteMember}
+          deleteMember={() => deleteMember(member)}
         />
       ))}
       {teamMembers.length < 6 && (
@@ -86,10 +103,7 @@ export const TeamList = () => {
             pressed && styles.pressed,
           ]}
         >
-          {/* glow */}
           <View pointerEvents="none" style={styles.addGlow} />
-
-          {/* content */}
           <View style={styles.addContent}>
             <View style={styles.addIconCircle}>
               <Feather name="plus" size={18} color={ACCENT} />
@@ -140,7 +154,7 @@ const styles = StyleSheet.create({
 
     backgroundColor: BG_800,
     borderWidth: 1.5,
-    borderColor: ACCENT,
+    borderColor: PRIMARY,
 
     shadowColor: "#000",
     shadowOpacity: 0.25,
@@ -162,7 +176,7 @@ const styles = StyleSheet.create({
   },
 
   addText: {
-    color: TEXT_100,
+    color: TEXT_300,
     fontSize: 16,
     textTransform: "uppercase",
     letterSpacing: 1,
