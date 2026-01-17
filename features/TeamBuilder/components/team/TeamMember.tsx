@@ -1,11 +1,13 @@
-import { StyleSheet, View, Pressable, Platform } from "react-native";
-import { TwoTypesHeader } from "../../../../shared/ui/TwoTypesHeader";
+import Feather from "@expo/vector-icons/Feather";
+import {Pressable, StyleSheet, View } from "react-native";
+
 import {
   ACCENT,
   BG_1000,
+  TEXT_300,
 } from "../../../../constants";
+import { TwoTypesHeader } from "../../../../shared/ui/TwoTypesHeader";
 import { TeamMemberModel } from "../../types";
-import Feather from "@expo/vector-icons/Feather";
 
 type Props = {
   editMember: () => void;
@@ -93,8 +95,9 @@ const styles = StyleSheet.create({
     backgroundColor: BG_1000,
 
     // subtelny border w akcencie
-    borderWidth: 2,
-    borderColor: "rgba(27,197,190,0.22)",
+    borderWidth: 1,
+    //borderColor: "rgba(27,197,190,0.22)",
+    borderColor: TEXT_300,
 
     // delikatny cień (lift)
     shadowColor: "#000",

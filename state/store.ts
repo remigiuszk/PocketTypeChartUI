@@ -1,7 +1,7 @@
 import { configureStore } from "@reduxjs/toolkit";
 
-import { pokeTypesApi } from "../features/TypeSelection/query";
 import { damageRelationsApi } from "../features/DamageRelations/query";
+import { pokeTypesApi } from "../features/TypeSelection/query";
 
 export const store = configureStore({
   reducer: {

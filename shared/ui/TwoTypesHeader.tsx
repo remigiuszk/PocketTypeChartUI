@@ -1,6 +1,6 @@
 import { Image, StyleProp, StyleSheet, View, ViewStyle } from "react-native";
+
 import { Subtitle } from "../typohraphy/Subtitle";
-import { PADDING } from "../../constants";
 
 type Props = {
   sprites: string[];

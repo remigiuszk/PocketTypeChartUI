@@ -1,16 +1,21 @@
 import { StyleSheet, View } from "react-native";
+
 import { BG_100 } from "../constants";
-import { TopBar } from "../shared/components/TopBar";
-import { NavBar } from "../shared/components/NavBar";
-import { Title } from "../shared/typohraphy/Title";
-import { Subtitle } from "../shared/typohraphy/Subtitle";
+import { useGetAllRelationsQuery } from "../features/DamageRelations/query";
 import { TeamList } from "../features/TeamBuilder/components/team/TeamList";
+import { NavBar } from "../shared/components/NavBar";
+import { TopBar } from "../shared/components/TopBar";
+import { Subtitle } from "../shared/typohraphy/Subtitle";
+import { Title } from "../shared/typohraphy/Title";
 
 type Props = {
   switchViews: () => void;
 };
 
 export const TeamBuilder = ({ switchViews }: Props) => {
+  const { data, isLoading, isFetching, error, refetch } =
+    useGetAllRelationsQuery();
+
   return (
     <View style={styles.container}>
       <TopBar clearSelection={() => {}}></TopBar>

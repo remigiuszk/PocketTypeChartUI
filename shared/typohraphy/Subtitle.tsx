@@ -5,8 +5,9 @@ import {
   TextStyle,
   View,
 } from "react-native";
-import { TEXT_100 } from "../../constants/colors";
+
 import { SUBTITLE_FONT_SIZE } from "../../constants";
+import { TEXT_100 } from "../../constants/colors";
 
 type Props = {
   children: any;

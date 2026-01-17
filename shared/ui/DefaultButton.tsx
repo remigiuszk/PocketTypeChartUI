@@ -2,10 +2,10 @@ import {
   Pressable,
   StyleProp,
   StyleSheet,
-  View,
   ViewStyle,
 } from "react-native";
-import { ACCENT, PRIMARY } from "../../constants";
+
+import { PRIMARY } from "../../constants";
 
 type Props = {
   click: () => void;

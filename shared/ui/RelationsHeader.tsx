@@ -1,6 +1,7 @@
-import { StyleSheet, View } from "react-native";
-import { TEXT_300, WARNING } from "../../constants";
 import Feather from "@expo/vector-icons/Feather";
+import { StyleSheet, View } from "react-native";
+
+import { TEXT_300, WARNING } from "../../constants";
 import { Subtitle } from "../typohraphy/Subtitle";
 
 type Props = {

@@ -1,9 +1,9 @@
 import { StyleSheet, View } from "react-native";
-import { DefensiveDamageRelationModel } from "../../types";
-import { RelationsHeader } from "../../../../shared/ui/RelationsHeader";
-import { DefensiveDamageRelation } from "./DefensiveDamageRelation";
+
 import { BORDER_100 } from "../../../../constants";
-import { TwoTypesHeader } from "../../../../shared/ui/TwoTypesHeader";
+import { RelationsHeader } from "../../../../shared/ui/RelationsHeader";
+import { DefensiveDamageRelationModel } from "../../types";
+import { DefensiveDamageRelation } from "./DefensiveDamageRelation";
 
 type Props = {
   relationList: DefensiveDamageRelationModel[];

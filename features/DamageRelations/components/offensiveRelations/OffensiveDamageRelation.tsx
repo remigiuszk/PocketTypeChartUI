@@ -1,7 +1,8 @@
 import { Image, StyleSheet, View } from "react-native";
-import { OffensiveDamageRelationModel } from "../../types";
-import { Subtitle } from "../../../../shared/typohraphy/Subtitle";
+
 import { ACCENT, BG_800 } from "../../../../constants";
+import { Subtitle } from "../../../../shared/typohraphy/Subtitle";
+import { OffensiveDamageRelationModel } from "../../types";
 
 type Props = {
   damageRelation: OffensiveDamageRelationModel;

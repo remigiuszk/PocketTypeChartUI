@@ -1,6 +1,7 @@
 import { Image, StyleSheet, View } from "react-native";
+
+import { BG_100 } from "../../constants";
 import { Subtitle } from "../typohraphy/Subtitle";
-import { BG_100, TEXT_300 } from "../../constants";
 import DefaultButton from "../ui/DefaultButton";
 
 type ErrorStateProps = {

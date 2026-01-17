@@ -13,6 +13,7 @@
     "@react-native-async-storage/async-storage": "2.2.0",
     "@reduxjs/toolkit": "^2.11.2",
     "axios": "^1.13.2",
+    "eslint-plugin-react-hooks": "^7.0.1",
     "expo": "~54.0.27",
     "expo-crypto": "^15.0.8",
     "expo-navigation-bar": "^5.0.10",
@@ -23,7 +24,18 @@
     "react-redux": "^9.2.0"
   },
   "devDependencies": {
+    "@eslint/compat": "^2.0.1",
+    "@eslint/eslintrc": "^3.3.3",
+    "@eslint/js": "^9.39.2",
     "@types/react": "~19.1.0",
+    "@typescript-eslint/eslint-plugin": "^8.53.0",
+    "@typescript-eslint/parser": "^8.53.0",
+    "eslint": "^9.39.2",
+    "eslint-config-expo": "^10.0.0",
+    "eslint-config-prettier": "^10.1.8",
+    "eslint-plugin-simple-import-sort": "^12.1.1",
+    "eslint-plugin-unused-imports": "^4.3.0",
+    "prettier": "^3.8.0",
     "typescript": "~5.9.2"
   },
   "private": true

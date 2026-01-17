@@ -1,4 +1,5 @@
 import { Image, StyleSheet, View } from "react-native";
+
 import { BG_100, BG_500, BORDER_100, TEXT_300 } from "../../constants";
 import { Subtitle } from "../typohraphy/Subtitle";
 import DefaultButton from "../ui/DefaultButton";

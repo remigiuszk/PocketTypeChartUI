@@ -1,4 +1,7 @@
+import FontAwesome from "@expo/vector-icons/FontAwesome";
+import MaterialCommunityIcons from "@expo/vector-icons/MaterialCommunityIcons";
 import { StyleProp, StyleSheet, View, ViewStyle } from "react-native";
+
 import {
   BG_500,
   BG_600,
@@ -6,10 +9,8 @@ import {
   PADDING,
   TEXT_300,
 } from "../../constants";
-import FontAwesome from "@expo/vector-icons/FontAwesome";
-import MaterialCommunityIcons from "@expo/vector-icons/MaterialCommunityIcons";
-import { Title } from "../typohraphy/Title";
 import { Subtitle } from "../typohraphy/Subtitle";
+import { Title } from "../typohraphy/Title";
 
 type CardProps = {
   title: string;

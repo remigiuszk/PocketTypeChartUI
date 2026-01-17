@@ -1,12 +1,12 @@
+import { SerializedError } from "@reduxjs/toolkit";
+import { FetchBaseQueryError } from "@reduxjs/toolkit/query";
 import { FlatList, StyleSheet, View } from "react-native";
-import { PokeType } from "./PokeType";
+
+import { Error } from "../../../shared/components/Error";
 import { Loading } from "../../../shared/components/Loading";
 import { CardWithHeader } from "../../../shared/ui/CardWithHeader";
-import { Error } from "../../../shared/components/Error";
-import { useGetAllPokeTypesQuery } from "../query";
 import { PokeTypeModel } from "../types";
-import { FetchBaseQueryError } from "@reduxjs/toolkit/query";
-import { SerializedError } from "@reduxjs/toolkit";
+import { PokeType } from "./PokeType";
 
 type PokeTypeListProps = {
   selectedTypes: PokeTypeModel[];

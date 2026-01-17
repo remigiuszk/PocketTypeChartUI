@@ -1,7 +1,8 @@
-import { StyleProp, StyleSheet, View, ViewStyle } from "react-native";
-import { BG_500, BG_600, BORDER_100, PADDING, TEXT_300 } from "../../constants";
 import FontAwesome from "@expo/vector-icons/FontAwesome";
 import MaterialCommunityIcons from "@expo/vector-icons/MaterialCommunityIcons";
+import { StyleProp, StyleSheet, View, ViewStyle } from "react-native";
+
+import { BG_500, BG_600, BORDER_100, PADDING, TEXT_300 } from "../../constants";
 import { Title } from "../typohraphy/Title";
 import { TwoTypesHeader } from "./TwoTypesHeader";
 

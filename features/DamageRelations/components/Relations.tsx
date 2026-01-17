@@ -1,12 +1,13 @@
 import { StyleSheet, View } from "react-native";
+
 import { BG_100 } from "../../../constants";
+import { Error } from "../../../shared/components/Error";
+import { Loading } from "../../../shared/components/Loading";
+import { CardWithHeaderRelations } from "../../../shared/ui/CardWithHeaderRelations";
+import { PokeTypeModel } from "../../TypeSelection/types";
 import { useGetDamageRelationsQuery } from "../query";
 import { DefensiveRelationsList } from "./defensiveRelations/DefensiveRelationsList";
 import { OffensiveRelationsList } from "./offensiveRelations/OffensiveRelationsList";
-import { PokeTypeModel } from "../../TypeSelection/types";
-import { CardWithHeaderRelations } from "../../../shared/ui/CardWithHeaderRelations";
-import { Loading } from "../../../shared/components/Loading";
-import { Error } from "../../../shared/components/Error";
 
 type Props = {
   selectedTypes: PokeTypeModel[];

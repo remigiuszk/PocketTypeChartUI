@@ -1,10 +1,11 @@
 import { StyleSheet, View } from "react-native";
-import { OffensiveDamageRelationModel } from "../../types";
+
 import { BORDER_100 } from "../../../../constants";
-import { PokeTypeModel } from "../../../TypeSelection/types";
-import { OffensiveDamageRelation } from "./OffensiveDamageRelation";
-import { OffensiveRelationsHeader } from "../../../../shared/ui/OffensiveRelationsHeader";
 import { CardWithHeaderRelations } from "../../../../shared/ui/CardWithHeaderRelations";
+import { OffensiveRelationsHeader } from "../../../../shared/ui/OffensiveRelationsHeader";
+import { PokeTypeModel } from "../../../TypeSelection/types";
+import { OffensiveDamageRelationModel } from "../../types";
+import { OffensiveDamageRelation } from "./OffensiveDamageRelation";
 
 type Props = {
   relationList: OffensiveDamageRelationModel[];

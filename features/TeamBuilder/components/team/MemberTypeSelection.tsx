@@ -1,15 +1,16 @@
-import { FlatList, Modal, Pressable, StyleSheet, View } from "react-native";
-import { ACCENT, BG_500, PRIMARY, TEXT_300 } from "../../../../constants";
-import { Loading } from "../../../../shared/components/Loading";
-import { Error } from "../../../../shared/components/Error";
-import { CardWithHeader } from "../../../../shared/ui/CardWithHeader";
-import { PokeType } from "../../../TypeSelection/components/PokeType";
-import { useEffect, useState } from "react";
-import { PokeTypeModel } from "../../../TypeSelection/types";
-import { useGetAllPokeTypesQuery } from "../../../TypeSelection/query";
-import { Subtitle } from "../../../../shared/typohraphy/Subtitle";
-import { TwoTypesHeader } from "../../../../shared/ui/TwoTypesHeader";
 import { Feather } from "@expo/vector-icons";
+import { useEffect, useState } from "react";
+import { FlatList, Modal, Pressable, StyleSheet, View } from "react-native";
+
+import { ACCENT, BG_500, PRIMARY, TEXT_300 } from "../../../../constants";
+import { Error } from "../../../../shared/components/Error";
+import { Loading } from "../../../../shared/components/Loading";
+import { Subtitle } from "../../../../shared/typohraphy/Subtitle";
+import { CardWithHeader } from "../../../../shared/ui/CardWithHeader";
+import { TwoTypesHeader } from "../../../../shared/ui/TwoTypesHeader";
+import { PokeType } from "../../../TypeSelection/components/PokeType";
+import { useGetAllPokeTypesQuery } from "../../../TypeSelection/query";
+import { PokeTypeModel } from "../../../TypeSelection/types";
 import { TeamMemberModel } from "../../types";
 
 type Props = {

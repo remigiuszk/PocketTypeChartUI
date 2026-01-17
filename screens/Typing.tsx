@@ -1,13 +1,14 @@
-import { ScrollView, StyleSheet, Text, View } from "react-native";
-import { PokeTypeList } from "../features/TypeSelection/components/PokeTypeList";
-import { Relations } from "../features/DamageRelations/components/Relations";
-import { BG_100 } from "../constants";
-import { TopBar } from "../shared/components/TopBar";
 import { useMemo, useState } from "react";
-import { PokeTypeModel } from "../features/TypeSelection/types";
-import { NoTypesSelected } from "../shared/components/NoTypesSelected";
+import { ScrollView, StyleSheet, View } from "react-native";
+
+import { BG_100 } from "../constants";
+import { Relations } from "../features/DamageRelations/components/Relations";
+import { PokeTypeList } from "../features/TypeSelection/components/PokeTypeList";
 import { useGetAllPokeTypesQuery } from "../features/TypeSelection/query";
+import { PokeTypeModel } from "../features/TypeSelection/types";
 import { NavBar } from "../shared/components/NavBar";
+import { NoTypesSelected } from "../shared/components/NoTypesSelected";
+import { TopBar } from "../shared/components/TopBar";
 
 type Props = {
   switchViews: () => void;

@@ -1,6 +1,7 @@
 import { Image, StyleSheet, View } from "react-native";
-import { Subtitle } from "../typohraphy/Subtitle";
+
 import { TEXT_300 } from "../../constants";
+import { Subtitle } from "../typohraphy/Subtitle";
 
 export const NoTypesSelected = () => {
   return (

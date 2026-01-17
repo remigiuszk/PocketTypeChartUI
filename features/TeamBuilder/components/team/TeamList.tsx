@@ -1,18 +1,19 @@
-import { StyleSheet, View, Pressable, Alert } from "react-native";
-import { CardWithHeader } from "../../../../shared/ui/CardWithHeader";
-import { useEffect, useRef, useState } from "react";
-import { TeamMemberModel } from "../../types";
-import { TeamMember } from "./TeamMember";
-import { ACCENT, BG_800, PRIMARY, TEXT_300 } from "../../../../constants";
-import { Subtitle } from "../../../../shared/typohraphy/Subtitle";
 import { Feather } from "@expo/vector-icons";
-import { MemberTypeSelection } from "./MemberTypeSelection";
 import * as Crypto from "expo-crypto";
-import { PokeTypeModel } from "../../../TypeSelection/types";
+import { useEffect, useRef, useState } from "react";
+import { Alert,Pressable, StyleSheet, View } from "react-native";
+
+import { ACCENT, BG_800, PRIMARY, TEXT_300 } from "../../../../constants";
 import {
   loadTeamMembers,
   saveTeamMembers,
 } from "../../../../shared/storage/teamStorage";
+import { Subtitle } from "../../../../shared/typohraphy/Subtitle";
+import { CardWithHeader } from "../../../../shared/ui/CardWithHeader";
+import { PokeTypeModel } from "../../../TypeSelection/types";
+import { TeamMemberModel } from "../../types";
+import { MemberTypeSelection } from "./MemberTypeSelection";
+import { TeamMember } from "./TeamMember";
 
 export const TeamList = () => {
   const [showModal, setShowModal] = useState<boolean>(false);

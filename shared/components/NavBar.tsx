@@ -1,14 +1,14 @@
+import FontAwesome6 from "@expo/vector-icons/FontAwesome6";
 import { Pressable, StyleSheet, View } from "react-native";
+
 import {
   ACCENT,
-  BG_100,
   BG_500,
   BG_800,
   BORDER_100,
   TEXT_100,
 } from "../../constants";
 import { Subtitle } from "../typohraphy/Subtitle";
-import FontAwesome6 from "@expo/vector-icons/FontAwesome6";
 
 type Props = {
   teamBuilderOpen: boolean;
