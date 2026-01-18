@@ -8,7 +8,7 @@ export const store = configureStore({
     [pokeTypesApi.reducerPath]: pokeTypesApi.reducer,
     [damageRelationsApi.reducerPath]: damageRelationsApi.reducer,
   },
-  middleware: (getDefaultMiddleware: any) =>
+  middleware: (getDefaultMiddleware) =>
     getDefaultMiddleware({
       serializableCheck: false,
     })

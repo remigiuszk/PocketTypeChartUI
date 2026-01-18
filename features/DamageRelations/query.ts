@@ -1,10 +1,6 @@
 import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
 
-import {
-  ALL_ENDPOINT,
-  BASE_URL,
-  DAMAGERELATIONS_ENDPOINT,
-} from "../../constants";
+import { ALL_ENDPOINT, BASE_URL, DAMAGERELATIONS_ENDPOINT } from "../../constants";
 import { DamageRelationFullModel, TypingEffectivenessModel } from "./types";
 
 export const damageRelationsApi = createApi({
@@ -21,8 +17,7 @@ export const damageRelationsApi = createApi({
           params: { selectedTypesId: selectedTypes.join(", ") },
         };
       },
-      transformResponse: (res: any) => {
-        console.log("FETCHING RELATIONS", res);
+      transformResponse: (res) => {
         return res as TypingEffectivenessModel;
       },
     }),
@@ -33,12 +28,11 @@ export const damageRelationsApi = createApi({
           method: "GET",
         };
       },
-      transformResponse: (res: any) => {
+      transformResponse: (res) => {
         return res as DamageRelationFullModel[];
       },
     }),
   }),
 });
 
-export const { useGetDamageRelationsQuery, useGetAllRelationsQuery } =
-  damageRelationsApi;
+export const { useGetDamageRelationsQuery, useGetAllRelationsQuery } = damageRelationsApi;

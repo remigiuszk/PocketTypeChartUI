@@ -14,7 +14,7 @@ type PokeTypeListProps = {
   isLoading: boolean;
   isFetching: boolean;
   error: FetchBaseQueryError | SerializedError | undefined;
-  refetch: () => any;
+  refetch: () => void;
   onToggle: (pokeType: PokeTypeModel) => void;
 };
 
@@ -34,10 +34,7 @@ export const PokeTypeList = ({
       ) : error ? (
         <Error onRetry={refetch} />
       ) : (
-        <CardWithHeader
-          title="Select poke type(s)"
-          subtitle="Choose up to two types"
-        >
+        <CardWithHeader title="Select poke type(s)" subtitle="Choose up to two types">
           <FlatList
             style={styles.container}
             data={data ?? []}
@@ -58,5 +55,5 @@ export const PokeTypeList = ({
 };
 
 const styles = StyleSheet.create({
-  container: { padding:6 },
+  container: { padding: 6 },
 });

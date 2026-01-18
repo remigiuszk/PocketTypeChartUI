@@ -7,17 +7,18 @@ import { DefensiveDamageRelation } from "./DefensiveDamageRelation";
 
 type Props = {
   relationList: DefensiveDamageRelationModel[];
-  selectedTypeSprites: string[]
 };
 
-export const DefensiveRelationsList = ({ relationList, selectedTypeSprites }: Props) => {
+export const DefensiveRelationsList = ({ relationList }: Props) => {
   const superEffective = relationList
     .filter((x) => x.multiplier >= 2)
     .sort((a, b) => b.multiplier - a.multiplier);
+
   const notVeryEffective = relationList
     .filter((x) => x.multiplier < 1 && x.multiplier > 0)
     .sort((a, b) => a.multiplier - b.multiplier);
-  const immunities = relationList.filter((x) => x.multiplier == 0);
+
+  const immunities = relationList.filter((x) => x.multiplier === 0);
 
   return (
     <View style={styles.container}>

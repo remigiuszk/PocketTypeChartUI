@@ -1,15 +1,11 @@
-import {
-  Pressable,
-  StyleProp,
-  StyleSheet,
-  ViewStyle,
-} from "react-native";
+import { ReactNode } from "react";
+import { Pressable, StyleProp, StyleSheet, ViewStyle } from "react-native";
 
 import { PRIMARY } from "../../constants";
 
 type Props = {
   click: () => void;
-  children: any;
+  children: ReactNode;
   style?: StyleProp<ViewStyle>;
 };
 

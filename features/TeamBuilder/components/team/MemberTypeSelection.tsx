@@ -26,14 +26,13 @@ export const MemberTypeSelection = ({
   onConfirm,
   onClose,
 }: Props) => {
+  const [selectedTypes, setSelectedTypes] = useState<PokeTypeModel[]>([]);
+
   useEffect(() => {
     setSelectedTypes(selectedMember?.selectedTypes ?? []);
   }, [selectedMember]);
 
-  const { data, isLoading, isFetching, error, refetch } =
-    useGetAllPokeTypesQuery();
-
-  const [selectedTypes, setSelectedTypes] = useState<PokeTypeModel[]>([]);
+  const { data, isLoading, isFetching, error, refetch } = useGetAllPokeTypesQuery();
 
   const toggleType = (type: PokeTypeModel) => {
     setSelectedTypes((prev) => {
@@ -91,9 +90,7 @@ export const MemberTypeSelection = ({
                 numColumns={3}
               />
               <View style={styles.selectedContainer}>
-                <Subtitle style={{ color: TEXT_300 }}>
-                  Currently selected:
-                </Subtitle>
+                <Subtitle style={{ color: TEXT_300 }}>Currently selected:</Subtitle>
                 <TwoTypesHeader
                   imageHeight={20}
                   message=""
@@ -103,16 +100,11 @@ export const MemberTypeSelection = ({
               <View style={styles.buttonsContainer}>
                 <Pressable
                   onPress={confirm}
-                  style={({ pressed }) => [
-                    styles.actionBtn,
-                    pressed && styles.pressed,
-                  ]}
+                  style={({ pressed }) => [styles.actionBtn, pressed && styles.pressed]}
                   hitSlop={8}
                 >
                   <Feather name="check" size={18} color={ACCENT} />
-                  <Subtitle style={{ fontSize: 18, color: ACCENT }}>
-                    Confirm
-                  </Subtitle>
+                  <Subtitle style={{ fontSize: 18, color: ACCENT }}>Confirm</Subtitle>
                 </Pressable>
 
                 <Pressable
@@ -125,9 +117,7 @@ export const MemberTypeSelection = ({
                   hitSlop={8}
                 >
                   <Feather name="x" size={18} color="#ff6b6b" />
-                  <Subtitle style={{ fontSize: 18, color: "#ff6b6b" }}>
-                    Cancel
-                  </Subtitle>
+                  <Subtitle style={{ fontSize: 18, color: "#ff6b6b" }}>Cancel</Subtitle>
                 </Pressable>
               </View>
             </CardWithHeader>

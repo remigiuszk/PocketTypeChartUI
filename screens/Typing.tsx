@@ -16,10 +16,15 @@ type Props = {
 
 export const Typing = ({ switchViews }: Props) => {
   const [selectedType, setSelectedType] = useState<PokeTypeModel[]>([]);
-  const { data, isLoading, isFetching, error, refetch } =
-    useGetAllPokeTypesQuery();
 
-  const toggleType = (type: PokeTypeModel) => {
+  const { data, isLoading, isFetching, error, refetch } = useGetAllPokeTypesQuery();
+
+  const normalizedSelected = useMemo(
+    () => [...selectedType].sort((a, b) => a.id - b.id),
+    [selectedType],
+  );
+
+  function toggleType(type: PokeTypeModel): void {
     setSelectedType((prev) => {
       const has = prev.some((x) => x.id === type.id);
       if (has) {
@@ -30,16 +35,11 @@ export const Typing = ({ switchViews }: Props) => {
       }
       return [...prev, type];
     });
-  };
+  }
 
-  const normalizedSelected = useMemo(
-    () => [...selectedType].sort((a, b) => a.id - b.id),
-    [selectedType]
-  );
-
-  const clearSelection = () => {
+  function clearSelection(): void {
     setSelectedType(() => []);
-  };
+  }
 
   return (
     <View style={styles.container}>

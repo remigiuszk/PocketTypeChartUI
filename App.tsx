@@ -10,7 +10,13 @@ import { TeamBuilder } from "./screens/TeamBuilder";
 import { Typing } from "./screens/Typing";
 import { store } from "./state/store";
 
-export default function App() {
+export const App = () => {
+  const [teamBuilderOpen, setTeamBuilderOpen] = useState<boolean>(false);
+
+  function switchViews() {
+    setTeamBuilderOpen(!teamBuilderOpen);
+  }
+
   useEffect(() => {
     if (Platform.OS !== "android") return;
 
@@ -18,11 +24,6 @@ export default function App() {
       await NavigationBar.setButtonStyleAsync("light");
     })();
   }, []);
-
-  const [teamBuilderOpen, setTeamBuilderOpen] = useState<boolean>(false);
-  const switchViews = () => {
-    setTeamBuilderOpen(!teamBuilderOpen);
-  };
 
   return (
     <SafeAreaProvider>
@@ -41,7 +42,7 @@ export default function App() {
       </Provider>
     </SafeAreaProvider>
   );
-}
+};
 
 const styles = StyleSheet.create({
   container: {

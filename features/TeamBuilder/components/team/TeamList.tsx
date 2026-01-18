@@ -1,15 +1,13 @@
 import { Feather } from "@expo/vector-icons";
 import * as Crypto from "expo-crypto";
 import { useEffect, useRef, useState } from "react";
-import { Alert,Pressable, StyleSheet, View } from "react-native";
+import { Alert, StyleSheet, View } from "react-native";
 
-import { ACCENT, BG_800, PRIMARY, TEXT_300 } from "../../../../constants";
-import {
-  loadTeamMembers,
-  saveTeamMembers,
-} from "../../../../shared/storage/teamStorage";
+import { OPTIONS_BG, OPTIONS_BORDER, OPTIONS_CONTENT } from "../../../../constants";
+import { loadTeamMembers, saveTeamMembers } from "../../../../shared/storage/teamStorage";
 import { Subtitle } from "../../../../shared/typohraphy/Subtitle";
 import { CardWithHeader } from "../../../../shared/ui/CardWithHeader";
+import { OptionButton } from "../../../../shared/ui/OptionButton";
 import { PokeTypeModel } from "../../../TypeSelection/types";
 import { TeamMemberModel } from "../../types";
 import { MemberTypeSelection } from "./MemberTypeSelection";
@@ -19,7 +17,54 @@ export const TeamList = () => {
   const [showModal, setShowModal] = useState<boolean>(false);
   const [teamMembers, setTeamMembers] = useState<TeamMemberModel[]>([]);
   const [selectedMember, setSelectedMember] = useState<TeamMemberModel>();
+
   const didLoad = useRef(false);
+
+  function addMember() {
+    const newMember: TeamMemberModel = {
+      id: Crypto.randomUUID(),
+      selectedTypes: [],
+    };
+    setSelectedMember(newMember);
+    setShowModal(true);
+  }
+
+  function editMember(member: TeamMemberModel) {
+    setSelectedMember(member);
+    setShowModal(true);
+  }
+
+  function deleteMember(member: TeamMemberModel) {
+    Alert.alert(
+      "Delete team member",
+      "Are you sure you want to delete this team member?",
+      [
+        {
+          text: "Yes, delete",
+          onPress: () => setTeamMembers((prev) => prev.filter((x) => x.id !== member.id)),
+        },
+        {
+          text: "No",
+          style: "cancel",
+        },
+      ],
+    );
+  }
+
+  function onConfirm(id: string, selectedTypes: PokeTypeModel[]) {
+    setTeamMembers((prev) => {
+      if (prev.some((x) => x.id === id)) {
+        return prev.map((m) =>
+          m.id === id ? { ...m, selectedTypes: selectedTypes } : m,
+        );
+      } else return [...prev, { id, selectedTypes }];
+    });
+  }
+
+  useEffect(() => {
+    if (!didLoad.current) return;
+    saveTeamMembers(teamMembers);
+  }, [teamMembers]);
 
   useEffect(() => {
     (async () => {
@@ -31,43 +76,6 @@ export const TeamList = () => {
     })();
   }, []);
 
-  useEffect(() => {
-    if (!didLoad.current) return; // żeby nie nadpisać storage zanim załadujesz
-    saveTeamMembers(teamMembers);
-  }, [teamMembers]);
-
-  const editMember = (member: TeamMemberModel) => {
-    setSelectedMember(member);
-    setShowModal(true);
-  };
-
-  const deleteMember = (member: TeamMemberModel) => {
-    Alert.alert(
-      "Delete team member",
-      "Are you sure you want to delete this team member?",
-      [
-        {
-          text: "Yes, delete",
-          onPress: () =>
-            setTeamMembers((prev) => prev.filter((x) => x.id !== member.id)),
-        },
-        {
-          text: "No",
-          style: "cancel",
-        },
-      ]
-    );
-  };
-
-  const addMember = () => {
-    const newMember: TeamMemberModel = {
-      id: Crypto.randomUUID(),
-      selectedTypes: [],
-    };
-    setSelectedMember(newMember);
-    setShowModal(true);
-  };
-
   return (
     <CardWithHeader
       title="Your team"
@@ -76,15 +84,9 @@ export const TeamList = () => {
     >
       <MemberTypeSelection
         onClose={() => setShowModal(false)}
-        onConfirm={(id: string, selectedTypes: PokeTypeModel[]) => {
-          setTeamMembers((prev) => {
-            if (prev.some((x) => x.id === id)) {
-              return prev.map((m) =>
-                m.id === id ? { ...m, selectedTypes: selectedTypes } : m
-              );
-            } else return [...prev, { id, selectedTypes }];
-          });
-        }}
+        onConfirm={(id: string, selectedTypes: PokeTypeModel[]) =>
+          onConfirm(id, selectedTypes)
+        }
         selectedMember={selectedMember}
         showModal={showModal}
       ></MemberTypeSelection>
@@ -97,21 +99,12 @@ export const TeamList = () => {
         />
       ))}
       {teamMembers.length < 6 && (
-        <Pressable
-          onPress={addMember}
-          style={({ pressed }) => [
-            styles.addContainer,
-            pressed && styles.pressed,
-          ]}
-        >
-          <View pointerEvents="none" style={styles.addGlow} />
-          <View style={styles.addContent}>
-            <View style={styles.addIconCircle}>
-              <Feather name="plus" size={18} color={ACCENT} />
-            </View>
-            <Subtitle style={styles.addText}>Add a team member</Subtitle>
+        <OptionButton onPress={addMember} style={styles.buttonStyle} type="options">
+          <View style={styles.addIconCircle}>
+            <Feather name="plus" size={18} color={OPTIONS_CONTENT} />
           </View>
-        </Pressable>
+          <Subtitle style={styles.addText}>Add a new member</Subtitle>
+        </OptionButton>
       )}
     </CardWithHeader>
   );
@@ -121,47 +114,12 @@ const styles = StyleSheet.create({
   card: {
     gap: 6,
   },
-  addContainer: {
+  buttonStyle: {
     width: "100%",
     marginTop: 4,
     position: "relative",
-  },
-
-  addGlow: {
-    position: "absolute",
-    left: 6,
-    right: 6,
-    top: 4,
-    bottom: 4,
-    borderRadius: 14,
-
-    backgroundColor: ACCENT,
-    opacity: 0.18,
-
-    shadowColor: ACCENT,
-    shadowOpacity: 0.45,
-    shadowRadius: 16,
-    shadowOffset: { width: 0, height: 6 },
-    elevation: 8,
-  },
-
-  addContent: {
-    height: 44,
-    borderRadius: 14,
     flexDirection: "row",
-    alignItems: "center",
-    justifyContent: "center",
-    gap: 10,
-
-    backgroundColor: BG_800,
-    borderWidth: 1.5,
-    borderColor: PRIMARY,
-
-    shadowColor: "#000",
-    shadowOpacity: 0.25,
-    shadowRadius: 10,
-    shadowOffset: { width: 0, height: 6 },
-    elevation: 3,
+    gap: 6,
   },
 
   addIconCircle: {
@@ -171,21 +129,13 @@ const styles = StyleSheet.create({
     alignItems: "center",
     justifyContent: "center",
 
-    backgroundColor: "rgba(27,197,190,0.15)",
+    backgroundColor: OPTIONS_BG,
     borderWidth: 1,
-    borderColor: "rgba(27,197,190,0.35)",
+    borderColor: OPTIONS_BORDER,
   },
-
   addText: {
-    color: TEXT_300,
-    fontSize: 16,
-    textTransform: "uppercase",
+    color: OPTIONS_CONTENT,
+    fontSize: 18,
     letterSpacing: 1,
-    fontWeight: "600",
-  },
-
-  pressed: {
-    transform: [{ scale: 0.97 }],
-    opacity: 0.9,
   },
 });

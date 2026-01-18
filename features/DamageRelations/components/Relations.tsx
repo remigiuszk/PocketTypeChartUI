@@ -14,8 +14,9 @@ type Props = {
 };
 
 export const Relations = ({ selectedTypes }: Props) => {
-  const { data, isLoading, isFetching, error, refetch } =
-    useGetDamageRelationsQuery(selectedTypes.map((t) => t.id));
+  const { data, isLoading, isFetching, error, refetch } = useGetDamageRelationsQuery(
+    selectedTypes.map((t) => t.id),
+  );
 
   return (
     <View style={styles.container}>
@@ -33,7 +34,6 @@ export const Relations = ({ selectedTypes }: Props) => {
           >
             <DefensiveRelationsList
               relationList={data?.defensiveDamageRelations ?? []}
-              selectedTypeSprites={selectedTypes.map((x) => x.sprite)}
             ></DefensiveRelationsList>
           </CardWithHeaderRelations>
           <OffensiveRelationsList

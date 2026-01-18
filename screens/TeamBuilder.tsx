@@ -1,7 +1,6 @@
 import { StyleSheet, View } from "react-native";
 
 import { BG_100 } from "../constants";
-import { useGetAllRelationsQuery } from "../features/DamageRelations/query";
 import { TeamList } from "../features/TeamBuilder/components/team/TeamList";
 import { NavBar } from "../shared/components/NavBar";
 import { TopBar } from "../shared/components/TopBar";
@@ -13,8 +12,8 @@ type Props = {
 };
 
 export const TeamBuilder = ({ switchViews }: Props) => {
-  const { data, isLoading, isFetching, error, refetch } =
-    useGetAllRelationsQuery();
+  // const { data, isLoading, isFetching, error, refetch } =
+  //   useGetAllRelationsQuery();
 
   return (
     <View style={styles.container}>
@@ -22,7 +21,7 @@ export const TeamBuilder = ({ switchViews }: Props) => {
       <View style={{ padding: 10, flex: 1, gap: 16 }}>
         <Title>Welcome to the TeamBuilder</Title>
         <Subtitle>
-          Select up to 6 team members to view your entire team's relations and
+          Select up to 6 team members to view your entire team&apos;s relations and
           suggestions on how to improve.
         </Subtitle>
         <TeamList></TeamList>
