@@ -1,12 +1,25 @@
 import { Feather } from "@expo/vector-icons";
 import { useEffect, useState } from "react";
-import { FlatList, Modal, Pressable, StyleSheet, View } from "react-native";
+import { Alert, FlatList, Modal, StyleSheet, View } from "react-native";
 
-import { ACCENT, BG_500, PRIMARY, TEXT_300 } from "../../../../constants";
+import {
+  ALERT_CANT_CREATE_MEMBER_TITLE,
+  ALERT_CEANT_CREATE_MEMBER_CONTENT,
+  BG_500,
+  ERROR_BG,
+  ERROR_BORDER,
+  ERROR_CONTENT,
+  OPTIONS_BG,
+  OPTIONS_BORDER,
+  OPTIONS_CONTENT,
+  PRIMARY,
+  TEXT_300,
+} from "../../../../constants";
 import { Error } from "../../../../shared/components/Error";
 import { Loading } from "../../../../shared/components/Loading";
 import { Subtitle } from "../../../../shared/typohraphy/Subtitle";
 import { CardWithHeader } from "../../../../shared/ui/CardWithHeader";
+import { OptionButton } from "../../../../shared/ui/OptionButton";
 import { TwoTypesHeader } from "../../../../shared/ui/TwoTypesHeader";
 import { PokeType } from "../../../TypeSelection/components/PokeType";
 import { useGetAllPokeTypesQuery } from "../../../TypeSelection/query";
@@ -27,14 +40,13 @@ export const MemberTypeSelection = ({
   onClose,
 }: Props) => {
   const [selectedTypes, setSelectedTypes] = useState<PokeTypeModel[]>([]);
+  const { data, isLoading, isFetching, error, refetch } = useGetAllPokeTypesQuery();
 
   useEffect(() => {
     setSelectedTypes(selectedMember?.selectedTypes ?? []);
   }, [selectedMember]);
 
-  const { data, isLoading, isFetching, error, refetch } = useGetAllPokeTypesQuery();
-
-  const toggleType = (type: PokeTypeModel) => {
+  function toggleType(type: PokeTypeModel) {
     setSelectedTypes((prev) => {
       const has = prev.some((x) => x.id === type.id);
       if (has) {
@@ -45,17 +57,21 @@ export const MemberTypeSelection = ({
       }
       return [...prev, type];
     });
-  };
+  }
 
-  const confirm = () => {
+  function confirm() {
     if (!selectedMember) return;
-    onConfirm(selectedMember.id, selectedTypes);
-    onClose();
-  };
+    if (selectedTypes && selectedTypes.length > 0) {
+      onConfirm(selectedMember.id, selectedTypes);
+      onClose();
+    } else {
+      Alert.alert(ALERT_CANT_CREATE_MEMBER_TITLE, ALERT_CEANT_CREATE_MEMBER_CONTENT);
+    }
+  }
 
-  const cancel = () => {
+  function cancel() {
     onClose();
-  };
+  }
 
   return (
     <Modal
@@ -98,27 +114,27 @@ export const MemberTypeSelection = ({
                 ></TwoTypesHeader>
               </View>
               <View style={styles.buttonsContainer}>
-                <Pressable
-                  onPress={confirm}
-                  style={({ pressed }) => [styles.actionBtn, pressed && styles.pressed]}
-                  hitSlop={8}
-                >
-                  <Feather name="check" size={18} color={ACCENT} />
-                  <Subtitle style={{ fontSize: 18, color: ACCENT }}>Confirm</Subtitle>
-                </Pressable>
+                <OptionButton onPress={confirm} style={styles.buttonStyle} type="options">
+                  <View style={[styles.iconCircle, styles.iconCircleOptions]}>
+                    <Feather name="check" size={18} color={OPTIONS_CONTENT} />
+                  </View>
+                  <Subtitle
+                    style={{ fontSize: 16, fontWeight: 100, color: OPTIONS_CONTENT }}
+                  >
+                    Confirm
+                  </Subtitle>
+                </OptionButton>
 
-                <Pressable
-                  onPress={cancel}
-                  style={({ pressed }) => [
-                    styles.actionBtn,
-                    styles.dangerBtn,
-                    pressed && styles.pressed,
-                  ]}
-                  hitSlop={8}
-                >
-                  <Feather name="x" size={18} color="#ff6b6b" />
-                  <Subtitle style={{ fontSize: 18, color: "#ff6b6b" }}>Cancel</Subtitle>
-                </Pressable>
+                <OptionButton onPress={cancel} style={styles.buttonStyle} type="error">
+                  <View style={[styles.iconCircle, styles.iconCircleError]}>
+                    <Feather name="x" size={18} color={ERROR_CONTENT} />
+                  </View>
+                  <Subtitle
+                    style={{ fontSize: 16, fontWeight: 100, color: ERROR_CONTENT }}
+                  >
+                    Cancel
+                  </Subtitle>
+                </OptionButton>
               </View>
             </CardWithHeader>
           )}
@@ -158,10 +174,8 @@ const styles = StyleSheet.create({
     width: "100%",
     gap: 6,
     paddingHorizontal: 12,
-    // „card” tło dopasowane do motywu
     backgroundColor: BG_500,
 
-    // subtelny border w akcencie
     borderWidth: 1,
     borderColor: PRIMARY,
   },
@@ -174,6 +188,9 @@ const styles = StyleSheet.create({
     width: "100%",
     gap: 24,
     marginVertical: 6,
+  },
+  buttonStyle: {
+    width: "40%",
   },
   actionBtn: {
     borderRadius: 16,
@@ -193,7 +210,22 @@ const styles = StyleSheet.create({
     backgroundColor: "rgba(255,107,107,0.10)",
     borderColor: "rgba(255,107,107,0.25)",
   },
-
+  iconCircle: {
+    width: 26,
+    height: 26,
+    borderRadius: 13,
+    alignItems: "center",
+    justifyContent: "center",
+    borderWidth: 1,
+  },
+  iconCircleOptions: {
+    backgroundColor: OPTIONS_BG,
+    borderColor: OPTIONS_BORDER,
+  },
+  iconCircleError: {
+    backgroundColor: ERROR_BG,
+    borderColor: ERROR_BORDER,
+  },
   pressed: {
     transform: [{ scale: 0.96 }],
     opacity: 0.9,

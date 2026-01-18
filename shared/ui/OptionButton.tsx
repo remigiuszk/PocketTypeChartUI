@@ -24,6 +24,7 @@ type Props = {
   onPress: () => void;
   children: ReactNode;
   style?: StyleProp<ViewStyle>;
+  disabled?: boolean;
 };
 
 type OptionButtonConfig = {
@@ -31,10 +32,11 @@ type OptionButtonConfig = {
   style: ViewStyle;
 };
 
-export const OptionButton = ({ type, onPress, children, style }: Props) => {
+export const OptionButton = ({ type, onPress, children, style, disabled }: Props) => {
   const config = OPTION_BUTTON_CONFIG[type];
   return (
     <Pressable
+      disabled={disabled ?? false}
       onPress={onPress}
       style={({ pressed }) => [
         styles.button,
@@ -57,6 +59,8 @@ const styles = StyleSheet.create({
     alignItems: "center",
     justifyContent: "center",
     borderWidth: 1,
+    flexDirection: "row",
+    gap: 6,
   },
   options: {
     backgroundColor: OPTIONS_BG,

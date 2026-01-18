@@ -23,7 +23,7 @@ export const ACCENT: string = "#f3f2d0ff";
 export const WARNING: string = "#ffce85";
 
 export const OPTIONS_BG: string = "#3d6367a3";
-export const OPTIONS_BORDER: string = "#6dbfbe";
+export const OPTIONS_BORDER: string = "#6dbfbec3";
 export const OPTIONS_CONTENT: string = "#e5edd1ff";
 export const OPTIONS_SUBCONTENT: string = "#e5edd16b";
 
@@ -32,7 +32,7 @@ export const ERROR_BORDER: string = "rgba(255,107,107,0.25)";
 export const ERROR_CONTENT: string = "#ff6b6b";
 export const ERROR_SUBCONTENT: string = "#ff6b6b84";
 
-export const INFO_BG: string = "rgba(107, 228, 255, 0.1)";
-export const INFO_BORDER: string = "rgba(107, 216, 255, 0.25)";
+export const INFO_BG: string = "rgba(97, 189, 251, 0.38)";
+export const INFO_BORDER: string = "rgba(60, 175, 252, 1)";
 export const INFO_CONTENT: string = "rgba(107, 199, 232, 1)";
 export const INFO_SUBCONTENT: string = "rgba(107, 199, 232, 0.52)";

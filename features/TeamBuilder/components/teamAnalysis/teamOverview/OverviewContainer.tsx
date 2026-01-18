@@ -37,7 +37,9 @@ export const OverviewContainer = ({ type, style }: Props) => {
   const config = CONTAINER_CONFIG[type];
   return (
     <View style={[styles.container, config.containerStyle, style]}>
-      <Subtitle style={[styles.headerText]}>{config.headerText}</Subtitle>
+      <Subtitle style={[styles.headerText, config.headerTextStyle]}>
+        {config.headerText}
+      </Subtitle>
     </View>
   );
 };

@@ -1,5 +1,6 @@
 import FontAwesome from "@expo/vector-icons/FontAwesome";
 import MaterialCommunityIcons from "@expo/vector-icons/MaterialCommunityIcons";
+import { ReactNode } from "react";
 import { StyleProp, StyleSheet, View, ViewStyle } from "react-native";
 
 import { BG_500, BG_600, BORDER_100, PADDING, TEXT_300 } from "../../constants";
@@ -10,7 +11,7 @@ type CardProps = {
   title: string;
   subtitle: string;
   iconName?: string;
-  children: any;
+  children: ReactNode;
   style?: StyleProp<ViewStyle>;
   sprites: string[];
 };
@@ -31,23 +32,20 @@ export const CardWithHeaderRelations = ({
           iconName !== undefined
             ? { alignItems: "flex-start" }
             : { alignItems: "center" },
-          iconName == "sword" ? { paddingLeft: 8 } : {},
+          iconName === "sword" ? { paddingLeft: 8 } : {},
         ]}
       >
         <View
-          style={[
-            styles.titleContainer,
-            iconName == "sword" ? { gap: 6 } : { gap: 12 },
-          ]}
+          style={[styles.titleContainer, iconName === "sword" ? { gap: 6 } : { gap: 12 }]}
         >
-          {iconName == "shield" ? (
+          {iconName === "shield" ? (
             <FontAwesome
               style={styles.iconShield}
               name="shield"
               size={36}
               color={TEXT_300}
             />
-          ) : iconName == "sword" ? (
+          ) : iconName === "sword" ? (
             <MaterialCommunityIcons
               style={styles.iconSword}
               name="sword"
@@ -64,10 +62,7 @@ export const CardWithHeaderRelations = ({
             ]}
           >
             <Title>{title}</Title>
-            <TwoTypesHeader
-              sprites={sprites}
-              message={subtitle}
-            ></TwoTypesHeader>
+            <TwoTypesHeader sprites={sprites} message={subtitle}></TwoTypesHeader>
           </View>
         </View>
       </View>
@@ -102,10 +97,8 @@ const styles = StyleSheet.create({
     paddingHorizontal: PADDING,
     paddingVertical: PADDING / 2,
   },
-  iconShield: {
-  },
-  iconSword: {
-  },
+  iconShield: {},
+  iconSword: {},
   titleContainer: {
     alignItems: "flex-start",
     justifyContent: "center",

@@ -1,5 +1,6 @@
 import FontAwesome from "@expo/vector-icons/FontAwesome";
 import MaterialCommunityIcons from "@expo/vector-icons/MaterialCommunityIcons";
+import { ReactNode } from "react";
 import { StyleProp, StyleSheet, View, ViewStyle } from "react-native";
 
 import { BG_500, BG_600, BORDER_GRAY, PADDING, TEXT_300 } from "../../constants";
@@ -10,7 +11,7 @@ type CardProps = {
   title: string;
   subtitle: string;
   iconName?: string;
-  children: any;
+  children: ReactNode;
   style?: StyleProp<ViewStyle>;
 };
 
@@ -32,9 +33,9 @@ export const CardWithHeader = ({
         ]}
       >
         <View style={styles.titleContainer}>
-          {iconName == "shield" ? (
+          {iconName === "shield" ? (
             <FontAwesome name="shield" size={36} color={TEXT_300} />
-          ) : iconName == "sword" ? (
+          ) : iconName === "sword" ? (
             <MaterialCommunityIcons name="sword" size={36} color={TEXT_300} />
           ) : null}
           <View

@@ -1,6 +1,6 @@
 import { StyleSheet, View, ViewStyle } from "react-native";
 
-import { PADDING } from "../../../../../constants";
+import { OverviewContainer } from "./OverviewContainer";
 
 type Props = {
   style?: ViewStyle | ViewStyle[];
@@ -9,8 +9,8 @@ type Props = {
 export const TeamOverview = ({ style }: Props) => {
   return (
     <View style={[styles.overviewLayout, style]}>
-      <View style={[styles.container, styles.weaknesses]}></View>
-      <View style={[styles.container, styles.strengths]}></View>
+      <OverviewContainer type="weaknesses"></OverviewContainer>
+      <OverviewContainer type="strenghts"></OverviewContainer>
     </View>
   );
 };
@@ -21,13 +21,8 @@ const styles = StyleSheet.create({
     justifyContent: "flex-start",
     alignItems: "center",
     gap: 6,
-    padding: PADDING,
   },
-  container: {
-    flex: 1,
-    borderWidth: 1,
-    borderRadius: 16,
-  },
+  container: {},
   strengths: {},
   weaknesses: {},
 });
