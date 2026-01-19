@@ -24,15 +24,30 @@ export const WARNING: string = "#ffce85";
 
 export const OPTIONS_BG: string = "#3d6367a3";
 export const OPTIONS_BORDER: string = "#6dbfbec3";
-export const OPTIONS_CONTENT: string = "#e5edd1ff";
-export const OPTIONS_SUBCONTENT: string = "#e5edd16b";
+export const OPTIONS_CONTENT: string = "rgb(229, 237, 209)";
 
 export const ERROR_BG: string = "rgba(255,107,107,0.10)";
 export const ERROR_BORDER: string = "rgba(255,107,107,0.25)";
 export const ERROR_CONTENT: string = "#ff6b6b";
-export const ERROR_SUBCONTENT: string = "#ff6b6b84";
 
 export const INFO_BG: string = "rgba(97, 189, 251, 0.38)";
 export const INFO_BORDER: string = "rgba(60, 175, 252, 1)";
 export const INFO_CONTENT: string = "rgba(107, 199, 232, 1)";
 export const INFO_SUBCONTENT: string = "rgba(107, 199, 232, 0.52)";
+
+export const MEMBERS_COLORS = [
+  "#1BC5BE", // brand teal (twój główny accent)
+  "#4DA3FF", // clean blue
+  "#FF6B6B", // soft red
+  "#FF9F43", // orange
+  "#FFD93D", // yellow
+  "#6BCB77", // green
+  "#9B5DE5", // purple
+  "#F15BB5", // pink
+  "#5EEAD4", // mint
+  "#94A3B8", // neutral gray
+  "#E2E8F0", // soft white
+  "#2DD4BF", // secondary teal
+] as const;
+
+export type MemberColor = (typeof MEMBERS_COLORS)[number];

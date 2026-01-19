@@ -1,6 +1,6 @@
 import { Feather } from "@expo/vector-icons";
 import { useEffect, useState } from "react";
-import { Alert, FlatList, Modal, StyleSheet, View } from "react-native";
+import { Alert, FlatList, Modal, Pressable, StyleSheet, View } from "react-native";
 
 import {
   ALERT_CANT_CREATE_MEMBER_TITLE,
@@ -14,17 +14,19 @@ import {
   OPTIONS_CONTENT,
   PRIMARY,
   TEXT_300,
-} from "../../../../constants";
-import { Error } from "../../../../shared/components/Error";
-import { Loading } from "../../../../shared/components/Loading";
-import { Subtitle } from "../../../../shared/typohraphy/Subtitle";
-import { CardWithHeader } from "../../../../shared/ui/CardWithHeader";
-import { OptionButton } from "../../../../shared/ui/OptionButton";
-import { TwoTypesHeader } from "../../../../shared/ui/TwoTypesHeader";
-import { PokeType } from "../../../TypeSelection/components/PokeType";
-import { useGetAllPokeTypesQuery } from "../../../TypeSelection/query";
-import { PokeTypeModel } from "../../../TypeSelection/types";
-import { TeamMemberModel } from "../../types";
+} from "../../../../../constants";
+import { Error } from "../../../../../shared/components/Error";
+import { Loading } from "../../../../../shared/components/Loading";
+import { Subtitle } from "../../../../../shared/typohraphy/Subtitle";
+import { CardWithHeader } from "../../../../../shared/ui/CardWithHeader";
+import { OptionButton } from "../../../../../shared/ui/OptionButton";
+import { TwoTypesHeader } from "../../../../../shared/ui/TwoTypesHeader";
+import { PokeType } from "../../../../TypeSelection/components/PokeType";
+import { useGetAllPokeTypesQuery } from "../../../../TypeSelection/query";
+import { PokeTypeModel } from "../../../../TypeSelection/types";
+import { TeamMemberModel } from "../../../types";
+import { MEMBER_ICONS, MemberIconDef } from "../../../../../constants/icons";
+import { MemberIconSelection } from "./MemberIconSelection";
 
 type Props = {
   showModal: boolean;
@@ -33,7 +35,7 @@ type Props = {
   onClose: () => void;
 };
 
-export const MemberTypeSelection = ({
+export const MemberDetails = ({
   showModal,
   selectedMember,
   onConfirm,
@@ -72,6 +74,10 @@ export const MemberTypeSelection = ({
   function cancel() {
     onClose();
   }
+
+  function onColorSelected(color: string) {}
+
+  function onIconSelected(iconId: string) {}
 
   return (
     <Modal
@@ -113,6 +119,10 @@ export const MemberTypeSelection = ({
                   sprites={selectedTypes.map((x) => x.sprite)}
                 ></TwoTypesHeader>
               </View>
+              <MemberIconSelection
+                onColorSelected={onColorSelected}
+                onIconSelected={onIconSelected}
+              ></MemberIconSelection>
               <View style={styles.buttonsContainer}>
                 <OptionButton onPress={confirm} style={styles.buttonStyle} type="options">
                   <View style={[styles.iconCircle, styles.iconCircleOptions]}>
@@ -191,24 +201,6 @@ const styles = StyleSheet.create({
   },
   buttonStyle: {
     width: "40%",
-  },
-  actionBtn: {
-    borderRadius: 16,
-    alignItems: "center",
-    justifyContent: "center",
-    flexDirection: "row",
-    gap: 6,
-    paddingHorizontal: 24,
-    height: 32,
-
-    backgroundColor: "rgba(27,197,190,0.12)",
-    borderWidth: 1,
-    borderColor: "rgba(27,197,190,0.28)",
-  },
-
-  dangerBtn: {
-    backgroundColor: "rgba(255,107,107,0.10)",
-    borderColor: "rgba(255,107,107,0.25)",
   },
   iconCircle: {
     width: 26,

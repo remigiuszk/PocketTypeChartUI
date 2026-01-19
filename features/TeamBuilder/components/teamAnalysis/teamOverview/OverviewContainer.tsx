@@ -4,14 +4,14 @@ import {
   ERROR_BG,
   ERROR_BORDER,
   ERROR_CONTENT,
-  ERROR_SUBCONTENT,
   OPTIONS_BG,
   OPTIONS_BORDER,
   OPTIONS_CONTENT,
-  OPTIONS_SUBCONTENT,
   PADDING,
+  TeamOverviewRowTextData,
 } from "../../../../../constants";
 import { Subtitle } from "../../../../../shared/typohraphy/Subtitle";
+import { OverviewRow } from "./OverviewRow";
 
 export const CONTAINER_TYPE = {
   Weaknesses: "weaknesses",
@@ -23,6 +23,7 @@ export type ContainerType = (typeof CONTAINER_TYPE)[keyof typeof CONTAINER_TYPE]
 type Props = {
   type: ContainerType;
   style?: ViewStyle | ViewStyle[];
+  overViewRowTextData: TeamOverviewRowTextData[];
 };
 
 type ContainerConfig = {
@@ -33,29 +34,59 @@ type ContainerConfig = {
   rowTextStyle: TextStyle;
 };
 
-export const OverviewContainer = ({ type, style }: Props) => {
+export const OverviewContainer = ({ type, style, overViewRowTextData }: Props) => {
   const config = CONTAINER_CONFIG[type];
   return (
     <View style={[styles.container, config.containerStyle, style]}>
       <Subtitle style={[styles.headerText, config.headerTextStyle]}>
         {config.headerText}
       </Subtitle>
+      {overViewRowTextData.map((rowText) => (
+        <OverviewRow
+          key={rowText.mainText}
+          textStyle={config.rowTextStyle}
+          texts={rowText}
+        ></OverviewRow>
+      ))}
     </View>
   );
 };
 
 const styles = StyleSheet.create({
-  container: { flex: 1, borderWidth: 1, borderRadius: 8, padding: PADDING },
-  containerWeaknesses: { borderColor: ERROR_BORDER, backgroundColor: ERROR_BG },
-  containerStrenghts: { borderColor: OPTIONS_BORDER, backgroundColor: OPTIONS_BG },
+  container: {
+    width: "100%",
+    borderWidth: 1,
+    borderRadius: 8,
+    padding: PADDING,
+    gap: 8,
+  },
+  containerWeaknesses: {
+    borderColor: ERROR_BORDER,
+    backgroundColor: ERROR_BG,
+  },
+  containerStrenghts: {
+    borderColor: OPTIONS_BORDER,
+    backgroundColor: OPTIONS_BG,
+  },
 
-  headerText: { fontSize: 20 },
-  headerTextWeaknesses: { color: ERROR_CONTENT },
-  headerTextStrenghts: { color: OPTIONS_CONTENT },
+  headerText: {
+    fontSize: 20,
+  },
+  headerTextWeaknesses: {
+    color: ERROR_CONTENT,
+    textTransform: "uppercase",
+  },
+  headerTextStrenghts: {
+    color: OPTIONS_CONTENT,
+    textTransform: "uppercase",
+  },
 
-  rowTextStyle: { fontSize: 14 },
-  rowTextStyleWeaknesses: { color: ERROR_SUBCONTENT },
-  rowTextStyleStrenghts: { color: OPTIONS_SUBCONTENT },
+  rowTextStyleWeaknesses: {
+    color: ERROR_CONTENT,
+  },
+  rowTextStyleStrenghts: {
+    color: OPTIONS_CONTENT,
+  },
 });
 
 const CONTAINER_CONFIG: Record<ContainerType, ContainerConfig> = {
@@ -71,6 +102,6 @@ const CONTAINER_CONFIG: Record<ContainerType, ContainerConfig> = {
     containerStyle: styles.containerStrenghts,
     headerTextStyle: styles.headerTextStrenghts,
     headerText: "Strenghts",
-    rowTextStyle: styles.rowTextStyleWeaknesses,
+    rowTextStyle: styles.rowTextStyleStrenghts,
   },
 };

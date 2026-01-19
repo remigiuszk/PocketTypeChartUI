@@ -20,7 +20,7 @@ import { CardWithHeader } from "../../../../shared/ui/CardWithHeader";
 import { OptionButton } from "../../../../shared/ui/OptionButton";
 import { PokeTypeModel } from "../../../TypeSelection/types";
 import { TeamMemberModel } from "../../types";
-import { MemberTypeSelection } from "./MemberTypeSelection";
+import { MemberDetails } from "./memberDetails/MemberDetails";
 import { TeamMember } from "./TeamMember";
 
 type Props = {
@@ -125,14 +125,14 @@ export const TeamList = ({ onEvaluate: onAnalyze }: Props) => {
       subtitle="Select your team members' types"
       style={styles.card}
     >
-      <MemberTypeSelection
+      <MemberDetails
         onClose={() => setShowModal(false)}
         onConfirm={(id: string, selectedTypes: PokeTypeModel[]) =>
           onConfirm(id, selectedTypes)
         }
         selectedMember={selectedMember}
         showModal={showModal}
-      ></MemberTypeSelection>
+      ></MemberDetails>
       {teamMembers.map((member: TeamMemberModel) => (
         <TeamMember
           member={member}
