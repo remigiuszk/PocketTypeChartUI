@@ -19,7 +19,7 @@ export const TeamMember = ({ editMember, deleteMember, member }: Props) => {
         <TwoTypesHeader
           imageHeight={28}
           message=""
-          sprites={member.selectedTypes.map((x) => x.sprite)}
+          sprites={member.types.map((x) => x.sprite)}
           style={styles.types}
         />
 

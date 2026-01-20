@@ -10,10 +10,12 @@ import {
   BORDER_GRAY,
   BORDER_WHITE,
   INFO_BORDER,
+  MEMBERS_COLORS,
   OPTIONS_BG,
   OPTIONS_BORDER,
   OPTIONS_CONTENT,
 } from "../../../../constants";
+import { MEMBER_ICONS } from "../../../../constants/icons";
 import { loadTeamMembers, saveTeamMembers } from "../../../../shared/storage/teamStorage";
 import { Subtitle } from "../../../../shared/typohraphy/Subtitle";
 import { CardWithHeader } from "../../../../shared/ui/CardWithHeader";
@@ -30,7 +32,12 @@ type Props = {
 export const TeamList = ({ onEvaluate: onAnalyze }: Props) => {
   const [showModal, setShowModal] = useState<boolean>(false);
   const [teamMembers, setTeamMembers] = useState<TeamMemberModel[]>([]);
-  const [selectedMember, setSelectedMember] = useState<TeamMemberModel>();
+  const [selectedMember, setSelectedMember] = useState<TeamMemberModel>({
+    id: Crypto.randomUUID(),
+    types: [],
+    iconId: MEMBER_ICONS[0].id,
+    iconColor: MEMBERS_COLORS[0],
+  });
 
   const didLoad = useRef(false);
   const scale = useRef(new Animated.Value(1)).current;
@@ -38,7 +45,9 @@ export const TeamList = ({ onEvaluate: onAnalyze }: Props) => {
   function addMember() {
     const newMember: TeamMemberModel = {
       id: Crypto.randomUUID(),
-      selectedTypes: [],
+      types: [],
+      iconId: MEMBER_ICONS[0].id,
+      iconColor: MEMBERS_COLORS[0],
     };
     setSelectedMember(newMember);
     setShowModal(true);
@@ -67,13 +76,11 @@ export const TeamList = ({ onEvaluate: onAnalyze }: Props) => {
   }
 
   function onConfirm(id: string, selectedTypes: PokeTypeModel[]) {
-    setTeamMembers((prev) => {
-      if (prev.some((x) => x.id === id)) {
-        return prev.map((m) =>
-          m.id === id ? { ...m, selectedTypes: selectedTypes } : m,
-        );
-      } else return [...prev, { id, selectedTypes }];
-    });
+    // setTeamMembers((prev) => {
+    //   if (prev.some((x) => x.id === id)) {
+    //     return prev.map((m) => (m.id === id ? { ...m, types: selectedTypes } : m));
+    //   } else return [...prev, { id, types: selectedTypes }];
+    // });
   }
 
   function analyze() {

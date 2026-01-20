@@ -1,10 +1,8 @@
 import { Feather } from "@expo/vector-icons";
 import { useEffect, useState } from "react";
-import { Alert, FlatList, Modal, Pressable, StyleSheet, View } from "react-native";
+import { Modal, StyleSheet, View } from "react-native";
 
 import {
-  ALERT_CANT_CREATE_MEMBER_TITLE,
-  ALERT_CEANT_CREATE_MEMBER_CONTENT,
   BG_500,
   ERROR_BG,
   ERROR_BORDER,
@@ -21,16 +19,15 @@ import { Subtitle } from "../../../../../shared/typohraphy/Subtitle";
 import { CardWithHeader } from "../../../../../shared/ui/CardWithHeader";
 import { OptionButton } from "../../../../../shared/ui/OptionButton";
 import { TwoTypesHeader } from "../../../../../shared/ui/TwoTypesHeader";
-import { PokeType } from "../../../../TypeSelection/components/PokeType";
+import { PokeTypeList } from "../../../../TypeSelection/components/PokeTypeList";
 import { useGetAllPokeTypesQuery } from "../../../../TypeSelection/query";
 import { PokeTypeModel } from "../../../../TypeSelection/types";
 import { TeamMemberModel } from "../../../types";
-import { MEMBER_ICONS, MemberIconDef } from "../../../../../constants/icons";
 import { MemberIconSelection } from "./MemberIconSelection";
 
 type Props = {
   showModal: boolean;
-  selectedMember?: TeamMemberModel;
+  selectedMember: TeamMemberModel;
   onConfirm: (id: string, selectedTypes: PokeTypeModel[]) => void;
   onClose: () => void;
 };
@@ -41,43 +38,51 @@ export const MemberDetails = ({
   onConfirm,
   onClose,
 }: Props) => {
-  const [selectedTypes, setSelectedTypes] = useState<PokeTypeModel[]>([]);
+  const [newMember, setNewMember] = useState<TeamMemberModel>(selectedMember);
   const { data, isLoading, isFetching, error, refetch } = useGetAllPokeTypesQuery();
 
   useEffect(() => {
-    setSelectedTypes(selectedMember?.selectedTypes ?? []);
+    setNewMember(selectedMember);
   }, [selectedMember]);
 
   function toggleType(type: PokeTypeModel) {
-    setSelectedTypes((prev) => {
-      const has = prev.some((x) => x.id === type.id);
+    setNewMember((prev) => {
+      const has = prev.types.some((x) => x.id === type.id);
       if (has) {
-        return prev.filter((x) => x.id !== type.id);
+        return { ...prev, types: prev.types.filter((x) => x.id !== type.id) };
       }
-      if (prev.length === 2) {
-        return [prev[1], type];
+      if (prev.types.length === 2) {
+        return { ...prev, types: [prev.types[1], type] };
       }
-      return [...prev, type];
+      return { ...prev, types: [...prev.types, type] };
     });
   }
 
   function confirm() {
     if (!selectedMember) return;
-    if (selectedTypes && selectedTypes.length > 0) {
-      onConfirm(selectedMember.id, selectedTypes);
-      onClose();
-    } else {
-      Alert.alert(ALERT_CANT_CREATE_MEMBER_TITLE, ALERT_CEANT_CREATE_MEMBER_CONTENT);
-    }
+    // if (selectedTypes && selectedTypes.length > 0) {
+    //   onConfirm(selectedMember.id, selectedTypes);
+    //   onClose();
+    // } else {
+    //   Alert.alert(ALERT_CANT_CREATE_MEMBER_TITLE, ALERT_CEANT_CREATE_MEMBER_CONTENT);
+    // }
   }
 
   function cancel() {
     onClose();
   }
 
-  function onColorSelected(color: string) {}
+  function onColorSelected(color: string) {
+    setNewMember((prev) => {
+      return { ...prev, iconColor: color };
+    });
+  }
 
-  function onIconSelected(iconId: string) {}
+  function onIconSelected(iconId: string) {
+    setNewMember((prev) => {
+      return { ...prev, iconId: iconId };
+    });
+  }
 
   return (
     <Modal
@@ -97,54 +102,59 @@ export const MemberDetails = ({
             <CardWithHeader
               title="Select typing"
               subtitle="Choose up to two types for your team member"
+              style={{ gap: 12 }}
             >
-              <FlatList
-                style={styles.flatList}
-                data={data ?? []}
-                keyExtractor={(item: PokeTypeModel) => String(item.id)}
-                renderItem={({ item }) => (
-                  <PokeType
-                    pokeType={item}
-                    isSelected={selectedTypes?.some((x) => x.id === item.id)}
-                    onPress={() => toggleType(item)}
-                  ></PokeType>
-                )}
-                numColumns={3}
-              />
-              <View style={styles.selectedContainer}>
-                <Subtitle style={{ color: TEXT_300 }}>Currently selected:</Subtitle>
-                <TwoTypesHeader
-                  imageHeight={20}
-                  message=""
-                  sprites={selectedTypes.map((x) => x.sprite)}
-                ></TwoTypesHeader>
-              </View>
-              <MemberIconSelection
-                onColorSelected={onColorSelected}
-                onIconSelected={onIconSelected}
-              ></MemberIconSelection>
-              <View style={styles.buttonsContainer}>
-                <OptionButton onPress={confirm} style={styles.buttonStyle} type="options">
-                  <View style={[styles.iconCircle, styles.iconCircleOptions]}>
-                    <Feather name="check" size={18} color={OPTIONS_CONTENT} />
-                  </View>
-                  <Subtitle
-                    style={{ fontSize: 16, fontWeight: 100, color: OPTIONS_CONTENT }}
+              <View style={styles.content}>
+                <PokeTypeList
+                  memberTypes={newMember.types}
+                  data={data}
+                  isLoading={isLoading}
+                  isFetching={isFetching}
+                  error={error}
+                  refetch={refetch}
+                  onToggle={toggleType}
+                ></PokeTypeList>
+                <View style={styles.selectedContainer}>
+                  <Subtitle style={{ color: TEXT_300 }}>Currently selected:</Subtitle>
+                  <TwoTypesHeader
+                    imageHeight={20}
+                    message=""
+                    sprites={newMember.types.map((x) => x.sprite)}
+                  ></TwoTypesHeader>
+                </View>
+                <MemberIconSelection
+                  onColorSelected={onColorSelected}
+                  onIconSelected={onIconSelected}
+                  selectedColor={newMember.iconColor}
+                  selectedIconId={newMember.iconId}
+                ></MemberIconSelection>
+                <View style={styles.buttonsContainer}>
+                  <OptionButton
+                    onPress={confirm}
+                    style={styles.buttonStyle}
+                    type="options"
                   >
-                    Confirm
-                  </Subtitle>
-                </OptionButton>
+                    <View style={[styles.iconCircle, styles.iconCircleOptions]}>
+                      <Feather name="check" size={18} color={OPTIONS_CONTENT} />
+                    </View>
+                    <Subtitle
+                      style={{ fontSize: 16, fontWeight: 100, color: OPTIONS_CONTENT }}
+                    >
+                      Confirm
+                    </Subtitle>
+                  </OptionButton>
 
-                <OptionButton onPress={cancel} style={styles.buttonStyle} type="error">
-                  <View style={[styles.iconCircle, styles.iconCircleError]}>
-                    <Feather name="x" size={18} color={ERROR_CONTENT} />
-                  </View>
-                  <Subtitle
-                    style={{ fontSize: 16, fontWeight: 100, color: ERROR_CONTENT }}
-                  >
-                    Cancel
-                  </Subtitle>
-                </OptionButton>
+                  <OptionButton onPress={cancel} style={styles.buttonStyle} type="error">
+                    <View style={[styles.iconCircle, styles.iconCircleError]}>
+                      <Feather name="x" size={18} color={ERROR_CONTENT} />
+                    </View>
+                    <Subtitle
+                      style={{ fontSize: 16, fontWeight: 100, color: ERROR_CONTENT }}
+                    >
+                      Cancel
+                    </Subtitle>
+                  </OptionButton>
+                </View>
               </View>
             </CardWithHeader>
           )}
@@ -165,14 +175,13 @@ const styles = StyleSheet.create({
     flexDirection: "column",
     justifyContent: "flex-start",
     alignItems: "center",
-    gap: 12,
     backgroundColor: BG_500,
     borderRadius: 10,
     width: "99%",
   },
-  flatList: {
-    padding: 6,
-    marginVertical: 6,
+  content: {
+    gap: 12,
+    paddingHorizontal: 6,
   },
   selectedContainer: {
     flexDirection: "row",
@@ -183,7 +192,7 @@ const styles = StyleSheet.create({
     overflow: "hidden",
     width: "100%",
     gap: 6,
-    paddingHorizontal: 12,
+    paddingHorizontal: 6,
     backgroundColor: BG_500,
 
     borderWidth: 1,
@@ -193,11 +202,10 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     justifyContent: "center",
     alignItems: "center",
-    padding: 6,
     paddingHorizontal: 12,
     width: "100%",
     gap: 24,
-    marginVertical: 6,
+    marginBottom: 12,
   },
   buttonStyle: {
     width: "40%",

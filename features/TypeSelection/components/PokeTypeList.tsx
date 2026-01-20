@@ -1,15 +1,15 @@
 import { SerializedError } from "@reduxjs/toolkit";
 import { FetchBaseQueryError } from "@reduxjs/toolkit/query";
+import { useEffect, useState } from "react";
 import { FlatList, StyleSheet, View } from "react-native";
 
 import { Error } from "../../../shared/components/Error";
 import { Loading } from "../../../shared/components/Loading";
-import { CardWithHeader } from "../../../shared/ui/CardWithHeader";
 import { PokeTypeModel } from "../types";
 import { PokeType } from "./PokeType";
 
 type PokeTypeListProps = {
-  selectedTypes: PokeTypeModel[];
+  memberTypes: PokeTypeModel[];
   data: PokeTypeModel[] | undefined;
   isLoading: boolean;
   isFetching: boolean;
@@ -19,7 +19,7 @@ type PokeTypeListProps = {
 };
 
 export const PokeTypeList = ({
-  selectedTypes,
+  memberTypes,
   data,
   isLoading,
   isFetching,
@@ -27,6 +27,12 @@ export const PokeTypeList = ({
   refetch,
   onToggle,
 }: PokeTypeListProps) => {
+  const [selectedTypes, setSelectedTypes] = useState<PokeTypeModel[]>([]);
+
+  useEffect(() => {
+    setSelectedTypes(memberTypes ?? []);
+  }, [memberTypes]);
+
   return (
     <View>
       {isLoading || isFetching ? (
@@ -34,26 +40,24 @@ export const PokeTypeList = ({
       ) : error ? (
         <Error onRetry={refetch} />
       ) : (
-        <CardWithHeader title="Select poke type(s)" subtitle="Choose up to two types">
-          <FlatList
-            style={styles.container}
-            data={data ?? []}
-            keyExtractor={(item) => String(item.id)}
-            renderItem={({ item }) => (
-              <PokeType
-                pokeType={item}
-                isSelected={selectedTypes?.some((x) => x.id === item.id)}
-                onPress={() => onToggle(item)}
-              ></PokeType>
-            )}
-            numColumns={3}
-          />
-        </CardWithHeader>
+        <FlatList
+          style={styles.container}
+          data={data ?? []}
+          keyExtractor={(item) => String(item.id)}
+          renderItem={({ item }) => (
+            <PokeType
+              pokeType={item}
+              isSelected={selectedTypes?.some((x) => x.id === item.id)}
+              onPress={() => onToggle(item)}
+            ></PokeType>
+          )}
+          numColumns={3}
+        />
       )}
     </View>
   );
 };
 
 const styles = StyleSheet.create({
-  container: { padding: 6 },
+  container: {},
 });

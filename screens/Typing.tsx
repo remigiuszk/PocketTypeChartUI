@@ -9,6 +9,7 @@ import { PokeTypeModel } from "../features/TypeSelection/types";
 import { NavBar } from "../shared/components/NavBar";
 import { NoTypesSelected } from "../shared/components/NoTypesSelected";
 import { TopBar } from "../shared/components/TopBar";
+import { CardWithHeader } from "../shared/ui/CardWithHeader";
 
 type Props = {
   switchViews: () => void;
@@ -48,15 +49,17 @@ export const Typing = ({ switchViews }: Props) => {
         clearSelection={clearSelection}
       ></TopBar>
       <View style={{ margin: 6, marginBottom: 0, flex: 1, gap: 16 }}>
-        <PokeTypeList
-          data={data}
-          isFetching={isFetching}
-          error={error}
-          isLoading={isLoading}
-          refetch={refetch}
-          selectedTypes={normalizedSelected}
-          onToggle={toggleType}
-        />
+        <CardWithHeader title="Select poke type(s)" subtitle="Choose up to two types">
+          <PokeTypeList
+            data={data}
+            isFetching={isFetching}
+            error={error}
+            isLoading={isLoading}
+            refetch={refetch}
+            memberTypes={normalizedSelected}
+            onToggle={toggleType}
+          />
+        </CardWithHeader>
         {selectedType.length > 0 ? (
           <ScrollView>
             <Relations selectedTypes={normalizedSelected}></Relations>
