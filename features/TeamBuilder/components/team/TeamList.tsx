@@ -34,6 +34,7 @@ export const TeamList = ({ onEvaluate: onAnalyze }: Props) => {
   const [teamMembers, setTeamMembers] = useState<TeamMemberModel[]>([]);
   const [selectedMember, setSelectedMember] = useState<TeamMemberModel>({
     id: Crypto.randomUUID(),
+    name: "",
     types: [],
     iconId: MEMBER_ICONS[0].id,
     iconColor: MEMBERS_COLORS[0],
@@ -45,6 +46,7 @@ export const TeamList = ({ onEvaluate: onAnalyze }: Props) => {
   function addMember() {
     const newMember: TeamMemberModel = {
       id: Crypto.randomUUID(),
+      name: "Team member" + teamMembers.length + 1,
       types: [],
       iconId: MEMBER_ICONS[0].id,
       iconColor: MEMBERS_COLORS[0],

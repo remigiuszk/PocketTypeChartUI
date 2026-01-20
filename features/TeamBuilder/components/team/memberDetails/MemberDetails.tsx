@@ -24,6 +24,7 @@ import { useGetAllPokeTypesQuery } from "../../../../TypeSelection/query";
 import { PokeTypeModel } from "../../../../TypeSelection/types";
 import { TeamMemberModel } from "../../../types";
 import { MemberIconSelection } from "./MemberIconSelection";
+import { MemberName } from "./MemberName";
 
 type Props = {
   showModal: boolean;
@@ -105,6 +106,7 @@ export const MemberDetails = ({
               style={{ gap: 12 }}
             >
               <View style={styles.content}>
+                <MemberName memberName={newMember.name}></MemberName>
                 <PokeTypeList
                   memberTypes={newMember.types}
                   data={data}
@@ -177,11 +179,12 @@ const styles = StyleSheet.create({
     alignItems: "center",
     backgroundColor: BG_500,
     borderRadius: 10,
-    width: "99%",
+    width: "98%",
   },
   content: {
     gap: 12,
-    paddingHorizontal: 6,
+    paddingHorizontal: 12,
+    justifyContent: "center",
   },
   selectedContainer: {
     flexDirection: "row",
