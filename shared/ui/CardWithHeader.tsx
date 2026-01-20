@@ -9,7 +9,7 @@ import { Title } from "../typohraphy/Title";
 
 type CardProps = {
   title: string;
-  subtitle: string;
+  subtitle?: string;
   iconName?: string;
   children: ReactNode;
   style?: StyleProp<ViewStyle>;
@@ -47,7 +47,7 @@ export const CardWithHeader = ({
             ]}
           >
             <Title>{title}</Title>
-            <Subtitle>{subtitle}</Subtitle>
+            {subtitle && <Subtitle>{subtitle}</Subtitle>}
           </View>
         </View>
       </View>

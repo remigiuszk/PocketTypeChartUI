@@ -28,8 +28,12 @@ export const TEAM_OVERVIEW_STRENGHTS_TEXTS: TeamOverviewRowTextData[] = [
 export const HINT_HEADER_DEFAULT: string = "Why is this important?";
 
 export const ALERT_CANT_CREATE_MEMBER_TITLE: string = "Cannot create a team member";
-export const ALERT_CEANT_CREATE_MEMBER_CONTENT: string =
+export const ALERT_CANT_CREATE_NO_TYPES: string =
   "Cannot create a team member with no types, please select at least one type and try again.";
+export const ALERT_CANT_CREATE_NO_NAME: string =
+  "Cannot create a team member with no name, please input a name and try again.";
+export const ALERT_CANT_CREATE_NAME_EXISTS: string =
+  "Specified team member name already exists in your team. Select a different name and try again.";
 
 export const ALERT_CANT_ANALYZE_TITLE: string = "Cannot procceed to team analysis";
 export const ALERT_CANT_ANALYZE_CONTENT: string =

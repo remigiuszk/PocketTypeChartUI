@@ -12,8 +12,7 @@ export const Title = ({ children }: any) => {
 };
 
 const styles = StyleSheet.create({
-  container: {
-  },
+  container: {},
   text: {
     fontWeight: "600",
     fontFamily: "System",

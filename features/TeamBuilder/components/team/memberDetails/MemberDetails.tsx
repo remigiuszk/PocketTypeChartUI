@@ -29,7 +29,7 @@ import { MemberName } from "./MemberName";
 type Props = {
   showModal: boolean;
   selectedMember: TeamMemberModel;
-  onConfirm: (id: string, selectedTypes: PokeTypeModel[]) => void;
+  onConfirm: (id: string, newMember: TeamMemberModel) => void;
   onClose: () => void;
 };
 
@@ -60,17 +60,17 @@ export const MemberDetails = ({
   }
 
   function confirm() {
-    if (!selectedMember) return;
-    // if (selectedTypes && selectedTypes.length > 0) {
-    //   onConfirm(selectedMember.id, selectedTypes);
-    //   onClose();
-    // } else {
-    //   Alert.alert(ALERT_CANT_CREATE_MEMBER_TITLE, ALERT_CEANT_CREATE_MEMBER_CONTENT);
-    // }
+    onConfirm(selectedMember.id, newMember);
   }
 
   function cancel() {
     onClose();
+  }
+
+  function onNameChange(name: string) {
+    setNewMember((prev) => {
+      return { ...prev, name: name };
+    });
   }
 
   function onColorSelected(color: string) {
@@ -106,7 +106,10 @@ export const MemberDetails = ({
               style={{ gap: 12 }}
             >
               <View style={styles.content}>
-                <MemberName memberName={newMember.name}></MemberName>
+                <MemberName
+                  onNameChange={onNameChange}
+                  memberName={newMember.name}
+                ></MemberName>
                 <PokeTypeList
                   memberTypes={newMember.types}
                   data={data}

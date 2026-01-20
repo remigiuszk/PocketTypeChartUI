@@ -20,6 +20,8 @@ export const SELECTION: string = "#ffffffff";
 export const PRIMARY: string = "#5fbfdaff";
 export const ACCENT: string = "#f3f2d0ff";
 
+export const test: string = "rgb(11, 130, 163)";
+
 export const WARNING: string = "#ffce85";
 
 export const OPTIONS_BG: string = "#3d6367a3";

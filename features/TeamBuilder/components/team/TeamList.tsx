@@ -7,6 +7,10 @@ import {
   ACCENT,
   ALERT_CANT_ANALYZE_CONTENT,
   ALERT_CANT_ANALYZE_TITLE,
+  ALERT_CANT_CREATE_MEMBER_TITLE,
+  ALERT_CANT_CREATE_NAME_EXISTS,
+  ALERT_CANT_CREATE_NO_NAME,
+  ALERT_CANT_CREATE_NO_TYPES,
   BORDER_GRAY,
   BORDER_WHITE,
   INFO_BORDER,
@@ -18,9 +22,8 @@ import {
 import { MEMBER_ICONS } from "../../../../constants/icons";
 import { loadTeamMembers, saveTeamMembers } from "../../../../shared/storage/teamStorage";
 import { Subtitle } from "../../../../shared/typohraphy/Subtitle";
-import { CardWithHeader } from "../../../../shared/ui/CardWithHeader";
+import { Card } from "../../../../shared/ui/Card";
 import { OptionButton } from "../../../../shared/ui/OptionButton";
-import { PokeTypeModel } from "../../../TypeSelection/types";
 import { TeamMemberModel } from "../../types";
 import { MemberDetails } from "./memberDetails/MemberDetails";
 import { TeamMember } from "./TeamMember";
@@ -46,7 +49,7 @@ export const TeamList = ({ onEvaluate: onAnalyze }: Props) => {
   function addMember() {
     const newMember: TeamMemberModel = {
       id: Crypto.randomUUID(),
-      name: "Team member" + teamMembers.length + 1,
+      name: "Team member #" + (teamMembers.length + 1),
       types: [],
       iconId: MEMBER_ICONS[0].id,
       iconColor: MEMBERS_COLORS[0],
@@ -77,12 +80,41 @@ export const TeamList = ({ onEvaluate: onAnalyze }: Props) => {
     );
   }
 
-  function onConfirm(id: string, selectedTypes: PokeTypeModel[]) {
-    // setTeamMembers((prev) => {
-    //   if (prev.some((x) => x.id === id)) {
-    //     return prev.map((m) => (m.id === id ? { ...m, types: selectedTypes } : m));
-    //   } else return [...prev, { id, types: selectedTypes }];
-    // });
+  function onConfirm(id: string, newMember: TeamMemberModel) {
+    const validationResult = validateMember(newMember);
+
+    if (validationResult.length > 0) {
+      Alert.alert(ALERT_CANT_CREATE_MEMBER_TITLE, validationResult);
+      return;
+    }
+
+    setTeamMembers((prev) => {
+      if (prev.some((x) => x.id === id)) {
+        return prev.map((member) =>
+          member.id === newMember.id
+            ? {
+                ...member,
+                types: newMember.types,
+                name: newMember.name,
+                iconId: newMember.iconId,
+                iconColor: newMember.iconColor,
+              }
+            : member,
+        );
+      } else return [...prev, newMember];
+    });
+    setShowModal(false);
+  }
+
+  function validateMember(newMember: TeamMemberModel): string {
+    if (newMember.types.length === 0) return ALERT_CANT_CREATE_NO_TYPES;
+
+    if (newMember.name.length === 0) return ALERT_CANT_CREATE_NO_NAME;
+
+    if (teamMembers.some((x) => x.name === newMember.name && x.id !== newMember.id))
+      return ALERT_CANT_CREATE_NAME_EXISTS;
+
+    return "";
   }
 
   function analyze() {
@@ -129,16 +161,10 @@ export const TeamList = ({ onEvaluate: onAnalyze }: Props) => {
   }, [scale]);
 
   return (
-    <CardWithHeader
-      title="Your team"
-      subtitle="Select your team members' types"
-      style={styles.card}
-    >
+    <Card style={styles.card}>
       <MemberDetails
         onClose={() => setShowModal(false)}
-        onConfirm={(id: string, selectedTypes: PokeTypeModel[]) =>
-          onConfirm(id, selectedTypes)
-        }
+        onConfirm={(id: string, newMember: TeamMemberModel) => onConfirm(id, newMember)}
         selectedMember={selectedMember}
         showModal={showModal}
       ></MemberDetails>
@@ -174,21 +200,21 @@ export const TeamList = ({ onEvaluate: onAnalyze }: Props) => {
           <Subtitle style={styles.inactiveText}>ANALYZE TEAM</Subtitle>
         </OptionButton>
       )}
-    </CardWithHeader>
+    </Card>
   );
 };
 
 const styles = StyleSheet.create({
-  card: {
-    gap: 6,
-  },
+  card: { padding: 8 },
   buttonStyle: {
     width: "100%",
     position: "relative",
+    height: 42,
+    borderWidth: 2,
   },
   evaluateButtonStyle: {
     width: "60%",
-    marginVertical: 8,
+    marginTop: 8,
     alignSelf: "center",
     height: 42,
     backgroundColor: INFO_BORDER,
@@ -214,20 +240,21 @@ const styles = StyleSheet.create({
     shadowRadius: 8,
   },
   addIconCircle: {
-    width: 26,
-    height: 26,
-    borderRadius: 13,
+    width: 32,
+    height: 32,
+    borderRadius: 16,
     alignItems: "center",
     justifyContent: "center",
 
     backgroundColor: OPTIONS_BG,
-    borderWidth: 1,
+    borderWidth: 2,
     borderColor: OPTIONS_BORDER,
   },
   addText: {
     color: OPTIONS_CONTENT,
     fontSize: 18,
-    letterSpacing: 1,
+    textTransform: "uppercase",
+    fontWeight: 800,
   },
   evaluateText: {
     color: "#FFFFFF",

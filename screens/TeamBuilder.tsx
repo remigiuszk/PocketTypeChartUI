@@ -7,8 +7,8 @@ import { TeamAnalysis } from "../features/TeamBuilder/components/teamAnalysis/Te
 import { TeamMemberModel } from "../features/TeamBuilder/types";
 import { NavBar } from "../shared/components/NavBar";
 import { TopBar } from "../shared/components/TopBar";
-import { Subtitle } from "../shared/typohraphy/Subtitle";
-import { Title } from "../shared/typohraphy/Title";
+import { TeamBuilderHeader } from "../shared/typohraphy/TeamBuilderHeader";
+import { Card } from "../shared/ui/Card";
 
 type Props = {
   switchViews: () => void;
@@ -31,12 +31,13 @@ export const TeamBuilder = ({ switchViews }: Props) => {
           <TeamAnalysis></TeamAnalysis>
         </View>
       ) : (
-        <View style={{ padding: 10, flex: 1, gap: 16 }}>
-          <Title>Welcome to the TeamBuilder</Title>
-          <Subtitle>
-            Select up to 6 team members to view your entire team&apos;s relations and
-            suggestions on how to improve.
-          </Subtitle>
+        <View style={{ padding: 6, flex: 1, gap: 16 }}>
+          <Card>
+            <TeamBuilderHeader
+              title="WELCOME TO THE TEAMBUILDER"
+              subtitle="Select up to 6 team members to analyze synergy and get improvement reccomendations"
+            />
+          </Card>
           <TeamList
             onEvaluate={(teamMembers: TeamMemberModel[]) => onEvaluate(teamMembers)}
           ></TeamList>
