@@ -15,20 +15,27 @@ type Props = {
 };
 
 export const TeamBuilder = ({ switchViews }: Props) => {
-  // const { data, isLoading, isFetching, error, refetch } =
-  //   useGetAllRelationsQuery();
   const [analysisOn, setAnalysisOn] = useState<boolean>(false);
+  const [currentTeam, setCurrentTeam] = useState<TeamMemberModel[]>([]);
 
   function onEvaluate(teamMembers: TeamMemberModel[]) {
     setAnalysisOn(true);
+    setCurrentTeam(teamMembers);
+  }
+
+  function onChangeTeam() {
+    setAnalysisOn(false);
   }
 
   return (
     <View style={styles.container}>
       <TopBar clearSelection={() => {}}></TopBar>
       {analysisOn ? (
-        <View style={{ padding: 10, flex: 1, gap: 16 }}>
-          <TeamAnalysis></TeamAnalysis>
+        <View style={{ flex: 1, gap: 16 }}>
+          <TeamAnalysis
+            onChangeTeam={onChangeTeam}
+            currentTeam={currentTeam}
+          ></TeamAnalysis>
         </View>
       ) : (
         <View style={{ padding: 6, flex: 1, gap: 16 }}>
@@ -39,7 +46,7 @@ export const TeamBuilder = ({ switchViews }: Props) => {
             />
           </Card>
           <TeamList
-            onEvaluate={(teamMembers: TeamMemberModel[]) => onEvaluate(teamMembers)}
+            onAnalyze={(teamMembers: TeamMemberModel[]) => onEvaluate(teamMembers)}
           ></TeamList>
         </View>
       )}

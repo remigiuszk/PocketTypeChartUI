@@ -29,10 +29,10 @@ import { MemberDetails } from "./memberDetails/MemberDetails";
 import { TeamMember } from "./TeamMember";
 
 type Props = {
-  onEvaluate: (teamMembers: TeamMemberModel[]) => void;
+  onAnalyze: (teamMembers: TeamMemberModel[]) => void;
 };
 
-export const TeamList = ({ onEvaluate: onAnalyze }: Props) => {
+export const TeamList = ({ onAnalyze }: Props) => {
   const [showModal, setShowModal] = useState<boolean>(false);
   const [teamMembers, setTeamMembers] = useState<TeamMemberModel[]>([]);
   const [selectedMember, setSelectedMember] = useState<TeamMemberModel>({
