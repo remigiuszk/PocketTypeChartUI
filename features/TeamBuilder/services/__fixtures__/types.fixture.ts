@@ -1,0 +1,43 @@
+import { PokeTypeModel } from "../../../TypeSelection/types";
+
+export const ALL_TYPES_FIXTURE: PokeTypeModel[] = [
+  { id: 1, name: "normal", sprite: "" },
+  { id: 2, name: "fighting", sprite: "" },
+  { id: 3, name: "flying", sprite: "" },
+  { id: 4, name: "poison", sprite: "" },
+  { id: 5, name: "ground", sprite: "" },
+  { id: 6, name: "rock", sprite: "" },
+  { id: 7, name: "bug", sprite: "" },
+  { id: 8, name: "ghost", sprite: "" },
+  { id: 9, name: "steel", sprite: "" },
+  { id: 10, name: "fire", sprite: "" },
+  { id: 11, name: "water", sprite: "" },
+  { id: 12, name: "grass", sprite: "" },
+  { id: 13, name: "electric", sprite: "" },
+  { id: 14, name: "psychic", sprite: "" },
+  { id: 15, name: "ice", sprite: "" },
+  { id: 16, name: "dragon", sprite: "" },
+  { id: 17, name: "dark", sprite: "" },
+  { id: 18, name: "fairy", sprite: "" },
+];
+
+export enum TypeId {
+  Normal = 1,
+  Fighting = 2,
+  Flying = 3,
+  Poison = 4,
+  Ground = 5,
+  Rock = 6,
+  Bug = 7,
+  Ghost = 8,
+  Steel = 9,
+  Fire = 10,
+  Water = 11,
+  Grass = 12,
+  Electric = 13,
+  Psychic = 14,
+  Ice = 15,
+  Dragon = 16,
+  Dark = 17,
+  Fairy = 18,
+}

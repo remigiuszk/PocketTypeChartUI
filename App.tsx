@@ -8,6 +8,7 @@ import { Provider } from "react-redux";
 import { BG_500 } from "./constants/colors";
 import { TeamBuilder } from "./screens/TeamBuilder";
 import { Typing } from "./screens/Typing";
+import { clearTeamMembers } from "./shared/storage/teamStorage";
 import { store } from "./state/store";
 
 export const App = () => {
@@ -18,6 +19,7 @@ export const App = () => {
   }
 
   useEffect(() => {
+    clearTeamMembers();
     if (Platform.OS !== "android") return;
 
     (async () => {
