@@ -2,7 +2,11 @@ import { PokeTypeModel } from "../../../TypeSelection/types";
 import { TeamMemberModel } from "../../types";
 import { ALL_DAMAGE_RELATIONS_FIXTURE } from "../__fixtures__/damageRelations.fixture";
 import { ALL_TYPES_FIXTURE, TypeId } from "../__fixtures__/types.fixture";
-import { teamRelationsService } from "../teamRelationsService";
+import {
+  DefensiveMemberRelation,
+  TeamRelationsResult,
+  teamRelationsService,
+} from "../teamRelationsService";
 
 const byId = new Map<number, PokeTypeModel>(ALL_TYPES_FIXTURE.map((t) => [t.id, t]));
 
@@ -33,17 +37,31 @@ describe("teamRelationsService.calculateTeamRelations (defensive super effective
       teamMembers,
     );
 
-    // const m1 = result.defensive.superEffectiveAgainstMembers["m1"];
-    // const m2 = result.defensive.superEffectiveAgainstMembers["m2"];
+    const expected: TeamRelationsResult = {
+      defensiveRelations: {
+        allRelations: [], // na razie możesz zostawić puste, jeśli jeszcze tego nie liczysz
+        vulnerabilities: [
+          // Fire/Flying
+          { memberId: "m1", attackingTypeId: 6, multiplier: 4 }, // Rock
+          { memberId: "m1", attackingTypeId: 11, multiplier: 2 }, // Water
+          { memberId: "m1", attackingTypeId: 13, multiplier: 2 }, // Electric
 
-    // Fire/Flying: Rock = 4x, Water = 2x, Electric = 2x
-    expect(m1.x4.sort()).toEqual([TypeId.Rock].sort());
-    expect(m1.x2.sort()).toEqual([TypeId.Water, TypeId.Electric].sort());
+          // Grass/Poison
+          { memberId: "m2", attackingTypeId: 10, multiplier: 2 }, // Fire
+          { memberId: "m2", attackingTypeId: 15, multiplier: 2 }, // Ice
+          { memberId: "m2", attackingTypeId: 3, multiplier: 2 }, // Flying
+          { memberId: "m2", attackingTypeId: 14, multiplier: 2 }, // Psychic
+        ],
+        resistances: [],
+        immunities: [],
+      },
+    };
 
-    // Grass/Poison: Fire, Ice, Flying, Psychic = 2x
-    expect(m2.x4.sort()).toEqual([]);
-    expect(m2.x2.sort()).toEqual(
-      [TypeId.Fire, TypeId.Ice, TypeId.Flying, TypeId.Psychic].sort(),
+    const sortFn = (a: DefensiveMemberRelation, b: DefensiveMemberRelation) =>
+      a.memberId.localeCompare(b.memberId) || a.attackingTypeId - b.attackingTypeId;
+
+    expect([...result.defensiveRelations.vulnerabilities].sort(sortFn)).toEqual(
+      [...expected.defensiveRelations.vulnerabilities].sort(sortFn),
     );
   });
 });
