@@ -6,7 +6,6 @@ export type TeamRelationsResult = {
 };
 
 export type DefensiveRelations = {
-  allRelations: DefensiveMemberRelation[];
   vulnerabilities: DefensiveMemberRelation[];
   resistances: DefensiveMemberRelation[];
   immunities: DefensiveMemberRelation[];
@@ -24,7 +23,6 @@ export const teamRelationsService = () => {
 
   const result: TeamRelationsResult = {
     defensiveRelations: {
-      allRelations: [],
       vulnerabilities: [],
       resistances: [],
       immunities: [],
@@ -38,9 +36,8 @@ export const teamRelationsService = () => {
     damageRelations = relations;
     teamMembers = members;
 
-    const memberRelationsNotGrouped: DefensiveMemberRelation[] = [];
-
     teamMembers.forEach((teamMember) => {
+      const memberRelationsNotGrouped: DefensiveMemberRelation[] = [];
       teamMember.types.forEach((type) => {
         const r = damageRelations.filter((x) => x.defendingTypeId === type.id);
 
@@ -59,6 +56,14 @@ export const teamRelationsService = () => {
       //result.defensiveRelations.allRelations.concat(nettedRelations);
       result.defensiveRelations.vulnerabilities.push(
         ...nettedRelations.filter((x) => x.multiplier === 2 || x.multiplier === 4),
+      );
+
+      result.defensiveRelations.immunities.push(
+        ...nettedRelations.filter((x) => x.multiplier === 0),
+      );
+
+      result.defensiveRelations.immunities.push(
+        ...nettedRelations.filter((x) => x.multiplier === 0.5 || x.multiplier === 0.25),
       );
     });
 
