@@ -20,8 +20,7 @@ export type DefensiveMemberRelation = {
 export const teamRelationsService = () => {
   let damageRelations: DamageRelationFullModel[] = [];
   let teamMembers: TeamMemberModel[] = [];
-
-  const result: TeamRelationsResult = {
+  let result: TeamRelationsResult = {
     defensiveRelations: {
       vulnerabilities: [],
       resistances: [],
@@ -37,37 +36,34 @@ export const teamRelationsService = () => {
     teamMembers = members;
 
     teamMembers.forEach((teamMember) => {
-      const memberRelationsNotGrouped: DefensiveMemberRelation[] = [];
-      teamMember.types.forEach((type) => {
-        const r = damageRelations.filter((x) => x.defendingTypeId === type.id);
+      const allMemberRelations = findMemberRelations(teamMember);
 
-        memberRelationsNotGrouped.push(
-          ...r.map((m) => ({
-            memberId: teamMember.id,
-            attackingTypeId: m.attackingTypeId,
-            multiplier: m.multiplier,
-          })),
-        );
-      });
+      const nettedRelations = netMembersRelations(allMemberRelations);
 
-      const nettedRelations = netMembersRelations(memberRelationsNotGrouped);
-      //console.log(nettedRelations);
-
-      //result.defensiveRelations.allRelations.concat(nettedRelations);
-      result.defensiveRelations.vulnerabilities.push(
-        ...nettedRelations.filter((x) => x.multiplier === 2 || x.multiplier === 4),
-      );
-
-      result.defensiveRelations.immunities.push(
-        ...nettedRelations.filter((x) => x.multiplier === 0),
-      );
-
-      result.defensiveRelations.immunities.push(
-        ...nettedRelations.filter((x) => x.multiplier === 0.5 || x.multiplier === 0.25),
-      );
+      prepareResult(nettedRelations);
     });
 
     return result;
+  }
+
+  function findMemberRelations(teamMember: TeamMemberModel): DefensiveMemberRelation[] {
+    const allMemberRelations: DefensiveMemberRelation[] = [];
+
+    teamMember.types.forEach((type) => {
+      const defensiveRelationsToMember = damageRelations.filter(
+        (x) => x.defendingTypeId === type.id,
+      );
+
+      allMemberRelations.push(
+        ...defensiveRelationsToMember.map((m) => ({
+          memberId: teamMember.id,
+          attackingTypeId: m.attackingTypeId,
+          multiplier: m.multiplier,
+        })),
+      );
+    });
+
+    return allMemberRelations;
   }
 
   function netMembersRelations(
@@ -89,13 +85,29 @@ export const teamRelationsService = () => {
     return [...map.values()];
   }
 
-  const getState = () => ({
-    damageRelations,
-    teamMembers,
-  });
+  function prepareResult(nettedRelations: DefensiveMemberRelation[]) {
+    result = {
+      defensiveRelations: {
+        vulnerabilities: [],
+        resistances: [],
+        immunities: [],
+      },
+    };
+
+    result.defensiveRelations.vulnerabilities.push(
+      ...nettedRelations.filter((x) => x.multiplier === 2 || x.multiplier === 4),
+    );
+
+    result.defensiveRelations.immunities.push(
+      ...nettedRelations.filter((x) => x.multiplier === 0),
+    );
+
+    result.defensiveRelations.resistances.push(
+      ...nettedRelations.filter((x) => x.multiplier === 0.5 || x.multiplier === 0.25),
+    );
+  }
 
   return {
     calculateTeamRelations,
-    getState, // możesz potem usunąć
   };
 };

@@ -1,4 +1,4 @@
-import { DamageRelationFullModel } from "../../../DamageRelations/types";
+import { DamageRelationFullModel } from "../../../../DamageRelations/types";
 
 export const ALL_DAMAGE_RELATIONS_FIXTURE: DamageRelationFullModel[] = [
   {

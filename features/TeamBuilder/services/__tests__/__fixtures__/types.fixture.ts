@@ -1,4 +1,4 @@
-import { PokeTypeModel } from "../../../TypeSelection/types";
+import { PokeTypeModel } from "../../../../TypeSelection/types";
 
 export const ALL_TYPES_FIXTURE: PokeTypeModel[] = [
   { id: 1, name: "normal", sprite: "" },
