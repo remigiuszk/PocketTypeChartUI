@@ -24,6 +24,10 @@ export const test: string = "rgb(11, 130, 163)";
 
 export const WARNING: string = "#ffce85";
 
+export const STRENGHTS_BG: string = "rgba(107, 255, 139, 0.1)";
+export const STRENGHTS_BORDER: string = "rgba(107, 255, 149, 0.25)";
+export const STRENGHTS_CONTENT: string = "#abfec7";
+
 export const OPTIONS_BG: string = "#3d6367a3";
 export const OPTIONS_BORDER: string = "#6dbfbec3";
 export const OPTIONS_CONTENT: string = "rgb(229, 237, 209)";
@@ -32,10 +36,16 @@ export const ERROR_BG: string = "rgba(255,107,107,0.10)";
 export const ERROR_BORDER: string = "rgba(255,107,107,0.25)";
 export const ERROR_CONTENT: string = "#ff6b6b";
 
+export const SUGGESTIONS_BG: string = "rgba(22, 120, 186, 0.81)";
+export const SUGGESTIONS_BORDER: string = "rgba(60, 175, 252, 1)";
+export const SUGGESTIONS_CONTENT: string = "rgb(255, 255, 255)";
+
 export const INFO_BG: string = "rgba(97, 189, 251, 0.38)";
 export const INFO_BORDER: string = "rgba(60, 175, 252, 1)";
 export const INFO_CONTENT: string = "rgba(107, 199, 232, 1)";
 export const INFO_SUBCONTENT: string = "rgba(107, 199, 232, 0.52)";
+
+export const EVALUATE_BACKGROUND: string = "rgba(60, 175, 252, 1)";
 
 export const MEMBERS_COLORS = [
   "#1BC5BE", // brand teal (twój główny accent)

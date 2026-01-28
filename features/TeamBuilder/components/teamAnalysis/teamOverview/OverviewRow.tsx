@@ -1,7 +1,7 @@
+import MaterialIcons from "@expo/vector-icons/MaterialIcons";
 import { StyleSheet, TextStyle, View, ViewStyle } from "react-native";
 
 import { TeamOverviewRowTextData } from "../../../../../constants/strings";
-import MaterialIcons from "@expo/vector-icons/MaterialIcons";
 import { Subtitle } from "../../../../../shared/typohraphy/Subtitle";
 import { HintButton } from "../../../../../shared/ui/HintButton";
 

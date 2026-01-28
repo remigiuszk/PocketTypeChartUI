@@ -1,4 +1,5 @@
 import { FontAwesome5 } from "@expo/vector-icons";
+import { useMemo, useRef, useState } from "react";
 import {
   Animated,
   Dimensions,
@@ -11,15 +12,7 @@ import {
   ViewStyle,
 } from "react-native";
 
-import {
-  BG_100,
-  BG_500,
-  INFO_BG,
-  INFO_BORDER,
-  OPTIONS_CONTENT,
-  TEXT_300,
-} from "../../constants";
-import { useMemo, useRef, useState } from "react";
+import { BG_500, OPTIONS_CONTENT, TEXT_300 } from "../../constants";
 
 type Props = {
   style?: StyleProp<ViewStyle>;

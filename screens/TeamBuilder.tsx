@@ -31,12 +31,10 @@ export const TeamBuilder = ({ switchViews }: Props) => {
     <View style={styles.container}>
       <TopBar clearSelection={() => {}}></TopBar>
       {analysisOn ? (
-        <View style={{ flex: 1, gap: 16 }}>
-          <TeamAnalysis
-            onChangeTeam={onChangeTeam}
-            currentTeam={currentTeam}
-          ></TeamAnalysis>
-        </View>
+        <TeamAnalysis
+          onChangeTeam={onChangeTeam}
+          currentTeam={currentTeam}
+        ></TeamAnalysis>
       ) : (
         <View style={{ padding: 6, flex: 1, gap: 16 }}>
           <Card>

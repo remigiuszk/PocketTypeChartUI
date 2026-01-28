@@ -4,10 +4,13 @@ import {
   ERROR_BG,
   ERROR_BORDER,
   ERROR_CONTENT,
-  OPTIONS_BG,
-  OPTIONS_BORDER,
-  OPTIONS_CONTENT,
   PADDING,
+  STRENGHTS_BG,
+  STRENGHTS_BORDER,
+  STRENGHTS_CONTENT,
+  SUGGESTIONS_BG,
+  SUGGESTIONS_BORDER,
+  SUGGESTIONS_CONTENT,
   TeamOverviewRowTextData,
 } from "../../../../../constants";
 import { Subtitle } from "../../../../../shared/typohraphy/Subtitle";
@@ -16,6 +19,7 @@ import { OverviewRow } from "./OverviewRow";
 export const CONTAINER_TYPE = {
   Weaknesses: "weaknesses",
   Strenghts: "strenghts",
+  Suggestions: "suggestions",
 } as const;
 
 export type ContainerType = (typeof CONTAINER_TYPE)[keyof typeof CONTAINER_TYPE];
@@ -65,27 +69,25 @@ const styles = StyleSheet.create({
     backgroundColor: ERROR_BG,
   },
   containerStrenghts: {
-    borderColor: OPTIONS_BORDER,
-    backgroundColor: OPTIONS_BG,
+    borderColor: STRENGHTS_BORDER,
+    backgroundColor: STRENGHTS_BG,
   },
-
+  containerSuggestions: {
+    borderColor: SUGGESTIONS_BORDER,
+    backgroundColor: SUGGESTIONS_BG,
+  },
   headerText: {
     fontSize: 20,
-  },
-  headerTextWeaknesses: {
-    color: ERROR_CONTENT,
     textTransform: "uppercase",
   },
-  headerTextStrenghts: {
-    color: OPTIONS_CONTENT,
-    textTransform: "uppercase",
-  },
-
-  rowTextStyleWeaknesses: {
+  weaknessesText: {
     color: ERROR_CONTENT,
   },
-  rowTextStyleStrenghts: {
-    color: OPTIONS_CONTENT,
+  strenghtsText: {
+    color: STRENGHTS_CONTENT,
+  },
+  suggestionsText: {
+    color: SUGGESTIONS_CONTENT,
   },
 });
 
@@ -93,15 +95,22 @@ const CONTAINER_CONFIG: Record<ContainerType, ContainerConfig> = {
   weaknesses: {
     label: "Weaknesses",
     containerStyle: styles.containerWeaknesses,
-    headerTextStyle: styles.headerTextWeaknesses,
+    headerTextStyle: styles.weaknessesText,
     headerText: "Weaknesses",
-    rowTextStyle: styles.rowTextStyleWeaknesses,
+    rowTextStyle: styles.weaknessesText,
   },
   strenghts: {
     label: "Strenghts",
     containerStyle: styles.containerStrenghts,
-    headerTextStyle: styles.headerTextStrenghts,
+    headerTextStyle: styles.strenghtsText,
     headerText: "Strenghts",
-    rowTextStyle: styles.rowTextStyleStrenghts,
+    rowTextStyle: styles.strenghtsText,
+  },
+  suggestions: {
+    label: "Suggestions",
+    containerStyle: styles.containerSuggestions,
+    headerTextStyle: styles.suggestionsText,
+    headerText: "Suggestions",
+    rowTextStyle: styles.suggestionsText,
   },
 };

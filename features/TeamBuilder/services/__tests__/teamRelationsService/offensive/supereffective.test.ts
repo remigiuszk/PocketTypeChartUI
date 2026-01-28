@@ -14,14 +14,14 @@ describe("offensive - superEffective", () => {
     expectOffensive(result.offensiveRelations.superEffective, teamA_off_super_effective);
   });
 
-  it("should return immunities vs 3 team members", () => {
+  it("should return superEffectives vs 3 team members", () => {
     const service = teamRelationsService();
     const result = service.calculateTeamRelations(ALL_DAMAGE_RELATIONS_FIXTURE, teamB);
 
     expectOffensive(result.offensiveRelations.superEffective, teamB_off_super_effective);
   });
 
-  it("should return immunities vs 6 team members", () => {
+  it("should return superEffectives vs 6 team members", () => {
     const service = teamRelationsService();
     const result = service.calculateTeamRelations(ALL_DAMAGE_RELATIONS_FIXTURE, teamC);
 

@@ -127,6 +127,12 @@ export const teamB_off_super_effective: OffensiveRelation[] = [
     defendingTypeId: TypeId.Electric,
     multiplier: 2,
   },
+  {
+    memberId: "m3",
+    attackingTypeId: TypeId.Ground,
+    defendingTypeId: TypeId.Rock,
+    multiplier: 2,
+  },
 
   // m4 Dragon (16)
   {
@@ -180,7 +186,7 @@ export const teamB_off_not_very_effective: OffensiveRelation[] = [
   {
     memberId: "m1",
     attackingTypeId: TypeId.Fire,
-    defendingTypeId: TypeId.Fairy,
+    defendingTypeId: TypeId.Rock,
     multiplier: 0.5,
   },
 
@@ -270,12 +276,6 @@ export const teamB_off_not_very_effective: OffensiveRelation[] = [
   {
     memberId: "m2",
     attackingTypeId: TypeId.Poison,
-    defendingTypeId: TypeId.Bug,
-    multiplier: 0.5,
-  },
-  {
-    memberId: "m2",
-    attackingTypeId: TypeId.Poison,
     defendingTypeId: TypeId.Ghost,
     multiplier: 0.5,
   },
@@ -344,14 +344,6 @@ export const teamB_off_not_very_effective: OffensiveRelation[] = [
 ];
 
 export const teamB_off_no_effect: OffensiveRelation[] = [
-  // m1 Flying
-  {
-    memberId: "m1",
-    attackingTypeId: TypeId.Flying,
-    defendingTypeId: TypeId.Ground,
-    multiplier: 0,
-  },
-
   // m2 Poison
   {
     memberId: "m2",
@@ -373,14 +365,6 @@ export const teamB_off_no_effect: OffensiveRelation[] = [
     memberId: "m4",
     attackingTypeId: TypeId.Dragon,
     defendingTypeId: TypeId.Fairy,
-    multiplier: 0,
-  },
-
-  // m4 Flying
-  {
-    memberId: "m4",
-    attackingTypeId: TypeId.Flying,
-    defendingTypeId: TypeId.Ground,
     multiplier: 0,
   },
 ];

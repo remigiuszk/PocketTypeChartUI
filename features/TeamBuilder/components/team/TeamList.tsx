@@ -13,7 +13,7 @@ import {
   ALERT_CANT_CREATE_NO_TYPES,
   BORDER_GRAY,
   BORDER_WHITE,
-  INFO_BORDER,
+  EVALUATE_BACKGROUND,
   MEMBERS_COLORS,
   OPTIONS_BG,
   OPTIONS_BORDER,
@@ -217,7 +217,7 @@ const styles = StyleSheet.create({
     marginTop: 8,
     alignSelf: "center",
     height: 42,
-    backgroundColor: INFO_BORDER,
+    backgroundColor: EVALUATE_BACKGROUND,
     borderRadius: 14,
 
     shadowColor: ACCENT,

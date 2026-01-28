@@ -1,39 +1,8 @@
 import { DamageRelationFullModel } from "../../DamageRelations/types";
 import { TeamMemberModel } from "../types";
-
-export type TeamRelationsResult = {
-  defensiveRelations: DefensiveRelations;
-  offensiveRelations: OffensiveRelations;
-};
-
-export type OffensiveRelations = {
-  superEffective: OffensiveRelation[];
-  notVeryEffective: OffensiveRelation[];
-  noEffect: OffensiveRelation[];
-};
-
-export type OffensiveRelation = {
-  memberId: string;
-  attackingTypeId: number;
-  defendingTypeId: number;
-  multiplier: number;
-};
-
-export type DefensiveRelations = {
-  vulnerabilities: DefensiveMemberRelation[];
-  resistances: DefensiveMemberRelation[];
-  immunities: DefensiveMemberRelation[];
-};
-
-export type DefensiveMemberRelation = {
-  memberId: string;
-  attackingTypeId: number;
-  multiplier: number;
-};
+import { DefensiveMemberRelation, OffensiveRelation, TeamRelationsResult } from "./types";
 
 export const teamRelationsService = () => {
-  let damageRelations: DamageRelationFullModel[] = [];
-  let teamMembers: TeamMemberModel[] = [];
   let result: TeamRelationsResult = {
     defensiveRelations: {
       vulnerabilities: [],
@@ -51,8 +20,6 @@ export const teamRelationsService = () => {
     relations: DamageRelationFullModel[],
     members: TeamMemberModel[],
   ) {
-    damageRelations = relations;
-    teamMembers = members;
     result = {
       defensiveRelations: {
         vulnerabilities: [],
@@ -66,30 +33,39 @@ export const teamRelationsService = () => {
       },
     };
 
-    teamMembers.forEach((teamMember) => {
-      calculateDefense(teamMember);
-      calculateOffense(teamMember);
+    members.forEach((teamMember) => {
+      findMembersRelations(teamMember, relations);
     });
 
     return result;
   }
 
-  function calculateOffense(teamMember: TeamMemberModel) {
-    const membersOffensiveRelations = findOffensiveRelations(teamMember);
-  }
-
-  function findOffensiveRelations(
+  function findMembersRelations(
     teamMember: TeamMemberModel,
-  ): DefensiveMemberRelation[] {
-    const allMemberRelations: OffensiveRelation[] = [];
+    allRelations: DamageRelationFullModel[],
+  ) {
+    const allDefensiveRelations: DefensiveMemberRelation[] = [];
+    const allOffensiveRelations: OffensiveRelation[] = [];
 
     teamMember.types.forEach((type) => {
-      const offensiveRelations = damageRelations.filter(
+      const defensiveRelationsToMember = allRelations.filter(
+        (x) => x.defendingTypeId === type.id,
+      );
+
+      const offensiveRelationsToMember = allRelations.filter(
         (x) => x.attackingTypeId === type.id,
       );
 
-      allMemberRelations.push(
-        ...offensiveRelations.map((m) => ({
+      allDefensiveRelations.push(
+        ...defensiveRelationsToMember.map((m) => ({
+          memberId: teamMember.id,
+          attackingTypeId: m.attackingTypeId,
+          multiplier: m.multiplier,
+        })),
+      );
+
+      allOffensiveRelations.push(
+        ...offensiveRelationsToMember.map((m) => ({
           memberId: teamMember.id,
           attackingTypeId: m.attackingTypeId,
           defendingTypeId: m.defendingTypeId,
@@ -98,37 +74,9 @@ export const teamRelationsService = () => {
       );
     });
 
-    return allMemberRelations;
-  }
+    const nettedRelations = netMembersRelations(allDefensiveRelations);
 
-  function calculateDefense(teamMember: TeamMemberModel) {
-    const membersDefensiveRelations = findDefensiveRelations(teamMember);
-
-    const nettedRelations = netMembersRelations(membersDefensiveRelations);
-
-    prepareResult(nettedRelations);
-  }
-
-  function findDefensiveRelations(
-    teamMember: TeamMemberModel,
-  ): DefensiveMemberRelation[] {
-    const allMemberRelations: DefensiveMemberRelation[] = [];
-
-    teamMember.types.forEach((type) => {
-      const defensiveRelationsToMember = damageRelations.filter(
-        (x) => x.defendingTypeId === type.id,
-      );
-
-      allMemberRelations.push(
-        ...defensiveRelationsToMember.map((m) => ({
-          memberId: teamMember.id,
-          attackingTypeId: m.attackingTypeId,
-          multiplier: m.multiplier,
-        })),
-      );
-    });
-
-    return allMemberRelations;
+    prepareResult(nettedRelations, allOffensiveRelations);
   }
 
   function netMembersRelations(
@@ -150,18 +98,31 @@ export const teamRelationsService = () => {
     return [...map.values()];
   }
 
-  function prepareResult(nettedRelations: DefensiveMemberRelation[]) {
+  function prepareResult(
+    defense: DefensiveMemberRelation[],
+    offense: OffensiveRelation[],
+  ) {
     result.defensiveRelations.vulnerabilities.push(
-      ...nettedRelations.filter((x) => x.multiplier === 2 || x.multiplier === 4),
+      ...defense.filter((x) => x.multiplier === 2 || x.multiplier === 4),
     );
 
     result.defensiveRelations.immunities.push(
-      ...nettedRelations.filter((x) => x.multiplier === 0),
+      ...defense.filter((x) => x.multiplier === 0),
     );
 
     result.defensiveRelations.resistances.push(
-      ...nettedRelations.filter((x) => x.multiplier === 0.5 || x.multiplier === 0.25),
+      ...defense.filter((x) => x.multiplier === 0.5 || x.multiplier === 0.25),
     );
+
+    result.offensiveRelations.superEffective.push(
+      ...offense.filter((x) => x.multiplier === 2),
+    );
+
+    result.offensiveRelations.notVeryEffective.push(
+      ...offense.filter((x) => x.multiplier === 0.5),
+    );
+
+    result.offensiveRelations.noEffect.push(...offense.filter((x) => x.multiplier === 0));
   }
 
   return {

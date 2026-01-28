@@ -96,6 +96,12 @@ export const teamC_off_super_effective: OffensiveRelation[] = [
     defendingTypeId: TypeId.Dark,
     multiplier: 2,
   },
+  {
+    memberId: "m3",
+    attackingTypeId: TypeId.Fairy,
+    defendingTypeId: TypeId.Fighting,
+    multiplier: 2,
+  },
 
   // m4 Electric (13)
   {
@@ -228,6 +234,12 @@ export const teamC_off_super_effective: OffensiveRelation[] = [
     defendingTypeId: TypeId.Electric,
     multiplier: 2,
   },
+  {
+    memberId: "m6",
+    attackingTypeId: TypeId.Ground,
+    defendingTypeId: TypeId.Rock,
+    multiplier: 2,
+  },
 ];
 
 export const teamC_off_not_very_effective: OffensiveRelation[] = [
@@ -298,19 +310,6 @@ export const teamC_off_not_very_effective: OffensiveRelation[] = [
     defendingTypeId: TypeId.Steel,
     multiplier: 0.5,
   },
-  {
-    memberId: "m2",
-    attackingTypeId: TypeId.Steel,
-    defendingTypeId: TypeId.Grass,
-    multiplier: 0.5,
-  },
-  {
-    memberId: "m2",
-    attackingTypeId: TypeId.Steel,
-    defendingTypeId: TypeId.Dragon,
-    multiplier: 0.5,
-  },
-
   // m3 Water (11)
   {
     memberId: "m3",
@@ -335,7 +334,7 @@ export const teamC_off_not_very_effective: OffensiveRelation[] = [
   {
     memberId: "m3",
     attackingTypeId: TypeId.Fairy,
-    defendingTypeId: TypeId.Fighting,
+    defendingTypeId: TypeId.Steel,
     multiplier: 0.5,
   },
   {
@@ -422,6 +421,12 @@ export const teamC_off_not_very_effective: OffensiveRelation[] = [
     defendingTypeId: TypeId.Ice,
     multiplier: 0.5,
   },
+  {
+    memberId: "m5",
+    attackingTypeId: TypeId.Ice,
+    defendingTypeId: TypeId.Steel,
+    multiplier: 0.5,
+  },
 
   // m5 Psychic (14)
   {
@@ -472,6 +477,12 @@ export const teamC_off_not_very_effective: OffensiveRelation[] = [
     memberId: "m6",
     attackingTypeId: TypeId.Bug,
     defendingTypeId: TypeId.Fairy,
+    multiplier: 0.5,
+  },
+  {
+    memberId: "m6",
+    attackingTypeId: TypeId.Bug,
+    defendingTypeId: TypeId.Fighting,
     multiplier: 0.5,
   },
 
