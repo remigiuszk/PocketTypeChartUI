@@ -2,8 +2,19 @@ import { AntDesign } from "@expo/vector-icons";
 import { useState } from "react";
 import { Pressable, StyleSheet, View, ViewStyle } from "react-native";
 
-import { BG_800, BORDER_100, PADDING, TEXT_300 } from "../../../../../constants";
+import {
+  BORDER_100,
+  MORE_DETAILS_IMMUNITIES,
+  MORE_DETAILS_NO_EFF,
+  MORE_DETAILS_NOT_VERY_EFF,
+  MORE_DETAILS_RESISTANCES,
+  MORE_DETAILS_SUPER_EFF,
+  MORE_DETAILS_VULN,
+  PADDING,
+  TEXT_300,
+} from "../../../../../constants";
 import { Subtitle } from "../../../../../shared/typohraphy/Subtitle";
+import { DetailsRow } from "./details/DetailsRow";
 
 type Props = {
   style?: ViewStyle | ViewStyle[];
@@ -14,21 +25,46 @@ export const MoreDetails = ({ style }: Props) => {
 
   return (
     <View style={[styles.container, style]}>
-      <Pressable style={styles.button}>
-        <AntDesign name="down" size={24} color={TEXT_300} />
+      <Pressable onPress={() => setShowDetails(!showDetails)} style={styles.button}>
+        {showDetails ? (
+          <AntDesign name="up" size={18} color={TEXT_300} />
+        ) : (
+          <AntDesign name="down" size={18} color={TEXT_300} />
+        )}
         <Subtitle style={styles.textStyle}>More details</Subtitle>
       </Pressable>
-      <View style={styles.detailsContainer}>
-        <Subtitle style={styles.textStyle}>TEST</Subtitle>
-        <Subtitle style={styles.textStyle}>TEST</Subtitle>
-        <Subtitle style={styles.textStyle}>TEST</Subtitle>
-        <Subtitle style={styles.textStyle}>TEST</Subtitle>
-        <Subtitle style={styles.textStyle}>TEST</Subtitle>
-        <Subtitle style={styles.textStyle}>TEST</Subtitle>
-        <Subtitle style={styles.textStyle}>TEST</Subtitle>
-        <Subtitle style={styles.textStyle}>TEST</Subtitle>
-        <Subtitle style={styles.textStyle}>TEST</Subtitle>
-      </View>
+      {showDetails && (
+        <View style={styles.detailsContainer}>
+          <View style={styles.subContainerL}>
+            <Subtitle style={styles.textStyle}>Defence</Subtitle>
+            <DetailsRow text={MORE_DETAILS_VULN} hintText="text" value={4}></DetailsRow>
+            <DetailsRow
+              text={MORE_DETAILS_RESISTANCES}
+              hintText="text"
+              value={12}
+            ></DetailsRow>
+            <DetailsRow
+              text={MORE_DETAILS_IMMUNITIES}
+              hintText="text"
+              value={1}
+            ></DetailsRow>
+          </View>
+          <View style={styles.subContainer}>
+            <Subtitle style={styles.textStyle}>Offence</Subtitle>
+            <DetailsRow
+              text={MORE_DETAILS_SUPER_EFF}
+              hintText="text"
+              value={4}
+            ></DetailsRow>
+            <DetailsRow
+              text={MORE_DETAILS_NOT_VERY_EFF}
+              hintText="text"
+              value={12}
+            ></DetailsRow>
+            <DetailsRow text={MORE_DETAILS_NO_EFF} hintText="text" value={1}></DetailsRow>
+          </View>
+        </View>
+      )}
     </View>
   );
 };
@@ -39,6 +75,7 @@ const styles = StyleSheet.create({
     gap: 8,
     justifyContent: "center",
     alignItems: "flex-start",
+    flex: 1,
   },
   button: {
     flexDirection: "row",
@@ -53,10 +90,25 @@ const styles = StyleSheet.create({
   },
   textStyle: {
     color: TEXT_300,
-    fontSize: 16,
+    fontSize: 20,
+    textTransform: "uppercase",
   },
   detailsContainer: {
     width: "100%",
-    backgroundColor: BG_800,
+    flexDirection: "row",
+  },
+  subContainerL: {
+    flexDirection: "column",
+    gap: 8,
+    width: "50%",
+    borderRightColor: BORDER_100,
+    borderRightWidth: 1,
+    paddingHorizontal: 6,
+  },
+  subContainer: {
+    flexDirection: "column",
+    gap: 8,
+    width: "50%",
+    paddingHorizontal: 6,
   },
 });

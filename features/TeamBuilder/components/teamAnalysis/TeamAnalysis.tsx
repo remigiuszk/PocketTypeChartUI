@@ -27,5 +27,5 @@ export const TeamAnalysis = ({ style, currentTeam, onChangeTeam }: Props) => {
 };
 
 const styles = StyleSheet.create({
-  container: { width: "100%", flexDirection: "column", gap: 12 },
+  container: { width: "100%", flexDirection: "column", gap: 12, flex: 1 },
 });

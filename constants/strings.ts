@@ -51,3 +51,13 @@ export const ALERT_CANT_CREATE_NAME_EXISTS: string =
 export const ALERT_CANT_ANALYZE_TITLE: string = "Cannot procceed to team analysis";
 export const ALERT_CANT_ANALYZE_CONTENT: string =
   "Cannot procceed to team analysis, there are not enough team members selected. Please select typing of at least two team members to procceed.";
+
+export const MORE_DETAILS_VULN: string = "No. of vulnerabilities";
+export const MORE_DETAILS_RESISTANCES: string = "No. of resistances";
+export const MORE_DETAILS_IMMUNITIES: string = "No. of immunities";
+export const MORE_DETAILS_WORST_MATCHUP: string = "Worst matchup";
+
+export const MORE_DETAILS_SUPER_EFF: string = "Super-effective to:";
+export const MORE_DETAILS_NOT_VERY_EFF: string = "Not very effective to:";
+export const MORE_DETAILS_NO_EFF: string = "No effect on: ";
+export const MORE_DETAILS_NO_COVERAGE: string = "No coverage to:";
