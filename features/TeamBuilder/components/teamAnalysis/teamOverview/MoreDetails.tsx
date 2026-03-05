@@ -14,13 +14,15 @@ import {
   TEXT_300,
 } from "../../../../../constants";
 import { Subtitle } from "../../../../../shared/typohraphy/Subtitle";
+import { TeamRelationsResult } from "../../../services/types";
 import { DetailsRow } from "./details/DetailsRow";
 
 type Props = {
   style?: ViewStyle | ViewStyle[];
+  teamRelatons: TeamRelationsResult;
 };
 
-export const MoreDetails = ({ style }: Props) => {
+export const MoreDetails = ({ style, teamRelatons }: Props) => {
   const [showDetails, setShowDetails] = useState<boolean>(false);
 
   return (
@@ -37,16 +39,20 @@ export const MoreDetails = ({ style }: Props) => {
         <View style={styles.detailsContainer}>
           <View style={styles.subContainerL}>
             <Subtitle style={styles.textStyle}>Defence</Subtitle>
-            <DetailsRow text={MORE_DETAILS_VULN} hintText="text" value={4}></DetailsRow>
+            <DetailsRow
+              text={MORE_DETAILS_VULN}
+              hintText="text"
+              value={teamRelatons.defensiveRelations.vulnerabilities.length}
+            ></DetailsRow>
             <DetailsRow
               text={MORE_DETAILS_RESISTANCES}
               hintText="text"
-              value={12}
+              value={teamRelatons.defensiveRelations.resistances.length}
             ></DetailsRow>
             <DetailsRow
               text={MORE_DETAILS_IMMUNITIES}
               hintText="text"
-              value={1}
+              value={teamRelatons.defensiveRelations.immunities.length}
             ></DetailsRow>
           </View>
           <View style={styles.subContainer}>

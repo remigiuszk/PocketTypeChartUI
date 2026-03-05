@@ -1,6 +1,12 @@
 import { DamageRelationFullModel } from "../../DamageRelations/types";
 import { TeamMemberModel } from "../types";
-import { DefensiveMemberRelation, OffensiveRelation, TeamRelationsResult } from "./types";
+import {
+  DefensiveMemberRelation,
+  DefensiveStats,
+  OffensiveRelation,
+  TeamRelationsResult,
+  Weakness,
+} from "./types";
 
 export const teamRelationsService = () => {
   let result: TeamRelationsResult = {
@@ -123,6 +129,57 @@ export const teamRelationsService = () => {
     );
 
     result.offensiveRelations.noEffect.push(...offense.filter((x) => x.multiplier === 0));
+  }
+
+  function prepareStats() {
+    const defensiveStats: DefensiveStats = {
+      criticalWeaknesses: [],
+      majorWeaknesses: [],
+    };
+
+    const byType = new Map<number, Set<string>>();
+    const byType4x = new Map<number, Set<string>>();
+
+    for (const { attackingTypeId, memberId, multiplier } of result.defensiveRelations
+      .vulnerabilities) {
+      if (!byType.has(attackingTypeId)) {
+        byType.set(attackingTypeId, new Set());
+      }
+
+      byType.get(attackingTypeId)!.add(memberId);
+
+      if (multiplier === 4) {
+        if (!byType4x.has(attackingTypeId)) {
+          byType4x.set(attackingTypeId, new Set());
+        }
+
+        byType4x.get(attackingTypeId)!.add(memberId);
+      }
+    }
+
+    for (const [attackingTypeId, members] of byType) {
+      const weakness: Weakness = {
+        attackingTypeId,
+        affectedMembersCount: members.size,
+        memberIds: [...members],
+      };
+
+      if (members.size >= 4) {
+        defensiveStats.criticalWeaknesses.push(weakness);
+      } else if (members.size === 3) {
+        defensiveStats.majorWeaknesses.push(weakness);
+      }
+    }
+
+    for (const [attackingTypeId, members] of byType4x) {
+      if (members.size >= 2) {
+        defensiveStats.multiple4xVulns.push({
+          attackingTypeId,
+          affectedMembersCount: members.size,
+          memberIds: [...members],
+        });
+      }
+    }
   }
 
   return {

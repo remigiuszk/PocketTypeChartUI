@@ -11,8 +11,6 @@ type Props = {
 };
 
 export const TeamAnalysis = ({ style, currentTeam, onChangeTeam }: Props) => {
-  // const { data, isLoading, isFetching, error, refetch } =
-  //   useGetAllRelationsQuery();
   return (
     <View style={[styles.container, style]}>
       <MembersPreview
@@ -20,7 +18,7 @@ export const TeamAnalysis = ({ style, currentTeam, onChangeTeam }: Props) => {
         teamMembers={currentTeam}
       ></MembersPreview>
       <ScrollView>
-        <TeamOverview></TeamOverview>
+        <TeamOverview currentTeam={currentTeam}></TeamOverview>
       </ScrollView>
     </View>
   );
