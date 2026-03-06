@@ -7,7 +7,7 @@ import {
   TEAM_OVERVIEW_WEAKNESSES_TEXTS,
 } from "../../../../../constants";
 import { useGetAllRelationsQuery } from "../../../../DamageRelations/query";
-import { teamRelationsService } from "../../../services/teamRelationsService";
+import { teamRelationsService } from "../../../services/teamRelationsService/teamRelationsService";
 import { TeamMemberModel } from "../../../types";
 import { MoreDetails } from "./MoreDetails";
 import { OverviewContainer } from "./OverviewContainer";

@@ -1,4 +1,7 @@
-import { DefensiveMemberRelation, OffensiveRelation } from "../../teamRelationsService";
+import {
+  DefensiveMemberRelation,
+  OffensiveRelation,
+} from "../../teamRelationsService/teamRelationsService";
 
 export const sortDef = (a: DefensiveMemberRelation, b: DefensiveMemberRelation) =>
   a.memberId.localeCompare(b.memberId) ||

@@ -14,7 +14,7 @@ import {
   TEXT_300,
 } from "../../../../../constants";
 import { Subtitle } from "../../../../../shared/typohraphy/Subtitle";
-import { TeamRelationsResult } from "../../../services/types";
+import { TeamRelationsResult } from "../../../services/teamStats/types";
 import { DetailsRow } from "./details/DetailsRow";
 
 type Props = {

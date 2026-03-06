@@ -1,4 +1,4 @@
-import { OffensiveRelation } from "../../../../teamRelationsService";
+import { OffensiveRelation } from "../../../../teamRelationsService/teamRelationsService";
 import { TypeId } from "../../types.fixture";
 
 export const teamB_off_super_effective: OffensiveRelation[] = [

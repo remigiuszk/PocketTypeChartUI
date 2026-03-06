@@ -1,4 +1,4 @@
-import { teamRelationsService } from "../../../teamRelationsService";
+import { teamRelationsService } from "../../../teamRelationsService/teamRelationsService";
 import { ALL_DAMAGE_RELATIONS_FIXTURE } from "../../__fixtures__/damageRelations.fixture";
 import { teamA_off_super_effective } from "../../__fixtures__/expected/offensive/teamA.expected";
 import { teamB_off_super_effective } from "../../__fixtures__/expected/offensive/teamB.expected";
