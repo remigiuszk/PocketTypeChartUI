@@ -32,11 +32,14 @@ export const offensiveStatsService = (
     relations: OffensiveRelations,
     members: TeamMemberModel[],
   ) {
-    const stabTypes = getUniqueStabTypes(members);
+    //const stabTypes = getUniqueStabTypes(members);
 
     const uniqueImmunityTypes = new Set<number>(
       relations.noEffect.map((x) => x.defendingTypeId),
     );
+
+    for (const immunityType of uniqueImmunityTypes) {
+    }
 
     // for(const defendingTypeId of uniqueImmunityTypes) {
     //     const isWall = [...stabTypes].every
