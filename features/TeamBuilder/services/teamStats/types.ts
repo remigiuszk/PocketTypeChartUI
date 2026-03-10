@@ -14,7 +14,6 @@ export type TypeThreat = {
 };
 
 export type OffensiveStats = {
-  immunityWalls: number[];
   noSuperEffectiveCoverage: number[];
   severlyResistedTypes: number[];
   ovelappingOffensiveTypes: number[];
