@@ -12,7 +12,7 @@ export const defensiveStatsService = () => {
     noSafeSwitchAgainst: [],
   };
 
-  function calculate(defensiveRelations: DefensiveRelations) {
+  function calculate(defensiveRelations: DefensiveRelations): DefensiveStats {
     const byType = groupByType(defensiveRelations.vulnerabilities);
     const byType4x = groupByType(defensiveRelations.vulnerabilities, 4);
 
@@ -41,6 +41,8 @@ export const defensiveStatsService = () => {
     }
 
     calculateNoSafeSwitch(defensiveRelations);
+
+    return result;
   }
 
   function calculateNoSafeSwitch(defensiveRelations: DefensiveRelations) {

@@ -1,7 +1,7 @@
 import {
   DefensiveMemberRelation,
   OffensiveRelation,
-} from "../../teamRelationsService/teamRelationsService";
+} from "../../teamRelationsService/types";
 
 export const sortDef = (a: DefensiveMemberRelation, b: DefensiveMemberRelation) =>
   a.memberId.localeCompare(b.memberId) ||

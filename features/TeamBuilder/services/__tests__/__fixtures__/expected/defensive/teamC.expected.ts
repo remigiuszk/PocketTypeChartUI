@@ -1,4 +1,4 @@
-import { DefensiveMemberRelation } from "../../../../teamRelationsService/teamRelationsService";
+import { DefensiveMemberRelation } from "../../../../teamRelationsService/types";
 import { TypeId } from "../../types.fixture";
 
 export const teamC_def_vulnerabilities: DefensiveMemberRelation[] = [

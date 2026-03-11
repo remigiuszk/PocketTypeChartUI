@@ -17,6 +17,5 @@ export type OffensiveStats = {
   noSuperEffectiveCoverage: number[];
   severlyResistedTypes: number[];
   ovelappingOffensiveTypes: number[];
-  singleCoverageDependency: string | null;
 };
 export { OffensiveRelation };
