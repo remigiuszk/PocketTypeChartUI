@@ -1,7 +1,7 @@
 import { PokeTypeModel } from "../../../TypeSelection/types";
 import { TeamMemberModel } from "../../types";
 import { OffensiveRelations } from "../teamRelationsService/types";
-import { OffensiveStats } from "./types";
+import { AffectedMember, OffensiveStats } from "./types";
 
 export const offensiveStatsService = (
   relations: OffensiveRelations,
@@ -33,47 +33,58 @@ export const offensiveStatsService = (
 
   function getSeverlyResistedBy() {
     const resists = [...relations.notVeryEffective, ...relations.noEffect];
-    const threshold = members.length >= 5 ? 3 : 2;
-    const uniqueStabTypes = getUniqueStabTypes(members);
+    const threshold = getThreshold();
+    const stabCounts = getStabTypeCounts();
     const uniqueDefendingTypes = new Set(resists.map((r) => r.defendingTypeId));
 
     for (const defendingTypeId of uniqueDefendingTypes) {
-      const resistedAttackingTypes = new Set(
-        resists
-          .filter((r) => r.defendingTypeId === defendingTypeId)
-          .map((r) => r.attackingTypeId),
+      const resistedForType = resists.filter(
+        (r) => r.defendingTypeId === defendingTypeId,
       );
 
-      const resistedStabCount = [...uniqueStabTypes].filter((typeId) =>
-        resistedAttackingTypes.has(typeId),
-      ).length;
+      const resistedAttackingTypes = new Set(
+        resistedForType.map((r) => r.attackingTypeId),
+      );
+
+      const resistedStabCount = [...stabCounts.entries()]
+        .filter(([typeId]) => resistedAttackingTypes.has(typeId))
+        .reduce((sum, [, count]) => sum + count, 0);
 
       if (resistedStabCount >= threshold) {
-        result.severlyResistedTypes.push(defendingTypeId);
+        const affectedMembers: AffectedMember[] = members
+          .map((member) => {
+            const resistedTypeIds = member.types
+              .map((t) => t.id)
+              .filter((typeId) => resistedAttackingTypes.has(typeId));
+
+            return { memberId: member.id, resistedTypeIds };
+          })
+          .filter((m) => m.resistedTypeIds.length > 0);
+
+        result.severlyResistedTypes.push({
+          defendingTypeId,
+          totalTypesResisted: resistedStabCount,
+          affectedMembers,
+        });
       }
     }
   }
 
+  function getThreshold(): number {
+    const totalSlots = members.reduce((sum, m) => sum + m.types.length, 0);
+    if (totalSlots > 10) return 4;
+    if (totalSlots > 6) return 3;
+    return 2;
+  }
+
   function getOverlappingOffensiveTypes(): number[] {
-    const stabCounts = getStabTypeCounts(members);
+    const stabCounts = getStabTypeCounts();
     return [...stabCounts.entries()]
       .filter(([, count]) => count >= 3)
       .map(([typeId]) => typeId);
   }
 
-  function getUniqueStabTypes(members: TeamMemberModel[]): Set<number> {
-    const set: Set<number> = new Set<number>();
-
-    for (const member of members) {
-      for (const type of member.types) {
-        set.add(type.id);
-      }
-    }
-
-    return set;
-  }
-
-  function getStabTypeCounts(members: TeamMemberModel[]): Map<number, number> {
+  function getStabTypeCounts(): Map<number, number> {
     const counts = new Map<number, number>();
     for (const member of members) {
       for (const type of member.types) {

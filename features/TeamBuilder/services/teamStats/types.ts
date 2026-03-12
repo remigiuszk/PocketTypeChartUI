@@ -1,5 +1,3 @@
-import { OffensiveRelation } from "../teamRelationsService/types";
-
 export type DefensiveStats = {
   criticalWeaknesses: TypeThreat[];
   majorWeaknesses: TypeThreat[];
@@ -15,7 +13,17 @@ export type TypeThreat = {
 
 export type OffensiveStats = {
   noSuperEffectiveCoverage: number[];
-  severlyResistedTypes: number[];
+  severlyResistedTypes: SevereResistance[];
   ovelappingOffensiveTypes: number[];
 };
-export { OffensiveRelation };
+
+export type SevereResistance = {
+  defendingTypeId: number;
+  totalTypesResisted: number;
+  affectedMembers: AffectedMember[];
+};
+
+export type AffectedMember = {
+  memberId: string;
+  resistedTypeIds: number[];
+};
