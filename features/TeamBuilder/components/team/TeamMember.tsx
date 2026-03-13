@@ -1,7 +1,7 @@
 import Feather from "@expo/vector-icons/Feather";
 import { StyleSheet, View } from "react-native";
 
-import { ACCENT, BG_800, ERROR_CONTENT, TEXT_300 } from "../../../../constants";
+import { ACCENT, BG_CARD, ERROR_CONTENT, TEXT_300 } from "../../../../constants";
 import { MEMBER_ICONS } from "../../../../constants/icons";
 import { Subtitle } from "../../../../shared/typohraphy/Subtitle";
 import { OPTION_BUTTON_TYPE, OptionButton } from "../../../../shared/ui/OptionButton";
@@ -53,7 +53,7 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     alignItems: "center",
     justifyContent: "space-between",
-    backgroundColor: BG_800,
+    backgroundColor: BG_CARD,
     gap: 12,
   },
   nameTypeContainer: {

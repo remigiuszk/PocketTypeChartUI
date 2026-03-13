@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { StyleSheet, View } from "react-native";
 
-import { BG_100 } from "../constants";
+import { BG_ROOT } from "../constants";
 import { TeamList } from "../features/TeamBuilder/components/team/TeamList";
 import { TeamAnalysis } from "../features/TeamBuilder/components/teamAnalysis/TeamAnalysis";
 import { TeamMemberModel } from "../features/TeamBuilder/types";
@@ -55,7 +55,7 @@ export const TeamBuilder = ({ switchViews }: Props) => {
 
 const styles = StyleSheet.create({
   container: {
-    backgroundColor: BG_100,
+    backgroundColor: BG_ROOT,
     flex: 1,
   },
   content: {

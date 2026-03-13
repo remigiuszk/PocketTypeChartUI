@@ -1,6 +1,6 @@
 import { Image, StyleSheet, View } from "react-native";
 
-import { BG_100, BG_500, BORDER_100, TEXT_300 } from "../../constants";
+import { BG_ROOT, BORDER_100, TEXT_300 } from "../../constants";
 import { Subtitle } from "../typohraphy/Subtitle";
 import DefaultButton from "../ui/DefaultButton";
 
@@ -39,11 +39,11 @@ const styles = StyleSheet.create({
     height: "8%",
     width: "100%",
     flexDirection: "row",
-    backgroundColor: BG_500,
+    backgroundColor: BG_ROOT,
     paddingHorizontal: 10,
     borderBottomColor: BORDER_100,
     borderBottomWidth: 1,
-    marginBottom:1
+    marginBottom: 1,
   },
   appName: {
     flex: 1,
@@ -76,5 +76,5 @@ const styles = StyleSheet.create({
     height: "100%",
   },
   button: { width: "90%", padding: 4 },
-  buttonText: { color: BG_100, fontWeight: 800, fontSize: 12 },
+  buttonText: { color: BG_ROOT, fontWeight: 800, fontSize: 12 },
 });

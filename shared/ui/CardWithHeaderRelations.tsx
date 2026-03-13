@@ -3,7 +3,7 @@ import MaterialCommunityIcons from "@expo/vector-icons/MaterialCommunityIcons";
 import { ReactNode } from "react";
 import { StyleProp, StyleSheet, View, ViewStyle } from "react-native";
 
-import { BG_500, BG_600, BORDER_100, PADDING, TEXT_300 } from "../../constants";
+import { BG_LAYOUT, BG_600, BORDER_100, PADDING, TEXT_300 } from "../../constants";
 import { Title } from "../typohraphy/Title";
 import { TwoTypesHeader } from "./TwoTypesHeader";
 
@@ -75,7 +75,7 @@ const styles = StyleSheet.create({
   card: {
     width: "100%",
     borderRadius: 16,
-    backgroundColor: BG_500,
+    backgroundColor: BG_LAYOUT,
     shadowColor: "#000000",
     shadowOffset: {
       width: 0,

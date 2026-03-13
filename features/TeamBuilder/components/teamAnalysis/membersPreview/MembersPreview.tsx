@@ -2,7 +2,7 @@ import { FontAwesome6 } from "@expo/vector-icons";
 import { StyleSheet, View, ViewStyle } from "react-native";
 
 import {
-  BG_500,
+  BG_LAYOUT,
   BORDER_100,
   OPTIONS_BG,
   OPTIONS_BORDER,
@@ -39,7 +39,7 @@ const styles = StyleSheet.create({
   container: {
     flexDirection: "column",
     width: "100%",
-    backgroundColor: BG_500,
+    backgroundColor: BG_LAYOUT,
     borderBottomWidth: 1,
     borderBottomColor: BORDER_100,
     gap: 6,
@@ -52,7 +52,7 @@ const styles = StyleSheet.create({
     justifyContent: "space-evenly",
     gap: 1,
     padding: 1,
-    backgroundColor: BG_500,
+    backgroundColor: BG_LAYOUT,
   },
   addIconCircle: {
     width: 16,

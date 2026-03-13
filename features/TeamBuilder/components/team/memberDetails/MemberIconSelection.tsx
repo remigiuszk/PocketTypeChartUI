@@ -2,7 +2,7 @@ import { Feather } from "@expo/vector-icons";
 import { LinearGradient } from "expo-linear-gradient";
 import { Pressable, ScrollView, StyleSheet, View, ViewStyle } from "react-native";
 
-import { BG_100, BG_800, MEMBERS_COLORS, TEXT_300 } from "../../../../../constants";
+import { BG_CARD, BG_ROOT, MEMBERS_COLORS, TEXT_300 } from "../../../../../constants";
 import { MEMBER_ICONS } from "../../../../../constants/icons";
 
 type Props = {
@@ -54,7 +54,7 @@ export const MemberIconSelection = ({
             })}
           </ScrollView>
           <LinearGradient
-            colors={["transparent", BG_100]}
+            colors={["transparent", BG_ROOT]}
             start={{ x: 0, y: 0 }}
             end={{ x: 1, y: 0 }}
             style={styles.scrollHint}
@@ -95,7 +95,7 @@ export const MemberIconSelection = ({
             })}
           </ScrollView>
           <LinearGradient
-            colors={["transparent", BG_100]}
+            colors={["transparent", BG_ROOT]}
             start={{ x: 0, y: 0 }}
             end={{ x: 1, y: 0 }}
             style={styles.scrollHint}
@@ -124,7 +124,7 @@ const styles = StyleSheet.create({
     alignItems: "center",
     borderWidth: 3,
     borderColor: "transparent",
-    backgroundColor: BG_800,
+    backgroundColor: BG_CARD,
     padding: 3,
     width: 48,
     aspectRatio: 1 / 1,

@@ -5,7 +5,7 @@ import { Platform, StyleSheet } from "react-native";
 import { SafeAreaProvider, SafeAreaView } from "react-native-safe-area-context";
 import { Provider } from "react-redux";
 
-import { BG_500 } from "./constants/colors";
+import { BG_ROOT } from "./constants/colors";
 import { TeamBuilder } from "./screens/TeamBuilder";
 import { Typing } from "./screens/Typing";
 import { store } from "./state/store";
@@ -28,7 +28,7 @@ export const App = () => {
   return (
     <SafeAreaProvider>
       <Provider store={store}>
-        <StatusBar translucent={false} backgroundColor={BG_500} />
+        <StatusBar translucent={false} backgroundColor={BG_ROOT} />
         <SafeAreaView
           edges={["top", "left", "right", "bottom"]}
           style={[styles.container]}
@@ -47,6 +47,10 @@ export const App = () => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: BG_500,
+    backgroundColor: BG_ROOT,
+  },
+  appContainer: {
+    flex: 1,
+    backgroundColor: "white",
   },
 });

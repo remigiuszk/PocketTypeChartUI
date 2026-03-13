@@ -3,7 +3,7 @@ import { useEffect, useState } from "react";
 import { Modal, StyleSheet, View } from "react-native";
 
 import {
-  BG_500,
+  BG_LAYOUT,
   ERROR_BG,
   ERROR_BORDER,
   ERROR_CONTENT,
@@ -180,7 +180,7 @@ const styles = StyleSheet.create({
     flexDirection: "column",
     justifyContent: "flex-start",
     alignItems: "center",
-    backgroundColor: BG_500,
+    backgroundColor: BG_LAYOUT,
     borderRadius: 10,
     width: "98%",
   },
@@ -199,7 +199,7 @@ const styles = StyleSheet.create({
     width: "100%",
     gap: 6,
     paddingHorizontal: 6,
-    backgroundColor: BG_500,
+    backgroundColor: BG_LAYOUT,
 
     borderWidth: 1,
     borderColor: PRIMARY,

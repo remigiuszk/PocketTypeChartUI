@@ -12,7 +12,7 @@ import {
   ViewStyle,
 } from "react-native";
 
-import { BG_500, OPTIONS_CONTENT, TEXT_300 } from "../../constants";
+import { BG_LAYOUT, OPTIONS_CONTENT, TEXT_300 } from "../../constants";
 
 type Props = {
   style?: StyleProp<ViewStyle>;
@@ -108,7 +108,7 @@ export const HintButton = ({ style, hintText }: Props) => {
         onPress={open}
         style={({ pressed }) => [styles.iconCircle, pressed && styles.pressed, style]}
       >
-        <FontAwesome5 style={style} name="question" size={14} color={BG_500} />
+        <FontAwesome5 style={style} name="question" size={14} color={BG_LAYOUT} />
       </Pressable>
 
       <Modal visible={visible} transparent animationType="none" onRequestClose={close}>
@@ -166,7 +166,7 @@ const styles = StyleSheet.create({
     justifyContent: "center",
 
     borderWidth: 2,
-    borderColor: BG_500,
+    borderColor: BG_LAYOUT,
     backgroundColor: OPTIONS_CONTENT,
   },
   backdrop: {

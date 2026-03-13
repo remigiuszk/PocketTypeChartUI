@@ -1,6 +1,6 @@
 import { Image, StyleSheet, View } from "react-native";
 
-import { ACCENT, BG_800 } from "../../../../constants";
+import { ACCENT, BG_CARD } from "../../../../constants";
 import { Subtitle } from "../../../../shared/typohraphy/Subtitle";
 import { DefensiveDamageRelationModel } from "../../types";
 
@@ -10,9 +10,7 @@ type Props = {
 
 export const DefensiveDamageRelation = ({ damageRelation }: Props) => {
   const formatMultiplier = (value: number) =>
-    value < 0.5 && value > 0
-      ? value.toString().replace(/^0\./, ".")
-      : value.toString();
+    value < 0.5 && value > 0 ? value.toString().replace(/^0\./, ".") : value.toString();
 
   return (
     <View style={[styles.item]}>
@@ -76,14 +74,14 @@ const styles = StyleSheet.create({
   multiplierText: {
     fontWeight: 900,
     fontSize: 13,
-    color: BG_800,
+    color: BG_CARD,
     paddingHorizontal: 1,
     letterSpacing: 0.1,
   },
   multiplierTextSmall: {
     fontWeight: 900,
     fontSize: 11,
-    color: BG_800,
+    color: BG_CARD,
     paddingHorizontal: 1,
     letterSpacing: 0.1,
   },

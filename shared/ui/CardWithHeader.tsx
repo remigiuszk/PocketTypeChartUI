@@ -3,7 +3,7 @@ import MaterialCommunityIcons from "@expo/vector-icons/MaterialCommunityIcons";
 import { ReactNode } from "react";
 import { StyleProp, StyleSheet, View, ViewStyle } from "react-native";
 
-import { BG_500, BG_600, BORDER_GRAY, PADDING, TEXT_300 } from "../../constants";
+import { BG_CARD, BG_LAYOUT, BORDER_GRAY, PADDING, TEXT_300 } from "../../constants";
 import { Subtitle } from "../typohraphy/Subtitle";
 import { Title } from "../typohraphy/Title";
 
@@ -60,7 +60,7 @@ const styles = StyleSheet.create({
   card: {
     width: "100%",
     borderRadius: 16,
-    backgroundColor: BG_500,
+    backgroundColor: BG_LAYOUT,
     shadowColor: "#000000",
     shadowOffset: {
       width: 0,
@@ -75,7 +75,7 @@ const styles = StyleSheet.create({
     flexDirection: "column",
     borderBottomWidth: 1,
     borderColor: BORDER_GRAY,
-    backgroundColor: BG_600,
+    backgroundColor: BG_CARD,
     borderTopLeftRadius: 16,
     borderTopRightRadius: 16,
   },
