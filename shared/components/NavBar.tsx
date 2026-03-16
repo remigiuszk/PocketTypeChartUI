@@ -1,7 +1,7 @@
 import FontAwesome6 from "@expo/vector-icons/FontAwesome6";
 import { Pressable, StyleSheet, View } from "react-native";
 
-import { ACCENT, BG_CARD, BG_LAYOUT, BORDER_100, TEXT_100 } from "../../constants";
+import { ACCENT, BG_INTERNAL, BG_ROOT, TEXT_100 } from "../../constants";
 import { Subtitle } from "../typohraphy/Subtitle";
 
 type Props = {
@@ -43,9 +43,7 @@ const styles = StyleSheet.create({
     height: "6%",
     width: "100%",
     flexDirection: "row",
-    backgroundColor: BG_LAYOUT,
-    borderTopColor: BORDER_100,
-    borderTopWidth: 1,
+    backgroundColor: BG_ROOT,
   },
   button: {
     flex: 1,
@@ -58,7 +56,7 @@ const styles = StyleSheet.create({
   },
   selected: {
     color: ACCENT,
-    backgroundColor: BG_CARD,
+    backgroundColor: BG_INTERNAL,
   },
   pressed: {
     opacity: 0.85,

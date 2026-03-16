@@ -1,7 +1,11 @@
 export const BG_ROOT: string = "#0f0f14";
-export const BG_LAYOUT: string = "#1a1a24";
+export const BG_LAYOUT: string = "#151520";
 export const BG_CARD: string = "#12121c";
 export const BG_INTERNAL: string = "#1a1a28";
+export const BG_BUTTON: string = "#22223A";
+
+export const BORDER_DEFAULT: string = "#3a435a";
+export const BORDER_INTERNAL: string = "#2a2a3a";
 
 export const TEXT_100: string = "#A0A3BD";
 export const TEXT_300: string = "#dee0f2ff";

@@ -2,7 +2,7 @@ import { Feather } from "@expo/vector-icons";
 import { LinearGradient } from "expo-linear-gradient";
 import { Pressable, ScrollView, StyleSheet, View, ViewStyle } from "react-native";
 
-import { BG_CARD, BG_ROOT, MEMBERS_COLORS, TEXT_300 } from "../../../../../constants";
+import { BG_INTERNAL, BG_ROOT, MEMBERS_COLORS, TEXT_300 } from "../../../../../constants";
 import { MEMBER_ICONS } from "../../../../../constants/icons";
 
 type Props = {
@@ -124,7 +124,7 @@ const styles = StyleSheet.create({
     alignItems: "center",
     borderWidth: 3,
     borderColor: "transparent",
-    backgroundColor: BG_CARD,
+    backgroundColor: BG_INTERNAL,
     padding: 3,
     width: 48,
     aspectRatio: 1 / 1,

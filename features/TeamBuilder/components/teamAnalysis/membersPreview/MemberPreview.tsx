@@ -1,6 +1,6 @@
 import { StyleSheet, Text, View, ViewStyle } from "react-native";
 
-import { TEXT_300 } from "../../../../../constants";
+import { BG_BUTTON, BORDER_DEFAULT, TEXT_100 } from "../../../../../constants";
 import { MEMBER_ICONS } from "../../../../../constants/icons";
 import { TwoTypesHeader } from "../../../../../shared/ui/TwoTypesHeader";
 import { TeamMemberModel } from "../../../types";
@@ -28,7 +28,7 @@ export const MemberPreview = ({ style, member }: Props) => {
           {member.name}
         </Text>
         <TwoTypesHeader
-          imageHeight={11}
+          imageHeight={14}
           message=""
           sprites={member.types.map((x) => x.sprite)}
         />
@@ -39,13 +39,15 @@ export const MemberPreview = ({ style, member }: Props) => {
 
 const styles = StyleSheet.create({
   container: {
-    width: "33%",
-    borderRadius: 6,
+    borderRadius: 12,
     flexDirection: "row",
     alignItems: "center",
     justifyContent: "flex-start",
     gap: 4,
     padding: 3,
+    borderWidth: 1,
+    borderColor: BORDER_DEFAULT,
+    backgroundColor: BG_BUTTON,
   },
   nameTypeContainer: {
     flexDirection: "column",
@@ -56,10 +58,10 @@ const styles = StyleSheet.create({
     minWidth: 0,
   },
   text: {
-    fontWeight: 800,
+    fontWeight: 600,
     fontFamily: "System",
     textAlign: "center",
-    color: TEXT_300,
+    color: TEXT_100,
     fontSize: 14,
     letterSpacing: 1.5,
     textTransform: "uppercase",

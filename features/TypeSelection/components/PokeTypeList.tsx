@@ -34,7 +34,7 @@ export const PokeTypeList = ({
   }, [memberTypes]);
 
   return (
-    <View>
+    <View style={{ borderRadius: 12 }}>
       {isLoading || isFetching ? (
         <Loading />
       ) : error ? (

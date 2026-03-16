@@ -1,6 +1,6 @@
 import { StyleSheet, View } from "react-native";
 
-import { BG_ROOT } from "../../../constants";
+import { BG_LAYOUT } from "../../../constants";
 import { Error } from "../../../shared/components/Error";
 import { Loading } from "../../../shared/components/Loading";
 import { CardWithHeaderRelations } from "../../../shared/ui/CardWithHeaderRelations";
@@ -48,7 +48,7 @@ export const Relations = ({ selectedTypes }: Props) => {
 const styles = StyleSheet.create({
   container: {
     flex: 2,
-    backgroundColor: BG_ROOT,
+    backgroundColor: BG_LAYOUT,
     gap: 15,
     flexDirection: "column",
     width: "100%",

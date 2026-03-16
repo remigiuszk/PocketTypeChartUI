@@ -1,6 +1,7 @@
 import { useMemo, useState } from "react";
 import { ScrollView, StyleSheet, View } from "react-native";
 
+import { BG_LAYOUT } from "../constants";
 import { Relations } from "../features/DamageRelations/components/Relations";
 import { PokeTypeList } from "../features/TypeSelection/components/PokeTypeList";
 import { useGetAllPokeTypesQuery } from "../features/TypeSelection/query";
@@ -47,7 +48,7 @@ export const Typing = ({ switchViews }: Props) => {
         typesSelected={selectedType && selectedType.length > 0}
         clearSelection={clearSelection}
       ></TopBar>
-      <View style={{ margin: 6, marginBottom: 0, flex: 1, gap: 16 }}>
+      <View style={{ margin: 12, marginBottom: 0, flex: 1, gap: 16 }}>
         <CardWithHeader title="Select poke type(s)" subtitle="Choose up to two types">
           <PokeTypeList
             data={data}
@@ -74,7 +75,7 @@ export const Typing = ({ switchViews }: Props) => {
 
 const styles = StyleSheet.create({
   container: {
-    backgroundColor: "#1a1a24",
+    backgroundColor: BG_LAYOUT,
     flex: 1,
   },
 });

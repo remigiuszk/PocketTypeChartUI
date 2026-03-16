@@ -4,13 +4,13 @@ import { Modal, StyleSheet, View } from "react-native";
 
 import {
   BG_LAYOUT,
+  BORDER_DEFAULT,
   ERROR_BG,
   ERROR_BORDER,
   ERROR_CONTENT,
   OPTIONS_BG,
   OPTIONS_BORDER,
   OPTIONS_CONTENT,
-  PRIMARY,
   TEXT_300,
 } from "../../../../../constants";
 import { Error } from "../../../../../shared/components/Error";
@@ -193,16 +193,16 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     justifyContent: "flex-start",
     alignItems: "center",
-    padding: 6,
+    paddingHorizontal: 12,
+    paddingVertical: 6,
     borderRadius: 12,
     overflow: "hidden",
     width: "100%",
     gap: 6,
-    paddingHorizontal: 6,
     backgroundColor: BG_LAYOUT,
 
     borderWidth: 1,
-    borderColor: PRIMARY,
+    borderColor: BORDER_DEFAULT,
   },
   buttonsContainer: {
     flexDirection: "row",

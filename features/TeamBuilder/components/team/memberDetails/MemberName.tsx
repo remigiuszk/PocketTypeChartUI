@@ -2,7 +2,7 @@ import { Feather } from "@expo/vector-icons";
 import { useEffect, useState } from "react";
 import { Pressable, StyleSheet, TextInput, View, ViewStyle } from "react-native";
 
-import { BG_CARD, BG_LAYOUT, TEXT_100 } from "../../../../../constants";
+import { BG_LAYOUT, BORDER_DEFAULT, TEXT_100 } from "../../../../../constants";
 
 type Props = {
   style?: ViewStyle | ViewStyle[];
@@ -47,7 +47,7 @@ const styles = StyleSheet.create({
   },
   wrapper: {
     borderWidth: 1,
-    borderColor: BG_CARD,
+    borderColor: BORDER_DEFAULT,
     borderRadius: 16,
     width: "65%",
     flexDirection: "row",

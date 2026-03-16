@@ -3,7 +3,7 @@ import MaterialCommunityIcons from "@expo/vector-icons/MaterialCommunityIcons";
 import { ReactNode } from "react";
 import { StyleProp, StyleSheet, View, ViewStyle } from "react-native";
 
-import { BG_LAYOUT, BG_600, BORDER_100, PADDING, TEXT_300 } from "../../constants";
+import { BG_CARD, BG_LAYOUT, BORDER_DEFAULT, PADDING, TEXT_300 } from "../../constants";
 import { Title } from "../typohraphy/Title";
 import { TwoTypesHeader } from "./TwoTypesHeader";
 
@@ -84,13 +84,15 @@ const styles = StyleSheet.create({
     shadowOpacity: 0.16,
     shadowRadius: 1.51,
     elevation: 2,
+    borderWidth: 1,
+    borderColor: BORDER_DEFAULT,
   },
   headerContainer: {
     justifyContent: "center",
     flexDirection: "column",
     borderBottomWidth: 1,
-    borderBottomColor: BORDER_100,
-    backgroundColor: BG_600,
+    borderBottomColor: BORDER_DEFAULT,
+    backgroundColor: BG_CARD,
     borderTopLeftRadius: 16,
     borderTopRightRadius: 16,
     padding: 0,
@@ -109,5 +111,5 @@ const styles = StyleSheet.create({
     alignItems: "flex-start",
     flexDirection: "column",
   },
-  content: { padding: PADDING / 2 },
+  content: { margin: 8, backgroundColor: BG_CARD },
 });

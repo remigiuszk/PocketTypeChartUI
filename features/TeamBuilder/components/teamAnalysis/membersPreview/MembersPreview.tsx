@@ -1,15 +1,12 @@
-import { FontAwesome6 } from "@expo/vector-icons";
-import { StyleSheet, View, ViewStyle } from "react-native";
+import { LinearGradient } from "expo-linear-gradient";
+import { ScrollView, StyleSheet, View, ViewStyle } from "react-native";
 
 import {
   BG_LAYOUT,
-  BORDER_100,
   OPTIONS_BG,
   OPTIONS_BORDER,
   OPTIONS_CONTENT,
 } from "../../../../../constants";
-import { Subtitle } from "../../../../../shared/typohraphy/Subtitle";
-import { OptionButton } from "../../../../../shared/ui/OptionButton";
 import { TeamMemberModel } from "../../../types";
 import { MemberPreview } from "./MemberPreview";
 
@@ -23,14 +20,27 @@ export const MembersPreview = ({ style, teamMembers, onChangeTeam }: Props) => {
   return (
     <View style={[styles.container, style]}>
       <View style={styles.membersContainer}>
-        {teamMembers.map((member: TeamMemberModel) => (
-          <MemberPreview member={member} key={member.id}></MemberPreview>
-        ))}
+        <ScrollView
+          horizontal
+          contentContainerStyle={{ gap: 6 }}
+          showsHorizontalScrollIndicator={false}
+        >
+          {teamMembers.map((member: TeamMemberModel) => (
+            <MemberPreview member={member} key={member.id}></MemberPreview>
+          ))}
+        </ScrollView>
+        <LinearGradient
+          colors={["transparent", "white"]}
+          start={{ x: 0, y: 0 }}
+          end={{ x: 1, y: 0 }}
+          style={styles.fadeGradient}
+          pointerEvents="none"
+        />
       </View>
-      <OptionButton style={styles.buttonStyle} onPress={onChangeTeam} type="options">
+      {/* <OptionButton style={styles.buttonStyle} onPress={onChangeTeam} type="options">
         <FontAwesome6 name="arrows-rotate" size={18} color={OPTIONS_CONTENT} />
         <Subtitle style={styles.addText}>change team</Subtitle>
-      </OptionButton>
+      </OptionButton> */}
     </View>
   );
 };
@@ -40,19 +50,22 @@ const styles = StyleSheet.create({
     flexDirection: "column",
     width: "100%",
     backgroundColor: BG_LAYOUT,
-    borderBottomWidth: 1,
-    borderBottomColor: BORDER_100,
-    gap: 6,
-    paddingHorizontal: 6,
   },
   membersContainer: {
     flexDirection: "row",
     flexWrap: "wrap",
     width: "100%",
-    justifyContent: "space-evenly",
-    gap: 1,
-    padding: 1,
+    gap: 12,
+    padding: 6,
     backgroundColor: BG_LAYOUT,
+    borderWidth: 1,
+  },
+  fadeGradient: {
+    position: "absolute",
+    right: 0,
+    top: 0,
+    bottom: 0,
+    width: 48,
   },
   addIconCircle: {
     width: 16,
