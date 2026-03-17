@@ -1,5 +1,5 @@
 import { FontAwesome6 } from "@expo/vector-icons";
-import { useRef, useState } from "react";
+import { useState } from "react";
 import { ScrollView, StyleSheet, View, ViewStyle } from "react-native";
 
 import {
@@ -20,7 +20,6 @@ type Props = {
 };
 
 export const MembersPreview = ({ style, teamMembers, onChangeTeam }: Props) => {
-  const scrollViewRef = useRef<ScrollView>(null);
   const [scrollX, setScrollX] = useState(0);
   const [contentWidth, setContentWidth] = useState(0);
   const [viewWidth, setViewWidth] = useState(0);

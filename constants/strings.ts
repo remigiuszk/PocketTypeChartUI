@@ -4,39 +4,16 @@ export type TeamOverviewRowTextData = {
   hintText: string;
 };
 
-export const TEAM_OVERVIEW_WEAKNESSES_TEXTS: TeamOverviewRowTextData[] = [
-  {
-    mainText: "Your team has 0 Immunities",
-    subText: "Consider adding one to your team.",
-    hintText: `Having an immunity can play a key role in a Pokemon battle. They can save a massive amount of tempo by\n -`,
+export const OVERVIEW_STRINGS = {
+  immunities: {
+    header: (count: number) => `Your team has ${count} immunities!`,
+    lowSubText: "Consider adding one to your team.",
+    suggestionText: "Adding one more might make your team stronger.",
+    highSubText: "Your team has great immunity coverage!",
+    hintText:
+      "Immunities are one of the most powerful tools in Pokémon battles. When your Pokémon is immune to a move, you can switch it in for free — this is called pivoting. For example, if your opponent uses Earthquake, switching in a Flying-type not only blocks the damage completely, but forces your opponent into a tough spot, giving you a free turn to set up, heal, or attack. A well-timed immunity switch can shift momentum entirely in your favor.",
   },
-];
-
-export const TEAM_OVERVIEW_STRENGHTS_TEXTS: TeamOverviewRowTextData[] = [
-  {
-    mainText: "Your team has {0} Immunities",
-    subText: "Your <type1> pokemon is immune to <type2>",
-    hintText: `Having an immunity can play a key role in a Pokemon battle. They can save a massive amount of tempo by\n -`,
-  },
-  {
-    mainText: "Your team has {0} resistances",
-    subText: "Your {0} pokemon is resistant to {1}",
-    hintText: `Having an immunity can play a key role in a Pokemon battle. They can save a massive amount of tempo by\n -`,
-  },
-];
-
-export const TEAM_OVERVIEW_SUGGESTIONS_TEXTS: TeamOverviewRowTextData[] = [
-  {
-    mainText: "Your team has {0} Immunities",
-    subText: "Your <type1> pokemon is immune to <type2>",
-    hintText: `Having an immunity can play a key role in a Pokemon battle. They can save a massive amount of tempo by\n -`,
-  },
-  {
-    mainText: "Your team has {0} resistances",
-    subText: "Your {0} pokemon is resistant to {1}",
-    hintText: `Having an immunity can play a key role in a Pokemon battle. They can save a massive amount of tempo by\n -`,
-  },
-];
+};
 
 export const HINT_HEADER_DEFAULT: string = "Why is this important?";
 
