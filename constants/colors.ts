@@ -3,23 +3,29 @@ export const BG_LAYOUT: string = "#151520";
 export const BG_CARD: string = "#12121c";
 export const BG_INTERNAL: string = "#1a1a28";
 export const BG_BUTTON: string = "#22223A";
+export const BG_HINT: string = "#2A2A3A";
+
+export const BG_WEAKNESSES: string = "#1E1218";
+export const BG_STRENGHTS: string = "#121E16";
+export const BG_SUGGESTIONS: string = "#12161E";
+
+export const TEXT_WEAKNESSES_CRITICAL: string = "#E24B4A";
+export const TEXT_WEAKNESSES_WEAK: string = "#BA7517";
+export const TEXT_STRENGHTS: string = "#1D9E75";
+export const TEXT_SUGGESTIONS: string = "#378ADD";
+export const TEXT_HINT: string = "#686868";
 
 export const BORDER_DEFAULT: string = "#3a435a";
 export const BORDER_INTERNAL: string = "#2a2a3a";
+export const BORDER_WEAKNESSES: string = "#431D21";
+export const BORDER_STRENGHTS: string = "#143628";
+export const BORDER_SUGGESTIONS: string = "#172436";
 
 export const TEXT_100: string = "#A0A3BD";
 export const TEXT_300: string = "#dee0f2ff";
 export const TEXT_500: string = "#f6f7ffff";
 
-export const BORDER_WHITE: string = "#98a9c2ae";
-export const BORDER_GRAY: string = "#98a9c269";
-
-export const BORDER_100: string = "#324046ff";
-
 export const SELECTION: string = "#ffffffff";
-
-export const PRIMARY: string = "#5fbfdaff";
-export const ACCENT: string = "#f3f2d0ff";
 
 export const test: string = "rgb(11, 130, 163)";
 

@@ -1,4 +1,5 @@
-import { LinearGradient } from "expo-linear-gradient";
+import { FontAwesome6 } from "@expo/vector-icons";
+import { useRef, useState } from "react";
 import { ScrollView, StyleSheet, View, ViewStyle } from "react-native";
 
 import {
@@ -7,6 +8,8 @@ import {
   OPTIONS_BORDER,
   OPTIONS_CONTENT,
 } from "../../../../../constants";
+import { Subtitle } from "../../../../../shared/typohraphy/Subtitle";
+import { OptionButton } from "../../../../../shared/ui/OptionButton";
 import { TeamMemberModel } from "../../../types";
 import { MemberPreview } from "./MemberPreview";
 
@@ -17,30 +20,49 @@ type Props = {
 };
 
 export const MembersPreview = ({ style, teamMembers, onChangeTeam }: Props) => {
+  const scrollViewRef = useRef<ScrollView>(null);
+  const [scrollX, setScrollX] = useState(0);
+  const [contentWidth, setContentWidth] = useState(0);
+  const [viewWidth, setViewWidth] = useState(0);
+
+  const thumbWidth =
+    contentWidth > 0 ? (viewWidth / contentWidth) * viewWidth : viewWidth;
+  const thumbLeft =
+    contentWidth > 0
+      ? Math.min((scrollX / contentWidth) * viewWidth, viewWidth - thumbWidth)
+      : 0;
+
   return (
     <View style={[styles.container, style]}>
-      <View style={styles.membersContainer}>
-        <ScrollView
-          horizontal
-          contentContainerStyle={{ gap: 6 }}
-          showsHorizontalScrollIndicator={false}
-        >
-          {teamMembers.map((member: TeamMemberModel) => (
-            <MemberPreview member={member} key={member.id}></MemberPreview>
-          ))}
-        </ScrollView>
-        <LinearGradient
-          colors={["transparent", "white"]}
-          start={{ x: 0, y: 0 }}
-          end={{ x: 1, y: 0 }}
-          style={styles.fadeGradient}
-          pointerEvents="none"
-        />
-      </View>
-      {/* <OptionButton style={styles.buttonStyle} onPress={onChangeTeam} type="options">
+      <OptionButton style={styles.buttonStyle} onPress={onChangeTeam} type="options">
         <FontAwesome6 name="arrows-rotate" size={18} color={OPTIONS_CONTENT} />
         <Subtitle style={styles.addText}>change team</Subtitle>
-      </OptionButton> */}
+      </OptionButton>
+      <View style={styles.membersContainer}>
+        <View style={{ position: "relative" }}>
+          <ScrollView
+            horizontal
+            contentContainerStyle={{ gap: 6 }}
+            showsHorizontalScrollIndicator={false}
+            onScroll={(e) => setScrollX(e.nativeEvent.contentOffset.x)}
+            onContentSizeChange={(w) => setContentWidth(w)}
+            onLayout={(e) => setViewWidth(e.nativeEvent.layout.width)}
+            scrollEventThrottle={16}
+          >
+            {teamMembers.map((member: TeamMemberModel) => (
+              <MemberPreview member={member} key={member.id} />
+            ))}
+          </ScrollView>
+        </View>
+        <View style={styles.scrollTrack}>
+          <View
+            style={[
+              styles.scrollThumb,
+              { width: thumbWidth, position: "absolute", left: thumbLeft },
+            ]}
+          />
+        </View>
+      </View>
     </View>
   );
 };
@@ -52,20 +74,24 @@ const styles = StyleSheet.create({
     backgroundColor: BG_LAYOUT,
   },
   membersContainer: {
-    flexDirection: "row",
-    flexWrap: "wrap",
+    flexDirection: "column",
     width: "100%",
-    gap: 12,
     padding: 6,
     backgroundColor: BG_LAYOUT,
     borderWidth: 1,
   },
-  fadeGradient: {
-    position: "absolute",
-    right: 0,
-    top: 0,
-    bottom: 0,
-    width: 48,
+  scrollTrack: {
+    height: 3,
+    backgroundColor: "#2a2a3a",
+    borderRadius: 2,
+    marginTop: 4,
+    marginHorizontal: 6,
+    position: "relative",
+  },
+  scrollThumb: {
+    height: 3,
+    backgroundColor: "#4a4a6a",
+    borderRadius: 2,
   },
   addIconCircle: {
     width: 16,

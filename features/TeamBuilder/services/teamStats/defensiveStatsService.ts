@@ -4,7 +4,7 @@ import {
 } from "../teamRelationsService/types";
 import { DefensiveStats, TypeThreat } from "./types";
 
-export const defensiveStatsService = () => {
+export const defensiveStatsService = (defensiveRelations: DefensiveRelations) => {
   const result: DefensiveStats = {
     criticalWeaknesses: [],
     majorWeaknesses: [],
@@ -12,7 +12,7 @@ export const defensiveStatsService = () => {
     noSafeSwitchAgainst: [],
   };
 
-  function calculate(defensiveRelations: DefensiveRelations): DefensiveStats {
+  function calculate(): DefensiveStats {
     const byType = groupByType(defensiveRelations.vulnerabilities);
     const byType4x = groupByType(defensiveRelations.vulnerabilities, 4);
 
