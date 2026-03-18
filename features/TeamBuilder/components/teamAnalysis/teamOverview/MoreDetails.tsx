@@ -3,7 +3,7 @@ import { useState } from "react";
 import { Pressable, StyleSheet, View, ViewStyle } from "react-native";
 
 import {
-  BORDER_100,
+  BORDER_DEFAULT,
   MORE_DETAILS_IMMUNITIES,
   MORE_DETAILS_NO_EFF,
   MORE_DETAILS_NOT_VERY_EFF,
@@ -14,7 +14,7 @@ import {
   TEXT_300,
 } from "../../../../../constants";
 import { Subtitle } from "../../../../../shared/typohraphy/Subtitle";
-import { TeamRelationsResult } from "../../../services/teamStats/types";
+import { TeamRelationsResult } from "../../../services/teamRelationsService/types";
 import { DetailsRow } from "./details/DetailsRow";
 
 type Props = {
@@ -90,7 +90,7 @@ const styles = StyleSheet.create({
     width: "100%",
     gap: 12,
     borderWidth: 1,
-    borderColor: BORDER_100,
+    borderColor: BORDER_DEFAULT,
     padding: PADDING,
     borderRadius: 8,
   },
@@ -107,7 +107,7 @@ const styles = StyleSheet.create({
     flexDirection: "column",
     gap: 8,
     width: "50%",
-    borderRightColor: BORDER_100,
+    borderRightColor: BORDER_DEFAULT,
     borderRightWidth: 1,
     paddingHorizontal: 6,
   },

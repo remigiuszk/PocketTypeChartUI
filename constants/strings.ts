@@ -13,6 +13,18 @@ export const OVERVIEW_STRINGS = {
     hintText:
       "Immunities are one of the most powerful tools in Pokémon battles. When your Pokémon is immune to a move, you can switch it in for free — this is called pivoting. For example, if your opponent uses Earthquake, switching in a Flying-type not only blocks the damage completely, but forces your opponent into a tough spot, giving you a free turn to set up, heal, or attack. A well-timed immunity switch can shift momentum entirely in your favor.",
   },
+  criticalWeakness: {
+    header: "Critical weakness against: ",
+    subText: (count: number) => `${count} members are vulnerable`,
+    hintText:
+      "Critical weakness means that more than 4 members of your team share a vulnerability to the same type. This is one of the most dangerous situations in competitive battles — a single Pokemon of that type can threaten your entire team, forcing you into difficult switch-in decisions. Consider replacing one or two affected members with Pokemon that resist or are immune to this type, or make sure at least one member can reliably threaten opposing Pokemon of this type before they get a chance to attack.",
+  },
+  majorWeakness: {
+    header: "Major weakness against: ",
+    subText: (count: number) => `${count} members are vulnerable`,
+    hintText:
+      "Major weakness means that 3 members of your team are vulnerable to the same type. While not as critical as a full team weakness, this still gives opposing Pokemon of that type significant opportunities to cause damage. Try to have at least one member that resists or is immune to this type so you always have a safe switch-in option available.",
+  },
 };
 
 export const HINT_HEADER_DEFAULT: string = "Why is this important?";

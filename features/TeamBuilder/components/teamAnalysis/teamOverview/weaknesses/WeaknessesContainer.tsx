@@ -8,14 +8,15 @@ import {
   TEXT_WEAKNESSES_CRITICAL,
 } from "../../../../../../constants";
 import { Subtitle } from "../../../../../../shared/typohraphy/Subtitle";
-import { Stats } from "../TeamOverview";
+import { OverviewRowData } from "../../../../services/overviewRows/types";
+import { OverviewRow } from "../OverviewRow";
 
 type Props = {
   style?: ViewStyle | ViewStyle[];
-  stats: Stats;
+  weaknessRowData: OverviewRowData[];
 };
 
-export const WeaknessesContainer = ({ style, stats }: Props) => {
+export const WeaknessesContainer = ({ style, weaknessRowData }: Props) => {
   return (
     <View style={[styles.card, style]}>
       <View style={[styles.headerContainer]}>
@@ -24,7 +25,11 @@ export const WeaknessesContainer = ({ style, stats }: Props) => {
           <Subtitle style={styles.header}>WEAKNESSES</Subtitle>
         </View>
       </View>
-      <View style={styles.content}></View>
+      <View style={styles.content}>
+        {weaknessRowData.map((rowData, index) => (
+          <OverviewRow rowData={rowData} key={index} />
+        ))}
+      </View>
     </View>
   );
 };

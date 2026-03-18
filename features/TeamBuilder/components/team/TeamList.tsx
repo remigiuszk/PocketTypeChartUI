@@ -4,15 +4,14 @@ import { useEffect, useRef, useState } from "react";
 import { Alert, Animated, StyleSheet, View } from "react-native";
 
 import {
-  ACCENT,
   ALERT_CANT_ANALYZE_CONTENT,
   ALERT_CANT_ANALYZE_TITLE,
   ALERT_CANT_CREATE_MEMBER_TITLE,
   ALERT_CANT_CREATE_NAME_EXISTS,
   ALERT_CANT_CREATE_NO_NAME,
   ALERT_CANT_CREATE_NO_TYPES,
-  BORDER_GRAY,
-  BORDER_WHITE,
+  BORDER_DEFAULT,
+  BORDER_INTERNAL,
   EVALUATE_BACKGROUND,
   MEMBERS_COLORS,
   OPTIONS_BG,
@@ -220,7 +219,7 @@ const styles = StyleSheet.create({
     backgroundColor: EVALUATE_BACKGROUND,
     borderRadius: 14,
 
-    shadowColor: ACCENT,
+    shadowColor: "black",
     shadowOffset: { width: 0, height: 0 },
     shadowOpacity: 0.9,
     shadowRadius: 8,
@@ -230,11 +229,11 @@ const styles = StyleSheet.create({
     marginVertical: 8,
     alignSelf: "center",
     height: 42,
-    backgroundColor: BORDER_GRAY,
-    borderColor: BORDER_GRAY,
+    backgroundColor: BORDER_INTERNAL,
+    borderColor: BORDER_DEFAULT,
     borderRadius: 14,
 
-    shadowColor: ACCENT,
+    shadowColor: "black",
     shadowOffset: { width: 0, height: 0 },
     shadowOpacity: 0.9,
     shadowRadius: 8,
@@ -268,7 +267,7 @@ const styles = StyleSheet.create({
     textShadowRadius: 10,
   },
   inactiveText: {
-    color: BORDER_WHITE,
+    color: BORDER_DEFAULT,
     fontSize: 18,
     fontWeight: "800",
     letterSpacing: 0.8,

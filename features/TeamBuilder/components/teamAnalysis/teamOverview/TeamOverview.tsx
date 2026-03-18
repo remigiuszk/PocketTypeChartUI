@@ -1,12 +1,10 @@
 import { useMemo } from "react";
 import { StyleSheet, View, ViewStyle } from "react-native";
 
-import {
-  TEAM_OVERVIEW_STRENGHTS_TEXTS,
-  TEAM_OVERVIEW_SUGGESTIONS_TEXTS,
-} from "../../../../../constants";
 import { useGetAllRelationsQuery } from "../../../../DamageRelations/query";
 import { useGetAllPokeTypesQuery } from "../../../../TypeSelection/query";
+import { overviewRowsService } from "../../../services/overviewRows/overviewRowsService";
+import { OverviewRowData, OverviewRowType } from "../../../services/overviewRows/types";
 import { teamRelationsService } from "../../../services/teamRelationsService/teamRelationsService";
 import { TeamRelationsResult } from "../../../services/teamRelationsService/types";
 import { defensiveStatsService } from "../../../services/teamStats/defensiveStatsService";
@@ -14,7 +12,6 @@ import { offensiveStatsService } from "../../../services/teamStats/offensiveStat
 import { DefensiveStats, OffensiveStats } from "../../../services/teamStats/types";
 import { TeamMemberModel } from "../../../types";
 import { MoreDetails } from "./MoreDetails";
-import { OverviewContainer } from "./OverviewContainer";
 import { WeaknessesContainer } from "./weaknesses/WeaknessesContainer";
 
 type Props = {
@@ -49,18 +46,20 @@ export const TeamOverview = ({ style, currentTeam }: Props) => {
     };
   }, [currentTeam, data, pokeTypes.data]);
 
+  const rowData: OverviewRowData[] = useMemo(() => {
+    const service = overviewRowsService(teamStats, pokeTypes.data ?? [], currentTeam);
+
+    return service.getRowData();
+  }, [currentTeam, pokeTypes.data, teamStats]);
+
   return (
     <View style={[styles.overviewLayout, style]}>
-      <WeaknessesContainer stats={teamStats}></WeaknessesContainer>
-      <OverviewContainer
-        overViewRowTextData={TEAM_OVERVIEW_STRENGHTS_TEXTS}
-        type="strenghts"
-      ></OverviewContainer>
-      <OverviewContainer
-        overViewRowTextData={TEAM_OVERVIEW_SUGGESTIONS_TEXTS}
-        type="suggestions"
-      ></OverviewContainer>
-      <MoreDetails teamRelatons={teamStats}></MoreDetails>
+      <WeaknessesContainer
+        weaknessRowData={rowData.filter(
+          (rowData) => rowData.type === OverviewRowType.Weakness,
+        )}
+      ></WeaknessesContainer>
+      <MoreDetails teamRelatons={teamStats.relations}></MoreDetails>
     </View>
   );
 };

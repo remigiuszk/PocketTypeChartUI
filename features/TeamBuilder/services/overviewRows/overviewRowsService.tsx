@@ -2,9 +2,8 @@ import { OVERVIEW_STRINGS } from "../../../../constants";
 import { PokeTypeModel } from "../../../TypeSelection/types";
 import { Stats } from "../../components/teamAnalysis/teamOverview/TeamOverview";
 import { TeamMemberModel } from "../../types";
-import { TypeId } from "../__tests__/__fixtures__/types.fixture";
 import { OverviewRowDataBuilder } from "./OverviewRowDataBuilder";
-import { OverviewRowData, OverviewRowType } from "./types";
+import { OverviewRowData, OverviewRowSeverity, OverviewRowType } from "./types";
 
 export const overviewRowsService = (
   stats: Stats,
@@ -15,22 +14,62 @@ export const overviewRowsService = (
     const result: OverviewRowData[] = [];
 
     result.push(immunities());
+    result.push(...criticalWeaknesses());
+    result.push(...majorWeaknesses());
+
+    return result;
+  }
+
+  function criticalWeaknesses(): OverviewRowData[] {
+    const criticalWeaknesses = stats.defensiveStats.criticalWeaknesses;
+    const result: OverviewRowData[] = [];
+
+    for (const weakness of criticalWeaknesses) {
+      const row = new OverviewRowDataBuilder()
+        .setHeader(OVERVIEW_STRINGS.criticalWeakness.header)
+        .setSubText(OVERVIEW_STRINGS.criticalWeakness.subText(weakness.memberIds.length))
+        .setHintText(OVERVIEW_STRINGS.criticalWeakness.hintText)
+        .setType(OverviewRowType.Weakness)
+        .setSeverity(OverviewRowSeverity.High)
+        .setLeadType(allTypes.find((type) => type.id === weakness.attackingTypeId)!)
+        .setProgressBar(members.length, weakness.memberIds.length)
+        .setAffectedMembers(
+          members.filter((member) => weakness.memberIds.includes(member.id)),
+        )
+        .build();
+
+      result.push(row);
+    }
+
+    return result;
+  }
+
+  function majorWeaknesses(): OverviewRowData[] {
+    const majorWeaknesses = stats.defensiveStats.majorWeaknesses;
+    const result: OverviewRowData[] = [];
+
+    for (const weakness of majorWeaknesses) {
+      const row = new OverviewRowDataBuilder()
+        .setHeader(OVERVIEW_STRINGS.majorWeakness.header)
+        .setSubText(OVERVIEW_STRINGS.majorWeakness.subText(weakness.memberIds.length))
+        .setHintText(OVERVIEW_STRINGS.majorWeakness.hintText)
+        .setType(OverviewRowType.Weakness)
+        .setLeadType(allTypes.find((type) => type.id === weakness.attackingTypeId)!)
+        .setProgressBar(members.length, weakness.memberIds.length)
+        .setAffectedMembers(
+          members.filter((member) => weakness.memberIds.includes(member.id)),
+        )
+        .build();
+
+      result.push(row);
+    }
 
     return result;
   }
 
   function immunities(): OverviewRowData {
     const typesWithImmunity = allTypes.filter((type) =>
-      new Set([
-        TypeId.Normal,
-        TypeId.Fighting,
-        TypeId.Flying,
-        TypeId.Ghost,
-        TypeId.Ground,
-        TypeId.Steel,
-        TypeId.Dark,
-        TypeId.Fairy,
-      ]).has(type.id),
+      new Set([1, 2, 3, 8, 5, 9, 17, 18]).has(type.id),
     );
 
     const teamImmunities = stats.relations.defensiveRelations.immunities;
