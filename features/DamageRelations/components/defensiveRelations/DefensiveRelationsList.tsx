@@ -1,6 +1,6 @@
 import { StyleSheet, View } from "react-native";
 
-import { BORDER_100 } from "../../../../constants";
+import { BORDER_DEFAULT } from "../../../../constants";
 import { RelationsHeader } from "../../../../shared/ui/RelationsHeader";
 import { DefensiveDamageRelationModel } from "../../types";
 import { DefensiveDamageRelation } from "./DefensiveDamageRelation";
@@ -69,7 +69,7 @@ const styles = StyleSheet.create({
   container: {},
   section: {
     marginBottom: 8,
-    borderBottomColor: BORDER_100,
+    borderBottomColor: BORDER_DEFAULT,
     borderBottomWidth: 1,
   },
   listContainer: {

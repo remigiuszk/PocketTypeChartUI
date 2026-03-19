@@ -108,7 +108,7 @@ export const HintButton = ({ style, hintText }: Props) => {
         onPress={open}
         style={({ pressed }) => [styles.iconCircle, pressed && styles.pressed, style]}
       >
-        <FontAwesome5 style={style} name="question" size={14} color={BG_LAYOUT} />
+        <FontAwesome5 style={style} name="question" size={10} color={BG_LAYOUT} />
       </Pressable>
 
       <Modal visible={visible} transparent animationType="none" onRequestClose={close}>
@@ -159,8 +159,8 @@ const styles = StyleSheet.create({
     transform: [{ scale: 0.98 }],
   },
   iconCircle: {
-    width: 26,
-    height: 26,
+    width: 20,
+    height: 20,
     borderRadius: 13,
     alignItems: "center",
     justifyContent: "center",

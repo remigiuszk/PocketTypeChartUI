@@ -1,17 +1,21 @@
-import { useMemo, useState } from "react";
+import { useMemo } from "react";
 import { StyleSheet, View, ViewStyle } from "react-native";
 
 import {
+  TEXT_300,
   TEXT_STRENGHTS,
   TEXT_WEAKNESSES_CRITICAL,
   TEXT_WEAKNESSES_WEAK,
-} from "../../../../../constants";
-import { Subtitle } from "../../../../../shared/typohraphy/Subtitle";
+} from "../../../../../../constants";
+import { Subtitle } from "../../../../../../shared/typohraphy/Subtitle";
+import { HintButton } from "../../../../../../shared/ui/HintButton";
 import {
   OverviewRowData,
   OverviewRowSeverity,
   OverviewRowType,
-} from "../../../services/overviewRows/types";
+} from "../../../../services/overviewRows/types";
+import { OverviewRowBadge } from "./OverviewRowBadge";
+import { OverviewRowSuggestedTypes } from "./OverviewRowSuggestedTypes";
 
 type Props = {
   style?: ViewStyle | ViewStyle[];
@@ -19,9 +23,7 @@ type Props = {
 };
 
 export const OverviewRow = ({ style, rowData }: Props) => {
-  const progressBarEnabled = useState<boolean>(
-    !!rowData.progressBarActual && !!rowData.progressBarTotal,
-  );
+  const progressBarEnabled = !!rowData.progressBarActual && !!rowData.progressBarTotal;
   const color: string = useMemo(() => {
     if (rowData.type === OverviewRowType.Weakness) {
       return rowData.severity === OverviewRowSeverity.High
@@ -32,7 +34,11 @@ export const OverviewRow = ({ style, rowData }: Props) => {
 
   return (
     <View style={[styles.container, style]}>
-      {!progressBarEnabled && <View style={styles.badge}></View>}
+      {!progressBarEnabled && (
+        <View style={styles.badgeContainer}>
+          <OverviewRowBadge rowData={rowData} />
+        </View>
+      )}
       <View style={styles.content}>
         {progressBarEnabled && (
           <View style={styles.progressBarContainer}>
@@ -54,17 +60,24 @@ export const OverviewRow = ({ style, rowData }: Props) => {
         )}
         <Subtitle style={styles.header}>{rowData.header}</Subtitle>
         <Subtitle style={styles.subText}>{rowData.subText}</Subtitle>
+        {!!rowData.suggestedTypes && (
+          <View style={styles.suggestedTypes}>
+            <OverviewRowSuggestedTypes rowData={rowData}></OverviewRowSuggestedTypes>
+          </View>
+        )}
       </View>
-      <View style={styles.hintContainer}></View>
+      <View style={styles.hintContainer}>
+        <HintButton hintText={rowData.hintText}></HintButton>
+      </View>
     </View>
   );
 };
 
 const styles = StyleSheet.create({
-  container: { flexDirection: "row" },
+  container: { flexDirection: "row", gap: 8, alignItems: "flex-start" },
+  badgeContainer: { justifyContent: "center", alignItems: "center", height: "100%" },
   hintContainer: {},
-  badge: {},
-  content: { flexDirection: "column" },
+  content: { flexDirection: "column", flex: 1 },
   progressBarContainer: { flexDirection: "row" },
   track: {
     flex: 1,
@@ -78,6 +91,7 @@ const styles = StyleSheet.create({
     borderRadius: 4,
   },
   progressBarText: {},
-  header: {},
-  subText: {},
+  header: { color: TEXT_300, fontSize: 14, textAlign: "left" },
+  subText: { textAlign: "left" },
+  suggestedTypes: {},
 });

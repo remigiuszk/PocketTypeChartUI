@@ -1,6 +1,7 @@
 import { useMemo } from "react";
 import { StyleSheet, View, ViewStyle } from "react-native";
 
+import { Loading } from "../../../../../shared/components/Loading";
 import { useGetAllRelationsQuery } from "../../../../DamageRelations/query";
 import { useGetAllPokeTypesQuery } from "../../../../TypeSelection/query";
 import { overviewRowsService } from "../../../services/overviewRows/overviewRowsService";
@@ -26,8 +27,8 @@ export type Stats = {
 };
 
 export const TeamOverview = ({ style, currentTeam }: Props) => {
-  const { data } = useGetAllRelationsQuery();
-  const pokeTypes = useGetAllPokeTypesQuery();
+  const { data, isLoading: relationsLoading } = useGetAllRelationsQuery();
+  const { data: pokeTypesData, isLoading: typesLoading } = useGetAllPokeTypesQuery();
 
   const teamStats: Stats = useMemo(() => {
     const service = teamRelationsService();
@@ -35,7 +36,7 @@ export const TeamOverview = ({ style, currentTeam }: Props) => {
     const offService = offensiveStatsService(
       relations.offensiveRelations,
       currentTeam,
-      pokeTypes.data ?? [],
+      pokeTypesData ?? [],
     );
     const defService = defensiveStatsService(relations.defensiveRelations);
 
@@ -44,14 +45,20 @@ export const TeamOverview = ({ style, currentTeam }: Props) => {
       offensiveStats: offService.calculate(),
       defensiveStats: defService.calculate(),
     };
-  }, [currentTeam, data, pokeTypes.data]);
+  }, [currentTeam, data, pokeTypesData]);
+
+  console.log(teamStats.relations.defensiveRelations.immunities);
 
   const rowData: OverviewRowData[] = useMemo(() => {
-    const service = overviewRowsService(teamStats, pokeTypes.data ?? [], currentTeam);
+    const service = overviewRowsService(teamStats, pokeTypesData ?? [], currentTeam);
 
     return service.getRowData();
-  }, [currentTeam, pokeTypes.data, teamStats]);
+  }, [currentTeam, pokeTypesData, teamStats]);
 
+  console.log(rowData);
+  if (relationsLoading || typesLoading || !data || !pokeTypesData) {
+    return <Loading />;
+  }
   return (
     <View style={[styles.overviewLayout, style]}>
       <WeaknessesContainer

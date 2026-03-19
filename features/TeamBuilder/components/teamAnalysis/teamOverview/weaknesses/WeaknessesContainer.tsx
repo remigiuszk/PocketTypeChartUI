@@ -9,7 +9,7 @@ import {
 } from "../../../../../../constants";
 import { Subtitle } from "../../../../../../shared/typohraphy/Subtitle";
 import { OverviewRowData } from "../../../../services/overviewRows/types";
-import { OverviewRow } from "../OverviewRow";
+import { OverviewRow } from "../overviewRow/OverviewRow";
 
 type Props = {
   style?: ViewStyle | ViewStyle[];
@@ -78,5 +78,5 @@ const styles = StyleSheet.create({
     fontSize: 16,
     fontWeight: 800,
   },
-  content: { margin: 8, height: 250 },
+  content: { margin: 8 },
 });
