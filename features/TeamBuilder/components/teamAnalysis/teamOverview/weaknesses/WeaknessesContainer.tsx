@@ -4,7 +4,6 @@ import { StyleSheet, View, ViewStyle } from "react-native";
 import {
   BG_WEAKNESSES,
   BORDER_WEAKNESSES,
-  PADDING,
   TEXT_WEAKNESSES_CRITICAL,
 } from "../../../../../../constants";
 import { Subtitle } from "../../../../../../shared/typohraphy/Subtitle";
@@ -21,13 +20,16 @@ export const WeaknessesContainer = ({ style, weaknessRowData }: Props) => {
     <View style={[styles.card, style]}>
       <View style={[styles.headerContainer]}>
         <View style={[styles.textContainer]}>
-          <MaterialIcons style={[styles.header]} name="catching-pokemon" size={21} />
+          <MaterialIcons style={[styles.header]} name="catching-pokemon" size={32} />
           <Subtitle style={styles.header}>WEAKNESSES</Subtitle>
         </View>
       </View>
       <View style={styles.content}>
         {weaknessRowData.map((rowData, index) => (
-          <OverviewRow rowData={rowData} key={index} />
+          <View key={index}>
+            <OverviewRow rowData={rowData} />
+            {index < weaknessRowData.length - 1 && <View style={styles.separator} />}
+          </View>
         ))}
       </View>
     </View>
@@ -49,6 +51,13 @@ const styles = StyleSheet.create({
     elevation: 2,
     borderWidth: 1,
     borderColor: BORDER_WEAKNESSES,
+    flex: 1,
+  },
+  separator: {
+    height: 1,
+    backgroundColor: BORDER_WEAKNESSES,
+    marginVertical: 6,
+    marginHorizontal: 8,
   },
   headerContainer: {
     justifyContent: "center",
@@ -58,19 +67,11 @@ const styles = StyleSheet.create({
     borderTopLeftRadius: 16,
     borderTopRightRadius: 16,
   },
-  titleContainer: {
-    alignItems: "flex-start",
-    justifyContent: "center",
-    flexDirection: "row",
-    gap: 12,
-    padding: PADDING / 2,
-    paddingHorizontal: PADDING,
-  },
   textContainer: {
     justifyContent: "flex-start",
     alignItems: "center",
     flexDirection: "row",
-    gap: 12,
+    gap: 8,
     padding: 12,
   },
   header: {
@@ -78,5 +79,5 @@ const styles = StyleSheet.create({
     fontSize: 16,
     fontWeight: 800,
   },
-  content: { margin: 8 },
+  content: { margin: 6 },
 });

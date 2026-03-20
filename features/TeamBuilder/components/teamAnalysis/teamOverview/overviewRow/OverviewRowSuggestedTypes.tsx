@@ -26,7 +26,7 @@ export const OverviewRowSuggestedTypes = ({ rowData }: Props) => {
 };
 
 const styles = StyleSheet.create({
-  suggestedTypes: { marginTop: 5 },
+  suggestedTypes: { marginTop: 6 },
   text: {
     textAlign: "left",
     fontSize: 10,
@@ -40,7 +40,7 @@ const styles = StyleSheet.create({
     alignItems: "stretch",
     overflow: "hidden",
     borderRadius: 4,
-    height: 13,
+    height: 14,
     marginRight: 3,
     marginBottom: 3,
     shadowColor: "#000000",

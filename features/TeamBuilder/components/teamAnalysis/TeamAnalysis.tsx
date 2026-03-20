@@ -1,4 +1,4 @@
-import { ScrollView, StyleSheet, View, ViewStyle } from "react-native";
+import { StyleSheet, View, ViewStyle } from "react-native";
 
 import { TeamMemberModel } from "../../types";
 import { MembersPreview } from "./membersPreview/MembersPreview";
@@ -17,9 +17,7 @@ export const TeamAnalysis = ({ style, currentTeam, onChangeTeam }: Props) => {
         onChangeTeam={onChangeTeam}
         teamMembers={currentTeam}
       ></MembersPreview>
-      <ScrollView>
-        <TeamOverview currentTeam={currentTeam}></TeamOverview>
-      </ScrollView>
+      <TeamOverview currentTeam={currentTeam}></TeamOverview>
     </View>
   );
 };

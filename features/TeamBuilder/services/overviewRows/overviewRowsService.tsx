@@ -58,10 +58,12 @@ export const overviewRowsService = (
         .setProgressBar(members.length, weakness.memberIds.length)
         .setAffectedMembers(
           members.filter((member) => weakness.memberIds.includes(member.id)),
-        )
-        .build();
+        );
+      if (members.length === weakness.memberIds.length || weakness.memberIds.length + 1) {
+        row.setSeverity(OverviewRowSeverity.High);
+      }
 
-      result.push(row);
+      result.push(row.build());
     }
 
     return result;

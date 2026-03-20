@@ -81,7 +81,6 @@ const styles = StyleSheet.create({
     gap: 8,
     justifyContent: "center",
     alignItems: "flex-start",
-    flex: 1,
   },
   button: {
     flexDirection: "row",

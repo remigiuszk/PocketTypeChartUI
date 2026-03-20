@@ -1,4 +1,11 @@
+import {
+  Inter_300Light,
+  Inter_400Regular,
+  Inter_500Medium,
+  useFonts,
+} from "@expo-google-fonts/inter";
 import * as NavigationBar from "expo-navigation-bar";
+import * as SplashScreen from "expo-splash-screen";
 import { StatusBar } from "expo-status-bar";
 import React, { useEffect, useState } from "react";
 import { Platform, StyleSheet } from "react-native";
@@ -10,20 +17,29 @@ import { TeamBuilder } from "./screens/TeamBuilder";
 import { Typing } from "./screens/Typing";
 import { store } from "./state/store";
 
+SplashScreen.preventAutoHideAsync();
+
 export const App = () => {
   const [teamBuilderOpen, setTeamBuilderOpen] = useState<boolean>(false);
+  const [fontsLoaded] = useFonts({
+    Inter_300Light,
+    Inter_400Regular,
+    Inter_500Medium,
+  });
+
+  useEffect(() => {
+    if (fontsLoaded) {
+      SplashScreen.hideAsync();
+    }
+
+    if (Platform.OS === "android") {
+      NavigationBar.setButtonStyleAsync("light");
+    }
+  }, [fontsLoaded]);
 
   function switchViews() {
     setTeamBuilderOpen(!teamBuilderOpen);
   }
-
-  useEffect(() => {
-    if (Platform.OS !== "android") return;
-
-    (async () => {
-      await NavigationBar.setButtonStyleAsync("light");
-    })();
-  }, []);
 
   return (
     <SafeAreaProvider>

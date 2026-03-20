@@ -30,24 +30,26 @@ export const TeamBuilder = ({ switchViews }: Props) => {
   return (
     <View style={styles.container}>
       <TopBar clearSelection={() => {}}></TopBar>
-      {analysisOn ? (
-        <TeamAnalysis
-          onChangeTeam={onChangeTeam}
-          currentTeam={currentTeam}
-        ></TeamAnalysis>
-      ) : (
-        <View style={{ padding: 6, flex: 1, gap: 16 }}>
-          <Card>
-            <TeamBuilderHeader
-              title="WELCOME TO THE TEAMBUILDER"
-              subtitle="Select up to 6 team members to analyze synergy and get improvement reccomendations"
-            />
-          </Card>
-          <TeamList
-            onAnalyze={(teamMembers: TeamMemberModel[]) => onEvaluate(teamMembers)}
-          ></TeamList>
-        </View>
-      )}
+      <View style={{ flex: 1 }}>
+        {analysisOn ? (
+          <TeamAnalysis
+            onChangeTeam={onChangeTeam}
+            currentTeam={currentTeam}
+          ></TeamAnalysis>
+        ) : (
+          <View style={{ padding: 6, flex: 1, gap: 16 }}>
+            <Card>
+              <TeamBuilderHeader
+                title="WELCOME TO THE TEAMBUILDER"
+                subtitle="Select up to 6 team members to analyze synergy and get improvement reccomendations"
+              />
+            </Card>
+            <TeamList
+              onAnalyze={(teamMembers: TeamMemberModel[]) => onEvaluate(teamMembers)}
+            ></TeamList>
+          </View>
+        )}
+      </View>
       <NavBar switchViews={switchViews} teamBuilderOpen={true}></NavBar>
     </View>
   );

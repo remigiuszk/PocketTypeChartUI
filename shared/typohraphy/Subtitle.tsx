@@ -1,10 +1,4 @@
-import {
-  StyleProp,
-  StyleSheet,
-  Text,
-  TextStyle,
-  View,
-} from "react-native";
+import { StyleProp, StyleSheet, Text, TextStyle, View } from "react-native";
 
 import { SUBTITLE_FONT_SIZE } from "../../constants";
 import { TEXT_100 } from "../../constants/colors";
@@ -25,8 +19,7 @@ export const Subtitle = ({ children, style }: Props) => {
 const styles = StyleSheet.create({
   container: {},
   text: {
-    fontWeight: "400",
-    fontFamily: "System",
+    fontFamily: "Inter_200ExtraLight",
     textAlign: "center",
     color: TEXT_100,
     fontSize: SUBTITLE_FONT_SIZE,

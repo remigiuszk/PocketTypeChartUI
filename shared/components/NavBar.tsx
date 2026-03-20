@@ -1,8 +1,8 @@
 import FontAwesome6 from "@expo/vector-icons/FontAwesome6";
 import { Pressable, StyleSheet, View } from "react-native";
 
-import { ACCENT, BG_INTERNAL, BG_ROOT, TEXT_100 } from "../../constants";
-import { Subtitle } from "../typohraphy/Subtitle";
+import { ACCENT, BG_ROOT } from "../../constants";
+import { MutedText } from "../typohraphy/MutedText";
 
 type Props = {
   teamBuilderOpen: boolean;
@@ -20,9 +20,16 @@ export const NavBar = ({ teamBuilderOpen, switchViews }: Props) => {
         ]}
         onPress={teamBuilderOpen ? switchViews : null}
       >
-        <FontAwesome6 name="fire-flame-curved" size={18} color={TEXT_100} />
-        <Subtitle style={styles.textStyle}>Type Chart</Subtitle>
+        <FontAwesome6
+          name="fire-flame-curved"
+          size={16}
+          color={!teamBuilderOpen ? ACCENT : "#555"}
+        />
+        <MutedText style={[styles.label, !teamBuilderOpen && styles.labelActive]}>
+          Type Chart
+        </MutedText>
       </Pressable>
+
       <Pressable
         style={({ pressed }) => [
           styles.button,
@@ -31,8 +38,10 @@ export const NavBar = ({ teamBuilderOpen, switchViews }: Props) => {
         ]}
         onPress={!teamBuilderOpen ? switchViews : null}
       >
-        <FontAwesome6 name="users" size={18} color={TEXT_100} />
-        <Subtitle style={styles.textStyle}>Team Builder</Subtitle>
+        <FontAwesome6 name="users" size={16} color={teamBuilderOpen ? ACCENT : "#555"} />
+        <MutedText style={[styles.label, teamBuilderOpen && styles.labelActive]}>
+          Team Builder
+        </MutedText>
       </Pressable>
     </View>
   );
@@ -40,29 +49,39 @@ export const NavBar = ({ teamBuilderOpen, switchViews }: Props) => {
 
 const styles = StyleSheet.create({
   container: {
-    height: "6%",
     width: "100%",
     flexDirection: "row",
     backgroundColor: BG_ROOT,
+    borderTopWidth: 1,
+    borderTopColor: "#2a2a3a",
+    paddingHorizontal: 12,
+    paddingVertical: 8,
+    gap: 4,
   },
   button: {
     flex: 1,
+    flexDirection: "column",
     justifyContent: "center",
     alignItems: "center",
-    alignContent: "center",
-    flexDirection: "column",
-    padding: 10,
-    gap: 1,
+    gap: 4,
+    padding: 6,
+    borderRadius: 10,
+    borderTopWidth: 2,
+    borderTopColor: "transparent",
   },
   selected: {
-    color: ACCENT,
-    backgroundColor: BG_INTERNAL,
+    backgroundColor: "#22223a",
+    borderTopColor: ACCENT,
   },
   pressed: {
     opacity: 0.85,
     transform: [{ scale: 0.98 }],
   },
-  textStyle: {
+  label: {
     fontSize: 10,
+    color: "#555",
+  },
+  labelActive: {
+    color: ACCENT,
   },
 });

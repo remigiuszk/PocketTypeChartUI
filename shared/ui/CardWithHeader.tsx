@@ -10,8 +10,8 @@ import {
   PADDING,
   TEXT_300,
 } from "../../constants";
-import { Subtitle } from "../typohraphy/Subtitle";
-import { Title } from "../typohraphy/Title";
+import { DisplayHeader } from "../typohraphy/DisplayHeader";
+import { MutedText } from "../typohraphy/MutedText";
 
 type CardProps = {
   title: string;
@@ -52,8 +52,8 @@ export const CardWithHeader = ({
                 : { alignItems: "center" },
             ]}
           >
-            <Title>{title}</Title>
-            {subtitle && <Subtitle>{subtitle}</Subtitle>}
+            <DisplayHeader>{title}</DisplayHeader>
+            {subtitle && <MutedText>{subtitle}</MutedText>}
           </View>
         </View>
       </View>

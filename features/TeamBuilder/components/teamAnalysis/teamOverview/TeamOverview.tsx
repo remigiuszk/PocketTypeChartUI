@@ -1,5 +1,5 @@
 import { useMemo } from "react";
-import { StyleSheet, View, ViewStyle } from "react-native";
+import { ScrollView, StyleSheet, View, ViewStyle } from "react-native";
 
 import { Loading } from "../../../../../shared/components/Loading";
 import { useGetAllRelationsQuery } from "../../../../DamageRelations/query";
@@ -60,21 +60,23 @@ export const TeamOverview = ({ style, currentTeam }: Props) => {
     return <Loading />;
   }
   return (
-    <View style={[styles.overviewLayout, style]}>
-      <WeaknessesContainer
-        weaknessRowData={rowData.filter(
-          (rowData) => rowData.type === OverviewRowType.Weakness,
-        )}
-      ></WeaknessesContainer>
-      <MoreDetails teamRelatons={teamStats.relations}></MoreDetails>
-    </View>
+    <ScrollView>
+      <View style={[styles.overviewLayout, style]}>
+        <WeaknessesContainer
+          weaknessRowData={rowData.filter(
+            (rowData) => rowData.type === OverviewRowType.Weakness,
+          )}
+        ></WeaknessesContainer>
+        <MoreDetails teamRelatons={teamStats.relations}></MoreDetails>
+      </View>
+    </ScrollView>
   );
 };
 
 const styles = StyleSheet.create({
   overviewLayout: {
     flexDirection: "column",
-    justifyContent: "center",
+    justifyContent: "flex-start",
     alignItems: "flex-start",
     gap: 12,
     paddingHorizontal: 6,

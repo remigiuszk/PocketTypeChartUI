@@ -25,7 +25,7 @@ export const OverviewRowBadge = ({ rowData }: Props) => {
   if (rowData.type === OverviewRowType.Strength) {
     return (
       <View style={[styles.badge, styles.badgeStrength]}>
-        <FontAwesome6 name="star" size={14} color={TEXT_STRENGHTS} />
+        <FontAwesome6 name="star" size={18} color={TEXT_STRENGHTS} />
       </View>
     );
   }
@@ -59,8 +59,8 @@ const styles = StyleSheet.create({
     alignItems: "center",
     aspectRatio: 1 / 1,
   },
-  badgeCritical: { borderColor: BORDER_WEAKNESSES },
+  badgeCritical: { backgroundColor: BORDER_WEAKNESSES },
   badgeWeak: { backgroundColor: BG_WEAKNESS_WEAK_BADGE },
-  badgeStrength: { borderColor: BORDER_STRENGHTS },
-  badgeSuggestion: { borderColor: BORDER_SUGGESTIONS },
+  badgeStrength: { backgroundColor: BORDER_STRENGHTS },
+  badgeSuggestion: { backgroundColor: BORDER_SUGGESTIONS },
 });

@@ -23,11 +23,13 @@ export const BORDER_WEAKNESSES: string = "#431D21";
 export const BORDER_STRENGHTS: string = "#143628";
 export const BORDER_SUGGESTIONS: string = "#172436";
 
-export const ACCENT: string = "#f3f2d0ff";
+//export const ACCENT: string = "#f3f2d0ff";
+export const ACCENT: string = "#7eb8f7";
 
 export const TEXT_100: string = "#A0A3BD";
 export const TEXT_300: string = "#dee0f2ff";
 export const TEXT_500: string = "#f6f7ffff";
+export const TEXT_MUTED: string = "#55556a";
 
 export const SELECTION: string = "#ffffffff";
 
