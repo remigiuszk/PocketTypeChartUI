@@ -29,7 +29,7 @@ export const ACCENT: string = "#7eb8f7";
 export const TEXT_100: string = "#A0A3BD";
 export const TEXT_300: string = "#dee0f2ff";
 export const TEXT_500: string = "#f6f7ffff";
-export const TEXT_MUTED: string = "#55556a";
+export const TEXT_MUTED: string = "#747486";
 
 export const SELECTION: string = "#ffffffff";
 

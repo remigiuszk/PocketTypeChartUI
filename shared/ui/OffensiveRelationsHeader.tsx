@@ -61,12 +61,12 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     flexDirection: "column",
     alignItems: "flex-start",
+    paddingHorizontal: 6,
   },
   titleContainer: {
     alignItems: "center",
     justifyContent: "center",
     flexDirection: "row",
-    gap: 12,
   },
   textContainer: {
     justifyContent: "center",

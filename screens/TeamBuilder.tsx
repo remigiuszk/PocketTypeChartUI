@@ -40,7 +40,7 @@ export const TeamBuilder = ({ switchViews }: Props) => {
           <View style={{ padding: 6, flex: 1, gap: 16 }}>
             <Card>
               <TeamBuilderHeader
-                title="WELCOME TO THE TEAMBUILDER"
+                title="TEAM BUILDER"
                 subtitle="Select up to 6 team members to analyze synergy and get improvement reccomendations"
               />
             </Card>

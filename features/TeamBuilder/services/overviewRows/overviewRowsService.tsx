@@ -1,4 +1,5 @@
 import { OVERVIEW_STRINGS } from "../../../../constants";
+import { useGetDamageRelationsQuery } from "../../../DamageRelations/query";
 import { PokeTypeModel } from "../../../TypeSelection/types";
 import { Stats } from "../../components/teamAnalysis/teamOverview/TeamOverview";
 import { TeamMemberModel } from "../../types";
@@ -16,6 +17,7 @@ export const overviewRowsService = (
     result.push(immunities());
     result.push(...criticalWeaknesses());
     result.push(...majorWeaknesses());
+    result.push(...multiple4xVulns());
 
     return result;
   }
@@ -59,8 +61,10 @@ export const overviewRowsService = (
         .setAffectedMembers(
           members.filter((member) => weakness.memberIds.includes(member.id)),
         );
-      if (members.length === weakness.memberIds.length || weakness.memberIds.length + 1) {
+      if (weakness.memberIds.length >= members.length - 1) {
         row.setSeverity(OverviewRowSeverity.High);
+      } else {
+        row.setSeverity(OverviewRowSeverity.Medium);
       }
 
       result.push(row.build());
@@ -98,6 +102,37 @@ export const overviewRowsService = (
           .setSubText(OVERVIEW_STRINGS.immunities.highSubText);
     }
     return row.build();
+  }
+
+  function multiple4xVulns(): OverviewRowData[] {
+    const vulnsStats = stats.defensiveStats.multiple4xVulns;
+    const result: OverviewRowData[] = [];
+
+    for (const stat of vulnsStats) {
+      const row = new OverviewRowDataBuilder()
+        .setHeader(OVERVIEW_STRINGS.multiple4xWeaknesses.header)
+        .setSubText(OVERVIEW_STRINGS.multiple4xWeaknesses.subText(stat.memberIds.length))
+        .setHintText(OVERVIEW_STRINGS.multiple4xWeaknesses.hintText)
+        .setType(OverviewRowType.Weakness)
+        .setProgressBar(members.length, stat.memberIds.length)
+        .setLeadType(allTypes.find((type) => type.id === stat.attackingTypeId)!)
+        .setAffectedMembers(
+          members.filter((member) => stat.memberIds.includes(member.id)),
+        );
+
+      const severity =
+        stat.affectedMembersCount >= 3
+          ? OverviewRowSeverity.High
+          : OverviewRowSeverity.Medium;
+
+      const { data } = useGetDamageRelationsQuery([stat.attackingTypeId]);
+
+      row.setSeverity(severity);
+
+      result.push(row.build());
+    }
+
+    return result;
   }
 
   return {

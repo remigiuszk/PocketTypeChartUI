@@ -9,7 +9,7 @@ import { PokeTypeModel } from "../features/TypeSelection/types";
 import { NavBar } from "../shared/components/NavBar";
 import { NoTypesSelected } from "../shared/components/NoTypesSelected";
 import { TopBar } from "../shared/components/TopBar";
-import { CardWithHeader } from "../shared/ui/CardWithHeader";
+import { TeamBuilderHeader } from "../shared/typohraphy/TeamBuilderHeader";
 
 type Props = {
   switchViews: () => void;
@@ -49,7 +49,11 @@ export const Typing = ({ switchViews }: Props) => {
         clearSelection={clearSelection}
       ></TopBar>
       <View style={{ margin: 12, marginBottom: 0, flex: 1, gap: 16 }}>
-        <CardWithHeader title="Select poke type(s)" subtitle="Choose up to two types">
+        <View style={styles.typesContainer}>
+          <TeamBuilderHeader
+            title="TYPE CHART"
+            subtitle="Select up to 2 types and check their type relations"
+          />
           <PokeTypeList
             data={data}
             isFetching={isFetching}
@@ -59,7 +63,7 @@ export const Typing = ({ switchViews }: Props) => {
             memberTypes={normalizedSelected}
             onToggle={toggleType}
           />
-        </CardWithHeader>
+        </View>
         {selectedType.length > 0 ? (
           <ScrollView>
             <Relations selectedTypes={normalizedSelected}></Relations>
@@ -78,4 +82,5 @@ const styles = StyleSheet.create({
     backgroundColor: BG_LAYOUT,
     flex: 1,
   },
+  typesContainer: { alignItems: "stretch" },
 });

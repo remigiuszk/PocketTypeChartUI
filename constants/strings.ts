@@ -25,6 +25,12 @@ export const OVERVIEW_STRINGS = {
     hintText:
       "Major weakness means that 3 members of your team are vulnerable to the same type. While not as critical as a full team weakness, this still gives opposing Pokemon of that type significant opportunities to cause damage. Try to have at least one member that resists or is immune to this type so you always have a safe switch-in option available.",
   },
+  multiple4xWeaknesses: {
+    header: "Multiple 4x weaknesses against: ",
+    subText: (count: number) => `${count} members are 4x vulnerable`,
+    hintText:
+      "Multiple members share a 4x vulnerability to the same type, meaning they take quadruple damage from it. This is extremely dangerous — a single Pokemon of that type can threaten several members of your team at once. Consider replacing one of the affected members with a Pokemon that resists or is immune to this type.",
+  },
 };
 
 export const HINT_HEADER_DEFAULT: string = "Why is this important?";

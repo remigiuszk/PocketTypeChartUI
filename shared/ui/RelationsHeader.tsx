@@ -31,9 +31,7 @@ export const RelationsHeader = ({ multiplier }: Props) => {
             <View style={[styles.textContainer]}>
               <View style={styles.headerContainer}>
                 <Subtitle style={styles.titleTextStyle}>RESIST: </Subtitle>
-                <Subtitle style={styles.subTitileTextStyle}>
-                  (0.5x | 0.25x)
-                </Subtitle>
+                <Subtitle style={styles.subTitileTextStyle}>(0.5x | 0.25x)</Subtitle>
               </View>
             </View>
           ) : multiplier == 0 ? (
@@ -59,12 +57,12 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     flexDirection: "column",
     alignItems: "flex-start",
+    paddingHorizontal: 6,
   },
   titleContainer: {
     alignItems: "center",
     justifyContent: "center",
     flexDirection: "row",
-    gap: 12,
   },
   textContainer: {
     justifyContent: "center",

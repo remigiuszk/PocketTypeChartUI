@@ -76,6 +76,7 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     flexWrap: "wrap",
     marginBottom: 8,
+    paddingHorizontal: 6,
   },
   list: {},
 });

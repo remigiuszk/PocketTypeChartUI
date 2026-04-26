@@ -3,11 +3,13 @@ import { Image, StyleSheet, View, ViewStyle } from "react-native";
 
 import {
   TEXT_300,
+  TEXT_MUTED,
   TEXT_STRENGHTS,
   TEXT_WEAKNESSES_CRITICAL,
   TEXT_WEAKNESSES_WEAK,
 } from "../../../../../../constants";
-import { Subtitle } from "../../../../../../shared/typohraphy/Subtitle";
+import { BodyText } from "../../../../../../shared/typohraphy/BodyText";
+import { ValueText } from "../../../../../../shared/typohraphy/ValueText";
 import { HintButton } from "../../../../../../shared/ui/HintButton";
 import {
   OverviewRowData,
@@ -40,7 +42,9 @@ export const OverviewRow = ({ style, rowData }: Props) => {
 
       <View style={styles.content}>
         <View style={styles.headerContainer}>
-          <Subtitle style={styles.header}>{rowData.header}</Subtitle>
+          <ValueText style={{ textAlign: "left", fontSize: 16 }}>
+            {rowData.header}
+          </ValueText>
           {rowData.leadType && (
             <View style={[styles.leadTypeContainer]}>
               <Image
@@ -66,12 +70,14 @@ export const OverviewRow = ({ style, rowData }: Props) => {
                 ]}
               />
             </View>
-            <Subtitle style={[styles.progressBarText, { color: color }]}>
+            <ValueText style={{ color: color }}>
               {rowData.progressBarActual!} / {rowData.progressBarTotal!}
-            </Subtitle>
+            </ValueText>
           </View>
         )}
-        <Subtitle style={styles.subText}>{rowData.subText}</Subtitle>
+        <BodyText style={{ textAlign: "left", marginRight: 15, color: TEXT_MUTED }}>
+          {rowData.subText}
+        </BodyText>
         {!!rowData.suggestedTypes && (
           <View>
             <OverviewRowSuggestedTypes rowData={rowData}></OverviewRowSuggestedTypes>

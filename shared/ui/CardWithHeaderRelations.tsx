@@ -111,5 +111,11 @@ const styles = StyleSheet.create({
     alignItems: "flex-start",
     flexDirection: "column",
   },
-  content: { margin: 8, backgroundColor: BG_CARD },
+  content: {
+    margin: 0,
+    backgroundColor: BG_CARD,
+    width: "100%",
+    alignItems: "stretch", // zamiast "center"
+    justifyContent: "center",
+  },
 });
