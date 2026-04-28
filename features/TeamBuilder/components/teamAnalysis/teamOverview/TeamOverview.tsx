@@ -50,10 +50,15 @@ export const TeamOverview = ({ style, currentTeam }: Props) => {
   console.log(teamStats.relations.defensiveRelations.immunities);
 
   const rowData: OverviewRowData[] = useMemo(() => {
-    const service = overviewRowsService(teamStats, pokeTypesData ?? [], currentTeam);
+    const service = overviewRowsService(
+      teamStats,
+      pokeTypesData ?? [],
+      currentTeam,
+      data ?? [],
+    );
 
     return service.getRowData();
-  }, [currentTeam, pokeTypesData, teamStats]);
+  }, [currentTeam, pokeTypesData, teamStats, data]);
 
   console.log(rowData);
   if (relationsLoading || typesLoading || !data || !pokeTypesData) {

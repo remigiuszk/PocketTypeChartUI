@@ -1,5 +1,6 @@
 import { OVERVIEW_STRINGS } from "../../../../constants";
 import { useGetDamageRelationsQuery } from "../../../DamageRelations/query";
+import { DamageRelationFullModel } from "../../../DamageRelations/types";
 import { PokeTypeModel } from "../../../TypeSelection/types";
 import { Stats } from "../../components/teamAnalysis/teamOverview/TeamOverview";
 import { TeamMemberModel } from "../../types";
@@ -10,6 +11,7 @@ export const overviewRowsService = (
   stats: Stats,
   allTypes: PokeTypeModel[],
   members: TeamMemberModel[],
+  allRelations: DamageRelationFullModel[],
 ) => {
   function getRowData(): OverviewRowData[] {
     const result: OverviewRowData[] = [];
