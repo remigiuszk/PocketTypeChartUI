@@ -1,5 +1,7 @@
 import { Image, StyleSheet, View } from "react-native";
 
+import { TEXT_MUTED } from "../../../../../../constants";
+import { BodyText } from "../../../../../../shared/typohraphy/BodyText";
 import { PokeTypeModel } from "../../../../../TypeSelection/types";
 import { OverviewRowData } from "../../../../services/overviewRows/types";
 
@@ -10,6 +12,7 @@ type Props = {
 export const OverviewRowSuggestedTypes = ({ rowData }: Props) => {
   return (
     <View style={styles.suggestedTypes}>
+      <BodyText style={{ textAlign: "left", color: TEXT_MUTED, marginBottom: 3 }}>Consider adding one of these types:</BodyText>
       <View style={styles.list}>
         {rowData.suggestedTypes!.map((type: PokeTypeModel) => {
           return (
@@ -26,11 +29,7 @@ export const OverviewRowSuggestedTypes = ({ rowData }: Props) => {
 };
 
 const styles = StyleSheet.create({
-  suggestedTypes: { marginTop: 6 },
-  text: {
-    textAlign: "left",
-    fontSize: 10,
-  },
+  suggestedTypes: { marginTop: 0 },
   list: {
     flexDirection: "row",
     flexWrap: "wrap",

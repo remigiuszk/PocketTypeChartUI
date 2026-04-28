@@ -1,5 +1,4 @@
 import { OVERVIEW_STRINGS } from "../../../../constants";
-import { useGetDamageRelationsQuery } from "../../../DamageRelations/query";
 import { DamageRelationFullModel } from "../../../DamageRelations/types";
 import { PokeTypeModel } from "../../../TypeSelection/types";
 import { Stats } from "../../components/teamAnalysis/teamOverview/TeamOverview";
@@ -127,9 +126,15 @@ export const overviewRowsService = (
           ? OverviewRowSeverity.High
           : OverviewRowSeverity.Medium;
 
-      const { data } = useGetDamageRelationsQuery([stat.attackingTypeId]);
+      const counteringTypeIds = allRelations
+        .filter((r) => r.attackingTypeId === stat.attackingTypeId && r.multiplier < 1)
+        .map((r) => r.defendingTypeId);
 
-      row.setSeverity(severity);
+      const counteringTypes = allTypes.filter((t) => counteringTypeIds.includes(t.id));
+
+      row
+        .setSeverity(severity)
+        .setSuggestedTypes(counteringTypes, members);
 
       result.push(row.build());
     }
