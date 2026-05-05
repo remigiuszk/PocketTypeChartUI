@@ -1,6 +1,6 @@
 import { StyleSheet, View } from "react-native";
 
-import { BORDER_DEFAULT } from "../../../../constants";
+import { BORDER_INTERNAL } from "../../../../constants";
 import { RelationsHeader } from "../../../../shared/ui/RelationsHeader";
 import { DefensiveDamageRelationModel } from "../../types";
 import { DefensiveDamageRelation } from "./DefensiveDamageRelation";
@@ -20,47 +20,28 @@ export const DefensiveRelationsList = ({ relationList }: Props) => {
 
   const immunities = relationList.filter((x) => x.multiplier === 0);
 
+  const sections = [
+    superEffective.length > 0 ? { multiplier: 2, list: superEffective } : null,
+    notVeryEffective.length > 0 ? { multiplier: 0.5, list: notVeryEffective } : null,
+    immunities.length > 0 ? { multiplier: 0, list: immunities } : null,
+  ].filter((s): s is { multiplier: number; list: DefensiveDamageRelationModel[] } => s !== null);
+
   return (
     <View style={styles.container}>
-      {superEffective.length > 0 && (
-        <View style={styles.section}>
-          <RelationsHeader multiplier={2}></RelationsHeader>
+      {sections.map((section, index) => (
+        <View key={section.multiplier} style={styles.section}>
+          <RelationsHeader multiplier={section.multiplier} />
           <View style={styles.listContainer}>
-            {superEffective.map((relation: DefensiveDamageRelationModel) => (
+            {section.list.map((relation) => (
               <DefensiveDamageRelation
                 key={relation.attackingType.id}
                 damageRelation={relation}
               />
             ))}
           </View>
+          {index < sections.length - 1 && <View style={styles.separator} />}
         </View>
-      )}
-      {notVeryEffective.length > 0 && (
-        <View style={styles.section}>
-          <RelationsHeader multiplier={0.5}></RelationsHeader>
-          <View style={styles.listContainer}>
-            {notVeryEffective.map((relation: DefensiveDamageRelationModel) => (
-              <DefensiveDamageRelation
-                key={relation.attackingType.id}
-                damageRelation={relation}
-              />
-            ))}
-          </View>
-        </View>
-      )}
-      {immunities.length > 0 && (
-        <View style={styles.section}>
-          <RelationsHeader multiplier={0}></RelationsHeader>
-          <View style={styles.listContainer}>
-            {immunities.map((relation: DefensiveDamageRelationModel) => (
-              <DefensiveDamageRelation
-                key={relation.attackingType.id}
-                damageRelation={relation}
-              />
-            ))}
-          </View>
-        </View>
-      )}
+      ))}
     </View>
   );
 };
@@ -68,9 +49,13 @@ export const DefensiveRelationsList = ({ relationList }: Props) => {
 const styles = StyleSheet.create({
   container: {},
   section: {
+    marginBottom: 4,
+  },
+  separator: {
+    height: 1,
+    backgroundColor: BORDER_INTERNAL,
+    marginHorizontal: 6,
     marginBottom: 8,
-    borderBottomColor: BORDER_DEFAULT,
-    borderBottomWidth: 1,
   },
   listContainer: {
     flexDirection: "row",

@@ -1,6 +1,6 @@
 import { StyleSheet, View } from "react-native";
 
-import { BORDER_DEFAULT } from "../../../../constants";
+import { BORDER_INTERNAL } from "../../../../constants";
 import { CardWithHeaderRelations } from "../../../../shared/ui/CardWithHeaderRelations";
 import { OffensiveRelationsHeader } from "../../../../shared/ui/OffensiveRelationsHeader";
 import { PokeTypeModel } from "../../../TypeSelection/types";
@@ -44,57 +44,47 @@ export const OffensiveRelationsList = ({ relationList }: Props) => {
 
   return (
     <View style={styles.container}>
-      {Object.values(groupedBuckets).map((bucket) => (
-        <CardWithHeaderRelations
-          title="Offensive Relations"
-          subtitle="TYPE MOVES ARE:"
-          iconName="sword"
-          sprites={[bucket.attackingType.sprite]}
-          key={bucket.attackingType.id}
-        >
-          {bucket.superEffective.length > 0 && (
-            <View style={styles.section}>
-              <OffensiveRelationsHeader multiplier={2}></OffensiveRelationsHeader>
-              <View style={styles.listContainer}>
-                {bucket.superEffective.map((relation: OffensiveDamageRelationModel) => (
-                  <OffensiveDamageRelation
-                    key={relation.defendingType.id}
-                    damageRelation={relation}
-                  />
-                ))}
-              </View>
-            </View>
-          )}
-          {bucket.notVeryEffective.length > 0 && (
-            <View style={styles.section}>
-              <OffensiveRelationsHeader multiplier={0.5}></OffensiveRelationsHeader>
-              <View style={styles.listContainer}>
-                {bucket.notVeryEffective
-                  .sort((a, b) => b.multiplier - a.multiplier)
-                  .map((relation: OffensiveDamageRelationModel) => (
+      {Object.values(groupedBuckets).map((bucket) => {
+        const sections = [
+          bucket.superEffective.length > 0
+            ? { multiplier: 2, list: bucket.superEffective }
+            : null,
+          bucket.notVeryEffective.length > 0
+            ? {
+                multiplier: 0.5,
+                list: [...bucket.notVeryEffective].sort((a, b) => b.multiplier - a.multiplier),
+              }
+            : null,
+          bucket.immunities.length > 0 ? { multiplier: 0, list: bucket.immunities } : null,
+        ].filter(
+          (s): s is { multiplier: number; list: OffensiveDamageRelationModel[] } => s !== null,
+        );
+
+        return (
+          <CardWithHeaderRelations
+            title="Offensive Relations"
+            subtitle="TYPE MOVES ARE:"
+            iconName="sword"
+            sprites={[bucket.attackingType.sprite]}
+            key={bucket.attackingType.id}
+          >
+            {sections.map((section, index) => (
+              <View key={section.multiplier} style={styles.section}>
+                <OffensiveRelationsHeader multiplier={section.multiplier} />
+                <View style={styles.listContainer}>
+                  {section.list.map((relation) => (
                     <OffensiveDamageRelation
                       key={relation.defendingType.id}
                       damageRelation={relation}
                     />
                   ))}
+                </View>
+                {index < sections.length - 1 && <View style={styles.separator} />}
               </View>
-            </View>
-          )}
-          {bucket.immunities.length > 0 && (
-            <View style={styles.section}>
-              <OffensiveRelationsHeader multiplier={0}></OffensiveRelationsHeader>
-              <View style={styles.listContainer}>
-                {bucket.immunities.map((relation: OffensiveDamageRelationModel) => (
-                  <OffensiveDamageRelation
-                    key={relation.defendingType.id}
-                    damageRelation={relation}
-                  />
-                ))}
-              </View>
-            </View>
-          )}
-        </CardWithHeaderRelations>
-      ))}
+            ))}
+          </CardWithHeaderRelations>
+        );
+      })}
     </View>
   );
 };
@@ -102,9 +92,13 @@ export const OffensiveRelationsList = ({ relationList }: Props) => {
 const styles = StyleSheet.create({
   container: { gap: 15, alignItems: "center" },
   section: {
+    marginBottom: 4,
+  },
+  separator: {
+    height: 1,
+    backgroundColor: BORDER_INTERNAL,
+    marginHorizontal: 6,
     marginBottom: 8,
-    borderBottomColor: BORDER_DEFAULT,
-    borderBottomWidth: 1,
   },
   listContainer: {
     flexDirection: "row",

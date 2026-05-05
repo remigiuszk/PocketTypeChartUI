@@ -1,6 +1,6 @@
 import { StyleSheet, Text, View } from "react-native";
 
-import { ACCENT, BG_LAYOUT, test, TEXT_100, TEXT_300 } from "../../constants";
+import { ACCENT, BG_ROOT, test, TEXT_100, TEXT_300 } from "../../constants";
 
 type Props = {
   title: string;
@@ -19,7 +19,7 @@ export const TeamBuilderHeader = ({ title, subtitle }: Props) => {
 
 const styles = StyleSheet.create({
   container: {
-    backgroundColor: BG_LAYOUT,
+    backgroundColor: BG_ROOT,
     borderWidth: 1,
     borderColor: ACCENT,
     borderRadius: 18,

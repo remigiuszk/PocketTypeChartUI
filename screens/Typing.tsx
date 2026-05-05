@@ -1,7 +1,7 @@
 import { useMemo, useState } from "react";
 import { ScrollView, StyleSheet, View } from "react-native";
 
-import { BG_LAYOUT } from "../constants";
+import { BG_ROOT } from "../constants";
 import { Relations } from "../features/DamageRelations/components/Relations";
 import { PokeTypeList } from "../features/TypeSelection/components/PokeTypeList";
 import { useGetAllPokeTypesQuery } from "../features/TypeSelection/query";
@@ -79,8 +79,8 @@ export const Typing = ({ switchViews }: Props) => {
 
 const styles = StyleSheet.create({
   container: {
-    backgroundColor: BG_LAYOUT,
+    backgroundColor: BG_ROOT,
     flex: 1,
   },
-  typesContainer: { alignItems: "stretch" },
+  typesContainer: { alignItems: "stretch", gap: 6 },
 });
