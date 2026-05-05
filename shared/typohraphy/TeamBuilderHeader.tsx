@@ -1,6 +1,6 @@
 import { StyleSheet, Text, View } from "react-native";
 
-import { BG_LAYOUT, PRIMARY, test, TEXT_100, TEXT_300 } from "../../constants";
+import { ACCENT, BG_LAYOUT, test, TEXT_100, TEXT_300 } from "../../constants";
 
 type Props = {
   title: string;
@@ -21,13 +21,13 @@ const styles = StyleSheet.create({
   container: {
     backgroundColor: BG_LAYOUT,
     borderWidth: 1,
-    borderColor: PRIMARY,
+    borderColor: ACCENT,
     borderRadius: 18,
     paddingVertical: 14,
     paddingHorizontal: 16,
 
     // lekki "glow"
-    shadowColor: PRIMARY,
+    shadowColor: ACCENT,
     shadowOpacity: 0.35,
     shadowRadius: 2,
     shadowOffset: { width: 0, height: 0 },

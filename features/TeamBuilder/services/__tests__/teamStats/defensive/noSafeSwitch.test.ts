@@ -10,8 +10,8 @@ describe("defensive stats - no safe switch", () => {
     const service = teamRelationsService();
     const result = service.calculateTeamRelations(ALL_DAMAGE_RELATIONS_FIXTURE, teamD);
 
-    const statsService = defensiveStatsService();
-    const statsResult = statsService.calculate(result.defensiveRelations);
+    const statsService = defensiveStatsService(result.defensiveRelations);
+    const statsResult = statsService.calculate();
 
     const expected: TypeThreat[] = [
       {
@@ -33,8 +33,8 @@ describe("defensive stats - no safe switch", () => {
     const service = teamRelationsService();
     const result = service.calculateTeamRelations(ALL_DAMAGE_RELATIONS_FIXTURE, teamE);
 
-    const statsService = defensiveStatsService();
-    const statsResult = statsService.calculate(result.defensiveRelations);
+    const statsService = defensiveStatsService(result.defensiveRelations);
+    const statsResult = statsService.calculate();
 
     const expected: TypeThreat[] = [
       {
@@ -61,8 +61,8 @@ describe("defensive stats - no safe switch", () => {
     const service = teamRelationsService();
     const result = service.calculateTeamRelations(ALL_DAMAGE_RELATIONS_FIXTURE, teamF);
 
-    const statsService = defensiveStatsService();
-    const statsResult = statsService.calculate(result.defensiveRelations);
+    const statsService = defensiveStatsService(result.defensiveRelations);
+    const statsResult = statsService.calculate();
 
     const expected: TypeThreat[] = [];
 

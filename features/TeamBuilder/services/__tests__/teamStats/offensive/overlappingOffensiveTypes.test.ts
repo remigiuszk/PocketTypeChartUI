@@ -18,7 +18,7 @@ describe("offensive stats - overlapping defensive types", () => {
 
     const expected: number[] = [TypeId.Fire, TypeId.Flying];
 
-    expect(statsResult.ovelappingOffensiveTypes).toEqual(expected);
+    expect(statsResult.overlappingOffensiveTypes).toEqual(expected);
   });
 
   it("should return overlapping defensive types for teamE", () => {
@@ -34,7 +34,7 @@ describe("offensive stats - overlapping defensive types", () => {
 
     const expected: number[] = [TypeId.Flying];
 
-    expect(statsResult.ovelappingOffensiveTypes).toEqual(expected);
+    expect(statsResult.overlappingOffensiveTypes).toEqual(expected);
   });
 
   it("should return overlapping defensive types for teamF", () => {
@@ -50,6 +50,6 @@ describe("offensive stats - overlapping defensive types", () => {
 
     const expected: number[] = [];
 
-    expect(statsResult.ovelappingOffensiveTypes).toEqual(expected);
+    expect(statsResult.overlappingOffensiveTypes).toEqual(expected);
   });
 });

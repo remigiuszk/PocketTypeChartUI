@@ -7,10 +7,9 @@ import { useGetAllPokeTypesQuery } from "../../../../TypeSelection/query";
 import { overviewRowsService } from "../../../services/overviewRows/overviewRowsService";
 import { OverviewRowData, OverviewRowType } from "../../../services/overviewRows/types";
 import { teamRelationsService } from "../../../services/teamRelationsService/teamRelationsService";
-import { TeamRelationsResult } from "../../../services/teamRelationsService/types";
 import { defensiveStatsService } from "../../../services/teamStats/defensiveStatsService";
 import { offensiveStatsService } from "../../../services/teamStats/offensiveStatsService";
-import { DefensiveStats, OffensiveStats } from "../../../services/teamStats/types";
+import { Stats } from "../../../services/teamStats/types";
 import { TeamMemberModel } from "../../../types";
 import { MoreDetails } from "./MoreDetails";
 import { WeaknessesContainer } from "./weaknesses/WeaknessesContainer";
@@ -18,12 +17,6 @@ import { WeaknessesContainer } from "./weaknesses/WeaknessesContainer";
 type Props = {
   style?: ViewStyle | ViewStyle[];
   currentTeam: TeamMemberModel[];
-};
-
-export type Stats = {
-  relations: TeamRelationsResult;
-  offensiveStats: OffensiveStats;
-  defensiveStats: DefensiveStats;
 };
 
 export const TeamOverview = ({ style, currentTeam }: Props) => {
@@ -47,8 +40,6 @@ export const TeamOverview = ({ style, currentTeam }: Props) => {
     };
   }, [currentTeam, data, pokeTypesData]);
 
-  console.log(teamStats.relations.defensiveRelations.immunities);
-
   const rowData: OverviewRowData[] = useMemo(() => {
     const service = overviewRowsService(
       teamStats,
@@ -60,7 +51,6 @@ export const TeamOverview = ({ style, currentTeam }: Props) => {
     return service.getRowData();
   }, [currentTeam, pokeTypesData, teamStats, data]);
 
-  console.log(rowData);
   if (relationsLoading || typesLoading || !data || !pokeTypesData) {
     return <Loading />;
   }

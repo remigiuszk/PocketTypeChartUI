@@ -2,7 +2,7 @@ import AsyncStorage from "@react-native-async-storage/async-storage";
 
 import { TeamMemberModel } from "../../features/TeamBuilder/types";
 
-const KEY = "quiztracker.teamMembers.v1";
+const KEY = "pocketTypeChart.teamMembers.v1";
 
 export async function loadTeamMembers(): Promise<TeamMemberModel[] | null> {
   try {
@@ -15,9 +15,7 @@ export async function loadTeamMembers(): Promise<TeamMemberModel[] | null> {
   }
 }
 
-export async function saveTeamMembers(
-  members: TeamMemberModel[]
-): Promise<void> {
+export async function saveTeamMembers(members: TeamMemberModel[]): Promise<void> {
   try {
     await AsyncStorage.setItem(KEY, JSON.stringify(members));
   } catch (e) {

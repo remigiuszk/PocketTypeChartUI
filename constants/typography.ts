@@ -1,6 +1,6 @@
 export const FONTS = {
   light: "Inter_400Regular",
-  regular: "Inter_500RMedium",
+  regular: "Inter_500Medium",
   medium: "Inter_600SemiBold",
 } as const;
 

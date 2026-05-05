@@ -19,7 +19,6 @@ type OffensiveBuckets = {
 };
 
 export const OffensiveRelationsList = ({ relationList }: Props) => {
-  console.log;
   const groupedBuckets = (relationList ?? []).reduce<Record<string, OffensiveBuckets>>(
     (acc, rel) => {
       const key = String(rel.attackingMoveType.id); // albo rel.attackingMoveType.name

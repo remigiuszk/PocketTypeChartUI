@@ -1,7 +1,7 @@
 import { ReactNode } from "react";
 import { Pressable, StyleProp, StyleSheet, ViewStyle } from "react-native";
 
-import { PRIMARY } from "../../constants";
+import { ACCENT } from "../../constants";
 
 type Props = {
   click: () => void;
@@ -22,7 +22,7 @@ const DefaultButton = ({ click, children, style }: Props) => {
 
 const styles = StyleSheet.create({
   pressable: {
-    backgroundColor: PRIMARY,
+    backgroundColor: ACCENT,
     borderRadius: 5,
     height: 40,
     justifyContent: "center",

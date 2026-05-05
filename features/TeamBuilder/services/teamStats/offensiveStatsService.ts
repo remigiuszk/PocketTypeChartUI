@@ -11,13 +11,13 @@ export const offensiveStatsService = (
   const result: OffensiveStats = {
     noSuperEffectiveCoverage: [],
     severlyResistedTypes: [],
-    ovelappingOffensiveTypes: [],
+    overlappingOffensiveTypes: [],
   };
 
   function calculate(): OffensiveStats {
     result.noSuperEffectiveCoverage.push(...getNoSuperEffectveCoverage());
     getSeverlyResistedBy();
-    result.ovelappingOffensiveTypes.push(...getOverlappingOffensiveTypes());
+    result.overlappingOffensiveTypes.push(...getOverlappingOffensiveTypes());
     return result;
   }
 

@@ -1,8 +1,8 @@
 import { OVERVIEW_STRINGS } from "../../../../constants";
 import { DamageRelationFullModel } from "../../../DamageRelations/types";
 import { PokeTypeModel } from "../../../TypeSelection/types";
-import { Stats } from "../../components/teamAnalysis/teamOverview/TeamOverview";
 import { TeamMemberModel } from "../../types";
+import { Stats } from "../teamStats/types";
 import { OverviewRowDataBuilder } from "./OverviewRowDataBuilder";
 import { OverviewRowData, OverviewRowSeverity, OverviewRowType } from "./types";
 
@@ -132,9 +132,7 @@ export const overviewRowsService = (
 
       const counteringTypes = allTypes.filter((t) => counteringTypeIds.includes(t.id));
 
-      row
-        .setSeverity(severity)
-        .setSuggestedTypes(counteringTypes, members);
+      row.setSeverity(severity).setSuggestedTypes(counteringTypes, members);
 
       result.push(row.build());
     }

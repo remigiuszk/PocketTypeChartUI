@@ -2,6 +2,7 @@ import {
   Inter_300Light,
   Inter_400Regular,
   Inter_500Medium,
+  Inter_600SemiBold,
   useFonts,
 } from "@expo-google-fonts/inter";
 import * as NavigationBar from "expo-navigation-bar";
@@ -25,6 +26,7 @@ export const App = () => {
     Inter_300Light,
     Inter_400Regular,
     Inter_500Medium,
+    Inter_600SemiBold,
   });
 
   useEffect(() => {
@@ -64,9 +66,5 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: BG_ROOT,
-  },
-  appContainer: {
-    flex: 1,
-    backgroundColor: "white",
   },
 });

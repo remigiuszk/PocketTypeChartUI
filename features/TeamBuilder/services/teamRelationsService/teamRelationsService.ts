@@ -1,6 +1,5 @@
 import { DamageRelationFullModel } from "../../../DamageRelations/types";
 import { TeamMemberModel } from "../../types";
-import { DefensiveStats, TypeThreat } from "../teamStats/types";
 import { DefensiveMemberRelation, OffensiveRelation, TeamRelationsResult } from "./types";
 
 export const teamRelationsService = () => {
@@ -124,81 +123,6 @@ export const teamRelationsService = () => {
     );
 
     result.offensiveRelations.noEffect.push(...offense.filter((x) => x.multiplier === 0));
-
-    prepareStats();
-  }
-
-  function prepareStats() {
-    const defensiveStats: DefensiveStats = {
-      criticalWeaknesses: [],
-      majorWeaknesses: [],
-      multiple4xVulns: [],
-      noSafeSwitchAgainst: [],
-    };
-
-    const byType = groupByType(result.defensiveRelations.vulnerabilities);
-    const byType4x = groupByType(result.defensiveRelations.vulnerabilities, 4);
-
-    for (const [attackingTypeId, members] of byType) {
-      const weakness: TypeThreat = {
-        attackingTypeId,
-        affectedMembersCount: members.size,
-        memberIds: [...members],
-      };
-
-      if (members.size >= 4) {
-        defensiveStats.criticalWeaknesses.push(weakness);
-      } else if (members.size === 3) {
-        defensiveStats.majorWeaknesses.push(weakness);
-      }
-    }
-
-    for (const [attackingTypeId, members] of byType4x) {
-      if (members.size >= 2) {
-        defensiveStats.multiple4xVulns.push({
-          attackingTypeId,
-          affectedMembersCount: members.size,
-          memberIds: [...members],
-        });
-      }
-    }
-
-    calculateNoSafeSwitch(defensiveStats);
-  }
-
-  function calculateNoSafeSwitch(defensiveStats: DefensiveStats) {
-    const byTypeVuln = groupByType(result.defensiveRelations.vulnerabilities);
-    const byTypeResist = groupByType(result.defensiveRelations.resistances);
-    const byTypeImmune = groupByType(result.defensiveRelations.immunities);
-
-    for (const [attackingTypeId, weakMembers] of byTypeVuln) {
-      const hasResist = byTypeResist.has(attackingTypeId);
-      const hasImmune = byTypeImmune.has(attackingTypeId);
-
-      if (!hasResist && !hasImmune) {
-        defensiveStats.noSafeSwitchAgainst.push({
-          attackingTypeId,
-          affectedMembersCount: weakMembers.size,
-          memberIds: [...weakMembers],
-        });
-      }
-    }
-  }
-
-  function groupByType(relations: DefensiveMemberRelation[], filterMultiplier?: number) {
-    const map = new Map<number, Set<string>>();
-
-    for (const { attackingTypeId, memberId, multiplier } of relations) {
-      if (filterMultiplier !== undefined && multiplier !== filterMultiplier) {
-        continue;
-      }
-      if (!map.has(attackingTypeId)) {
-        map.set(attackingTypeId, new Set());
-      }
-      map.get(attackingTypeId)!.add(memberId);
-    }
-
-    return map;
   }
 
   return {

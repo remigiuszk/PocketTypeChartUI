@@ -42,7 +42,7 @@ export const OverviewRow = ({ style, rowData }: Props) => {
 
       <View style={styles.content}>
         <View style={styles.headerContainer}>
-          <ValueText style={{ textAlign: "left", fontSize: 16 }}>
+          <ValueText style={{ textAlign: "left", fontSize: 14 }}>
             {rowData.header}
           </ValueText>
           {rowData.leadType && (

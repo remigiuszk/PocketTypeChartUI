@@ -1,3 +1,11 @@
+import { TeamRelationsResult } from "../teamRelationsService/types";
+
+export type Stats = {
+  relations: TeamRelationsResult;
+  offensiveStats: OffensiveStats;
+  defensiveStats: DefensiveStats;
+};
+
 export type DefensiveStats = {
   criticalWeaknesses: TypeThreat[];
   majorWeaknesses: TypeThreat[];
@@ -14,7 +22,7 @@ export type TypeThreat = {
 export type OffensiveStats = {
   noSuperEffectiveCoverage: number[];
   severlyResistedTypes: SevereResistance[];
-  ovelappingOffensiveTypes: number[];
+  overlappingOffensiveTypes: number[];
 };
 
 export type SevereResistance = {
