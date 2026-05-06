@@ -1,10 +1,11 @@
 import { FontAwesome5 } from "@expo/vector-icons";
-import { useMemo, useRef, useState } from "react";
+import { useState } from "react";
 import {
-  Animated,
   Dimensions,
+  Image,
   Modal,
   Pressable,
+  ScrollView,
   StyleProp,
   StyleSheet,
   Text,
@@ -12,206 +13,264 @@ import {
   ViewStyle,
 } from "react-native";
 
-import { BG_LAYOUT, OPTIONS_CONTENT, TEXT_300 } from "../../constants";
+import {
+  ACCENT,
+  BG_BUTTON,
+  BG_CARD,
+  BG_INTERNAL,
+  BORDER_DEFAULT,
+  BORDER_INTERNAL,
+  TEXT_300,
+  TEXT_MUTED,
+} from "../../constants";
+
+type SpriteItem = { id: number; sprite: string };
 
 type Props = {
   style?: StyleProp<ViewStyle>;
+  title: string;
+  leadType?: { sprite: string };
   hintText: string;
+  accentColor: string;
+  icon: React.ReactNode;
+  suggestedTypes?: SpriteItem[];
 };
 
-type AnchorRect = { x: number; y: number; width: number; height: number };
-
-export const HintButton = ({ style, hintText }: Props) => {
-  const btnRef = useRef<React.ElementRef<typeof Pressable> | null>(null);
-
+export const HintButton = ({
+  style,
+  title,
+  leadType,
+  hintText,
+  accentColor,
+  icon,
+  suggestedTypes,
+}: Props) => {
   const [visible, setVisible] = useState(false);
-  const [anchor, setAnchor] = useState<AnchorRect | null>(null);
 
-  const opacity = useRef(new Animated.Value(0)).current;
-  const scale = useRef(new Animated.Value(0.98)).current;
+  const screenWidth = Dimensions.get("window").width;
 
-  const screen = Dimensions.get("window");
+  const open = () => setVisible(true);
+  const close = () => setVisible(false);
 
-  function open() {
-    btnRef.current?.measureInWindow((x, y, width, height) => {
-      setAnchor({ x, y, width, height });
-      setVisible(true);
-
-      opacity.setValue(0);
-      scale.setValue(0.98);
-      Animated.parallel([
-        Animated.timing(opacity, {
-          toValue: 1,
-          duration: 140,
-          useNativeDriver: true,
-        }),
-        Animated.timing(scale, {
-          toValue: 1,
-          duration: 140,
-          useNativeDriver: true,
-        }),
-      ]).start();
-    });
-  }
-
-  const close = () => {
-    Animated.timing(opacity, {
-      toValue: 0,
-      duration: 120,
-      useNativeDriver: true,
-    }).start(() => {
-      setVisible(false);
-      setAnchor(null);
-    });
-  };
-
-  const placement = useMemo(() => {
-    if (!anchor) return null;
-
-    const margin = 10;
-    const bubbleMaxWidth = Math.min(260, screen.width - margin * 2);
-    const approxBubbleWidth = bubbleMaxWidth;
-
-    const leftSpace = anchor.x - margin;
-    const rightSpace = screen.width - (anchor.x + anchor.width) - margin;
-
-    const side: "left" | "right" =
-      rightSpace >= approxBubbleWidth || rightSpace >= leftSpace ? "right" : "left";
-
-    const top = Math.max(margin, anchor.y - 6); // start near the icon (you can tweak)
-    const bubbleTop = top; // will adjust inside render if you want smarter vertical clamp
-
-    const bubbleLeft =
-      side === "right"
-        ? Math.min(screen.width - margin - bubbleMaxWidth, anchor.x + anchor.width + 8)
-        : Math.max(margin, anchor.x - 8 - bubbleMaxWidth);
-
-    // Clamp vertically so it stays on screen (simple)
-    const maxTop = screen.height - margin - 80; // 80 = rough bubble height
-    const clampedTop = Math.min(bubbleTop, maxTop);
-
-    return {
-      side,
-      bubbleMaxWidth,
-      bubbleLeft,
-      bubbleTop: clampedTop,
-      anchorCenterY: anchor.y + anchor.height / 2,
-      anchorX: anchor.x,
-      anchorW: anchor.width,
-    };
-  }, [anchor, screen.width, screen.height]);
+  const hasSuggestedTypes = !!suggestedTypes && suggestedTypes.length > 0;
 
   return (
     <>
       <Pressable
-        ref={btnRef}
         onPress={open}
-        style={({ pressed }) => [styles.iconCircle, pressed && styles.pressed, style]}
+        style={({ pressed }) => [styles.triggerBtn, pressed && styles.pressed, style]}
       >
-        <FontAwesome5 style={style} name="question" size={10} color={BG_LAYOUT} />
+        <FontAwesome5 name="question" size={10} color={ACCENT} />
       </Pressable>
 
       <Modal visible={visible} transparent animationType="none" onRequestClose={close}>
-        {/* Click outside to close */}
-        <Pressable style={styles.backdrop} onPress={close}></Pressable>
+        <View style={styles.overlay}>
+          <Pressable style={StyleSheet.absoluteFillObject} onPress={close} />
 
-        {anchor && placement && (
-          <Animated.View
-            pointerEvents="box-none"
-            style={[
-              styles.bubbleWrap,
-              {
-                left: placement.bubbleLeft,
-                top: placement.bubbleTop,
-                maxWidth: placement.bubbleMaxWidth,
-                opacity,
-                transform: [{ scale }],
-              },
-            ]}
-          >
-            {/* Arrow */}
-            <View
-              style={[
-                styles.arrow,
-                placement.side === "right" ? styles.arrowLeft : styles.arrowRight,
-                {
-                  top: Math.max(
-                    12,
-                    Math.min(44, placement.anchorCenterY - placement.bubbleTop - 6),
-                  ),
-                },
-              ]}
-            />
+          <View style={[styles.card, { width: screenWidth - 48 }]}>
+            <View style={[styles.accentBar, { backgroundColor: accentColor }]} />
 
-            <View style={styles.bubble}>
-              <Text style={styles.bubbleText}>{hintText}</Text>
+            {/* Header */}
+            <View style={styles.header}>
+              {icon}
+              <View style={styles.headerTitleRow}>
+                <Text style={styles.headerTitle} numberOfLines={1}>
+                  {title}
+                </Text>
+                {leadType && (
+                  <View style={styles.leadTypeContainer}>
+                    <Image
+                      style={styles.leadTypeImage}
+                      source={{ uri: leadType.sprite }}
+                      resizeMode="contain"
+                    />
+                  </View>
+                )}
+              </View>
             </View>
-          </Animated.View>
-        )}
+
+            {/* Scrollable sections */}
+            <ScrollView style={styles.scroll} showsVerticalScrollIndicator={false}>
+              <View style={styles.section}>
+                <Text style={styles.hintText}>{hintText}</Text>
+              </View>
+
+              {hasSuggestedTypes && (
+                <View style={styles.section}>
+                  <Text style={styles.sectionLabel}>Consider adding</Text>
+                  <View style={styles.spriteList}>
+                    {suggestedTypes!.map((t) => (
+                      <View key={t.id} style={styles.spriteWrap}>
+                        <Image
+                          style={styles.sprite}
+                          source={{ uri: t.sprite }}
+                          resizeMode="contain"
+                        />
+                      </View>
+                    ))}
+                  </View>
+                </View>
+              )}
+
+              <View style={[styles.section, styles.sectionLast]}>
+                <Text style={styles.sectionLabel}>All related relations</Text>
+                <Text style={styles.placeholderText}>Coming soon</Text>
+              </View>
+            </ScrollView>
+
+            {/* Bottom close button */}
+            <View style={styles.footer}>
+              <Pressable
+                onPress={close}
+                style={({ pressed }) => [
+                  styles.closeBtn,
+                  pressed && styles.closeBtnPressed,
+                ]}
+              >
+                <Text style={styles.closeBtnText}>Close</Text>
+              </Pressable>
+            </View>
+          </View>
+        </View>
       </Modal>
     </>
   );
 };
 
 const styles = StyleSheet.create({
-  pressed: {
-    opacity: 0.85,
-    transform: [{ scale: 0.98 }],
-  },
-  iconCircle: {
-    width: 20,
-    height: 20,
-    borderRadius: 13,
+  triggerBtn: {
+    width: 22,
+    height: 22,
+    borderRadius: 11,
+    backgroundColor: BG_INTERNAL,
+    borderWidth: 1.5,
+    borderColor: BORDER_DEFAULT,
     alignItems: "center",
     justifyContent: "center",
-
-    borderWidth: 2,
-    borderColor: BG_LAYOUT,
-    backgroundColor: OPTIONS_CONTENT,
   },
-  backdrop: {
-    ...StyleSheet.absoluteFillObject,
-    backgroundColor: "transparent",
+  pressed: {
+    opacity: 0.7,
   },
-
-  bubbleWrap: {
-    position: "absolute",
-    zIndex: 9999,
+  overlay: {
+    flex: 1,
+    backgroundColor: "rgba(0,0,0,0.65)",
+    justifyContent: "center",
+    alignItems: "center",
   },
-
-  bubble: {
-    borderRadius: 10,
-    paddingVertical: 10,
-    paddingHorizontal: 12,
-    backgroundColor: "#10161a",
+  card: {
+    backgroundColor: BG_CARD,
+    borderRadius: 16,
     borderWidth: 1,
-    borderColor: "rgba(255,255,255,0.12)",
+    borderColor: BORDER_DEFAULT,
+    overflow: "hidden",
+    maxHeight: "80%",
   },
-
-  bubbleText: {
-    color: TEXT_300,
-    fontSize: 12,
-    lineHeight: 16,
-  },
-
-  arrow: {
+  accentBar: {
     position: "absolute",
-    width: 10,
-    height: 10,
-    backgroundColor: "#10161a",
-    borderLeftWidth: 1,
+    left: 0,
+    top: 0,
+    bottom: 0,
+    width: 4,
+  },
+  header: {
+    flexDirection: "row",
+    alignItems: "flex-start",
+    gap: 6,
+    paddingVertical: 14,
+    paddingLeft: 18,
+    paddingRight: 14,
+    borderBottomWidth: 1,
+    borderBottomColor: BORDER_INTERNAL,
+  },
+  headerTitleRow: {
+    flexShrink: 1,
+    flexDirection: "row",
+    alignItems: "flex-start",
+    gap: 3,
+  },
+  headerTitle: {
+    flexShrink: 1,
+    fontSize: 13,
+    fontFamily: "Inter_600SemiBold",
+    color: TEXT_300,
+    lineHeight: 18,
+  },
+  leadTypeContainer: {
+    height: 18,
+    aspectRatio: 200 / 44,
+    borderRadius: 4,
+    overflow: "hidden",
+  },
+  leadTypeImage: {
+    width: "100%",
+    height: "100%",
+  },
+  scroll: {
+    flexGrow: 0,
+  },
+  section: {
+    paddingHorizontal: 16,
+    paddingVertical: 12,
+    borderBottomWidth: 1,
+    borderBottomColor: BORDER_INTERNAL,
+  },
+  sectionLast: {
+    borderBottomWidth: 0,
+  },
+  sectionLabel: {
+    fontSize: 11,
+    fontFamily: "Inter_500Medium",
+    color: TEXT_MUTED,
+    textTransform: "uppercase",
+    letterSpacing: 0.7,
+    marginBottom: 8,
+  },
+  hintText: {
+    fontSize: 13,
+    fontFamily: "Inter_400Regular",
+    color: TEXT_MUTED,
+    lineHeight: 21,
+  },
+  spriteList: {
+    flexDirection: "row",
+    flexWrap: "wrap",
+    gap: 5,
+  },
+  spriteWrap: {
+    height: 22,
+    aspectRatio: 200 / 44,
+    borderRadius: 4,
+    overflow: "hidden",
+  },
+  sprite: {
+    width: "100%",
+    height: "100%",
+  },
+  placeholderText: {
+    fontSize: 12,
+    fontFamily: "Inter_400Regular",
+    color: TEXT_MUTED,
+    fontStyle: "italic",
+  },
+  footer: {
+    paddingVertical: 12,
+    paddingHorizontal: 16,
+    alignItems: "center",
     borderTopWidth: 1,
-    borderColor: "rgba(255,255,255,0.12)",
-    transform: [{ rotate: "45deg" }],
+    borderTopColor: BORDER_INTERNAL,
   },
-
-  // bubble on the RIGHT side of the icon -> arrow points left
-  arrowLeft: {
-    left: -5,
+  closeBtn: {
+    paddingVertical: 10,
+    paddingHorizontal: 32,
+    backgroundColor: BG_BUTTON,
+    borderRadius: 8,
   },
-
-  // bubble on the LEFT side of the icon -> arrow points right
-  arrowRight: {
-    right: -5,
+  closeBtnPressed: {
+    opacity: 0.75,
+  },
+  closeBtnText: {
+    fontSize: 14,
+    fontFamily: "Inter_500Medium",
+    color: TEXT_300,
   },
 });
