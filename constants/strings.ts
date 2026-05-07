@@ -31,6 +31,12 @@ export const OVERVIEW_STRINGS = {
     hintText:
       "Multiple members share a 4x vulnerability to the same type, meaning they take quadruple damage from it. This is extremely dangerous — a single Pokemon of that type can threaten several members of your team at once. Consider replacing one of the affected members with a Pokemon that resists or is immune to this type.",
   },
+  noSafeSwitch: {
+    header: "No safe switch against: ",
+    subText: (count: number) => `${count} member${count === 1 ? "" : "s"} ${count === 1 ? "is" : "are"} vulnerable`,
+    hintText:
+      "When no member of your team resists or is immune to an attacking type, you have no safe switch against it — any switch-in will take neutral or super-effective damage. This leaves you vulnerable to being swept, as your opponent can freely use that type without fear of a punishing switch-in. Consider adding a Pokémon that resists or is immune to this type to give your team a reliable answer.",
+  },
 };
 
 export const HINT_HEADER_DEFAULT: string = "Why is this important?";

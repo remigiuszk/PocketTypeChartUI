@@ -19,8 +19,9 @@ export const overviewRowsService = (
     result.push(...criticalWeaknesses());
     result.push(...majorWeaknesses());
     result.push(...multiple4xVulns());
+    result.push(...noSafeSwitchAgainst());
 
-    return result;
+    return result.sort((a, b) => b.severity - a.severity);
   }
 
   function criticalWeaknesses(): OverviewRowData[] {
@@ -135,6 +136,37 @@ export const overviewRowsService = (
       row.setSeverity(severity).setSuggestedTypes(counteringTypes, members);
 
       result.push(row.build());
+    }
+
+    return result;
+  }
+
+  function noSafeSwitchAgainst(): OverviewRowData[] {
+    const noSafeSwitchStats = stats.defensiveStats.noSafeSwitchAgainst;
+    const result: OverviewRowData[] = [];
+
+    for (const stat of noSafeSwitchStats) {
+      const severity =
+        stat.memberIds.length >= 2 ? OverviewRowSeverity.High : OverviewRowSeverity.Medium;
+
+      const counteringTypeIds = allRelations
+        .filter((r) => r.attackingTypeId === stat.attackingTypeId && r.multiplier < 1)
+        .map((r) => r.defendingTypeId);
+
+      const counteringTypes = allTypes.filter((t) => counteringTypeIds.includes(t.id));
+
+      const row = new OverviewRowDataBuilder()
+        .setHeader(OVERVIEW_STRINGS.noSafeSwitch.header)
+        .setSubText(OVERVIEW_STRINGS.noSafeSwitch.subText(stat.memberIds.length))
+        .setHintText(OVERVIEW_STRINGS.noSafeSwitch.hintText)
+        .setType(OverviewRowType.Weakness)
+        .setSeverity(severity)
+        .setLeadType(allTypes.find((type) => type.id === stat.attackingTypeId)!)
+        .setAffectedMembers(members.filter((member) => stat.memberIds.includes(member.id)))
+        .setSuggestedTypes(counteringTypes, members)
+        .build();
+
+      result.push(row);
     }
 
     return result;
