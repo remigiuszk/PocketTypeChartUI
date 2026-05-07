@@ -1,10 +1,11 @@
+import { AntDesign, Feather, FontAwesome6 } from "@expo/vector-icons";
 import { useMemo } from "react";
 import { Image, StyleSheet, View, ViewStyle } from "react-native";
 
 import {
-  TEXT_300,
   TEXT_MUTED,
   TEXT_STRENGHTS,
+  TEXT_SUGGESTIONS,
   TEXT_WEAKNESSES_CRITICAL,
   TEXT_WEAKNESSES_WEAK,
 } from "../../../../../../constants";
@@ -17,7 +18,6 @@ import {
   OverviewRowType,
 } from "../../../../services/overviewRows/types";
 import { OverviewRowBadge } from "./OverviewRowBadge";
-import { OverviewRowSuggestedTypes } from "./OverviewRowSuggestedTypes";
 
 type Props = {
   style?: ViewStyle | ViewStyle[];
@@ -26,12 +26,26 @@ type Props = {
 
 export const OverviewRow = ({ style, rowData }: Props) => {
   const progressBarEnabled = !!rowData.progressBarActual && !!rowData.progressBarTotal;
-  const color: string = useMemo(() => {
-    if (rowData.type === OverviewRowType.Weakness) {
-      return rowData.severity === OverviewRowSeverity.High
-        ? TEXT_WEAKNESSES_CRITICAL
-        : TEXT_WEAKNESSES_WEAK;
-    } else return TEXT_STRENGHTS;
+
+  const accentColor = useMemo(() => {
+    if (rowData.type === OverviewRowType.Suggestion) return TEXT_SUGGESTIONS;
+    if (rowData.type === OverviewRowType.Strength) return TEXT_STRENGHTS;
+    return rowData.severity === OverviewRowSeverity.High
+      ? TEXT_WEAKNESSES_CRITICAL
+      : TEXT_WEAKNESSES_WEAK;
+  }, [rowData]);
+
+  const hintIcon = useMemo(() => {
+    if (rowData.type === OverviewRowType.Strength)
+      return <FontAwesome6 name="star" size={18} color={TEXT_STRENGHTS} />;
+    switch (rowData.severity) {
+      case OverviewRowSeverity.High:
+        return <Feather name="alert-triangle" size={18} color={TEXT_WEAKNESSES_CRITICAL} />;
+      case OverviewRowSeverity.Medium:
+        return <AntDesign name="exclamation-circle" size={18} color={TEXT_WEAKNESSES_WEAK} />;
+      default:
+        return <AntDesign name="info-circle" size={18} color={TEXT_SUGGESTIONS} />;
+    }
   }, [rowData]);
 
   return (
@@ -54,7 +68,14 @@ export const OverviewRow = ({ style, rowData }: Props) => {
             </View>
           )}
           <View style={styles.hintContainer}>
-            <HintButton hintText={rowData.hintText}></HintButton>
+            <HintButton
+              title={rowData.header}
+              leadType={rowData.leadType}
+              hintText={rowData.hintText}
+              accentColor={accentColor}
+              icon={hintIcon}
+              suggestedTypes={rowData.suggestedTypes}
+            />
           </View>
         </View>
         {progressBarEnabled && (
@@ -65,12 +86,12 @@ export const OverviewRow = ({ style, rowData }: Props) => {
                   styles.thumb,
                   {
                     width: `${(rowData.progressBarActual! / rowData.progressBarTotal!) * 100}%`,
-                    backgroundColor: color,
+                    backgroundColor: accentColor,
                   },
                 ]}
               />
             </View>
-            <ValueText style={{ color: color }}>
+            <ValueText style={{ color: accentColor }}>
               {rowData.progressBarActual!} / {rowData.progressBarTotal!}
             </ValueText>
           </View>
@@ -78,11 +99,6 @@ export const OverviewRow = ({ style, rowData }: Props) => {
         <BodyText style={{ textAlign: "left", marginRight: 15, color: TEXT_MUTED }}>
           {rowData.subText}
         </BodyText>
-        {!!rowData.suggestedTypes && (
-          <View>
-            <OverviewRowSuggestedTypes rowData={rowData}></OverviewRowSuggestedTypes>
-          </View>
-        )}
       </View>
     </View>
   );
@@ -121,27 +137,11 @@ const styles = StyleSheet.create({
   },
   thumb: {
     height: 6,
-    backgroundColor: "#e24b4a",
     borderRadius: 6,
-  },
-  progressBarText: {
-    fontWeight: "bold",
-    letterSpacing: 0.05,
   },
   headerContainer: {
     flexDirection: "row",
     alignItems: "center",
-  },
-  header: {
-    color: TEXT_300,
-    fontSize: 14,
-    textAlign: "left",
-    fontFamily: "Inter_500Regular",
-  },
-  subText: {
-    textAlign: "left",
-    marginRight: 15,
-    fontSize: 12,
   },
   leadTypeContainer: {
     flexDirection: "row",
