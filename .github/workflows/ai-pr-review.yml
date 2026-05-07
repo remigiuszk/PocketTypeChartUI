@@ -1,8 +1,8 @@
-name: AI PR Review 
+name: AI PR Review
 
 on:
   pull_request:
-    types: [opened, synchronize, reopened, ready_for_review]
+    types: [ opened, synchronize, reopened, ready_for_review ]
 
 permissions:
   contents: read
@@ -13,8 +13,8 @@ env:
   # Change to APPROVE / REQUEST_CHANGES / COMMENT
   REVIEW_EVENT: COMMENT
   # Configure which CLI to run for the review. Default is amp execute mode.
-  REVIEW_CLI_BIN: amp
-  REVIEW_CLI_ARGS: -x
+  REVIEW_CLI_BIN: claude
+  REVIEW_CLI_ARGS: -p --output-format json --max-turns 3
   # Tweak to your liking  
   SYSTEM_PROMPT: |
     Review this patch like a thoughtful senior engineer.
@@ -39,7 +39,7 @@ jobs:
       - name: Setup Node
         uses: actions/setup-node@v4
         with:
-          node-version: '20'
+          node-version: "20"
 
       - name: Verify tools
         run: |
@@ -72,7 +72,6 @@ jobs:
           else
             "$REVIEW_CLI_BIN" --version || true
           fi
-
 
       - name: Gather PR context
         env:
@@ -153,10 +152,10 @@ jobs:
           echo "Running AI review..."
           echo "Command: $REVIEW_CLI_BIN $REVIEW_CLI_ARGS"
           echo "Diff size: $(wc -c < diff.patch) bytes"
-          
+
           MAX_RETRIES=5
           RETRY_COUNT=0
-          
+
           while [ $RETRY_COUNT -lt $MAX_RETRIES ]; do
             echo "Attempt $((RETRY_COUNT + 1)) of $MAX_RETRIES..."
             
@@ -182,7 +181,7 @@ jobs:
               sleep 5
             fi
           done
-          
+
           # If all retries failed, create fallback response
           if [ $RETRY_COUNT -eq $MAX_RETRIES ]; then
             echo "All 5 retry attempts failed, creating fallback response"
