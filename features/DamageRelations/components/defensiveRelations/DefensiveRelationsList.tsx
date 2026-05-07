@@ -1,65 +1,47 @@
 import { StyleSheet, View } from "react-native";
-import { DefensiveDamageRelationModel } from "../../types";
+
+import { BORDER_INTERNAL } from "../../../../constants";
 import { RelationsHeader } from "../../../../shared/ui/RelationsHeader";
+import { DefensiveDamageRelationModel } from "../../types";
 import { DefensiveDamageRelation } from "./DefensiveDamageRelation";
-import { BORDER_100 } from "../../../../constants";
-import { TwoTypesHeader } from "../../../../shared/ui/TwoTypesHeader";
 
 type Props = {
   relationList: DefensiveDamageRelationModel[];
-  selectedTypeSprites: string[]
 };
 
-export const DefensiveRelationsList = ({ relationList, selectedTypeSprites }: Props) => {
+export const DefensiveRelationsList = ({ relationList }: Props) => {
   const superEffective = relationList
     .filter((x) => x.multiplier >= 2)
     .sort((a, b) => b.multiplier - a.multiplier);
+
   const notVeryEffective = relationList
     .filter((x) => x.multiplier < 1 && x.multiplier > 0)
     .sort((a, b) => a.multiplier - b.multiplier);
-  const immunities = relationList.filter((x) => x.multiplier == 0);
+
+  const immunities = relationList.filter((x) => x.multiplier === 0);
+
+  const sections = [
+    superEffective.length > 0 ? { multiplier: 2, list: superEffective } : null,
+    notVeryEffective.length > 0 ? { multiplier: 0.5, list: notVeryEffective } : null,
+    immunities.length > 0 ? { multiplier: 0, list: immunities } : null,
+  ].filter((s): s is { multiplier: number; list: DefensiveDamageRelationModel[] } => s !== null);
 
   return (
     <View style={styles.container}>
-      {superEffective.length > 0 && (
-        <View style={styles.section}>
-          <RelationsHeader multiplier={2}></RelationsHeader>
+      {sections.map((section, index) => (
+        <View key={section.multiplier} style={styles.section}>
+          <RelationsHeader multiplier={section.multiplier} />
           <View style={styles.listContainer}>
-            {superEffective.map((relation: DefensiveDamageRelationModel) => (
+            {section.list.map((relation) => (
               <DefensiveDamageRelation
                 key={relation.attackingType.id}
                 damageRelation={relation}
               />
             ))}
           </View>
+          {index < sections.length - 1 && <View style={styles.separator} />}
         </View>
-      )}
-      {notVeryEffective.length > 0 && (
-        <View style={styles.section}>
-          <RelationsHeader multiplier={0.5}></RelationsHeader>
-          <View style={styles.listContainer}>
-            {notVeryEffective.map((relation: DefensiveDamageRelationModel) => (
-              <DefensiveDamageRelation
-                key={relation.attackingType.id}
-                damageRelation={relation}
-              />
-            ))}
-          </View>
-        </View>
-      )}
-      {immunities.length > 0 && (
-        <View style={styles.section}>
-          <RelationsHeader multiplier={0}></RelationsHeader>
-          <View style={styles.listContainer}>
-            {immunities.map((relation: DefensiveDamageRelationModel) => (
-              <DefensiveDamageRelation
-                key={relation.attackingType.id}
-                damageRelation={relation}
-              />
-            ))}
-          </View>
-        </View>
-      )}
+      ))}
     </View>
   );
 };
@@ -67,14 +49,19 @@ export const DefensiveRelationsList = ({ relationList, selectedTypeSprites }: Pr
 const styles = StyleSheet.create({
   container: {},
   section: {
+    marginBottom: 4,
+  },
+  separator: {
+    height: 1,
+    backgroundColor: BORDER_INTERNAL,
+    marginHorizontal: 6,
     marginBottom: 8,
-    borderBottomColor: BORDER_100,
-    borderBottomWidth: 1,
   },
   listContainer: {
     flexDirection: "row",
     flexWrap: "wrap",
     marginBottom: 8,
+    paddingHorizontal: 6,
   },
   list: {},
 });

@@ -1,7 +1,8 @@
 import { Image, StyleSheet, View } from "react-native";
-import { OffensiveDamageRelationModel } from "../../types";
+
+import { ACCENT, BG_CARD } from "../../../../constants";
 import { Subtitle } from "../../../../shared/typohraphy/Subtitle";
-import { ACCENT, BG_800 } from "../../../../constants";
+import { OffensiveDamageRelationModel } from "../../types";
 
 type Props = {
   damageRelation: OffensiveDamageRelationModel;
@@ -39,8 +40,8 @@ const styles = StyleSheet.create({
     overflow: "hidden",
     borderRadius: 6,
     height: 19,
-    marginRight: 8,
-    marginBottom: 8,
+    marginRight: 6,
+    marginBottom: 6,
     shadowColor: "#000000",
     shadowOffset: {
       width: 0,
@@ -70,14 +71,14 @@ const styles = StyleSheet.create({
   multiplierText: {
     fontWeight: 900,
     fontSize: 13,
-    color: BG_800,
+    color: BG_CARD,
     paddingHorizontal: 1,
     letterSpacing: 0.1,
   },
   multiplierTextSmall: {
     fontWeight: 900,
     fontSize: 11,
-    color: BG_800,
+    color: BG_CARD,
     paddingHorizontal: 1,
     letterSpacing: 0.1,
   },

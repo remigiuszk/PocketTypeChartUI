@@ -1,40 +1,70 @@
-import { StatusBar } from "expo-status-bar";
-import { Platform, StyleSheet, Text, View } from "react-native";
-import { Provider } from "react-redux";
-import { store } from "./state/store";
-import { Typing } from "./screens/Typing";
-import React, { useEffect } from "react";
-import { SafeAreaProvider, SafeAreaView } from "react-native-safe-area-context";
-import { BG_100, BG_500 } from "./constants/colors";
+import {
+  Inter_300Light,
+  Inter_400Regular,
+  Inter_500Medium,
+  Inter_600SemiBold,
+  useFonts,
+} from "@expo-google-fonts/inter";
 import * as NavigationBar from "expo-navigation-bar";
+import * as SplashScreen from "expo-splash-screen";
+import { StatusBar } from "expo-status-bar";
+import React, { useEffect, useState } from "react";
+import { Platform, StyleSheet } from "react-native";
+import { SafeAreaProvider, SafeAreaView } from "react-native-safe-area-context";
+import { Provider } from "react-redux";
 
-export default function App() {
+import { BG_ROOT } from "./constants/colors";
+import { TeamBuilder } from "./screens/TeamBuilder";
+import { Typing } from "./screens/Typing";
+import { store } from "./state/store";
+
+SplashScreen.preventAutoHideAsync();
+
+export const App = () => {
+  const [teamBuilderOpen, setTeamBuilderOpen] = useState<boolean>(false);
+  const [fontsLoaded] = useFonts({
+    Inter_300Light,
+    Inter_400Regular,
+    Inter_500Medium,
+    Inter_600SemiBold,
+  });
+
   useEffect(() => {
-    if (Platform.OS !== "android") return;
+    if (fontsLoaded) {
+      SplashScreen.hideAsync();
+    }
 
-    (async () => {
-      await NavigationBar.setButtonStyleAsync("light");
-    })();
-  }, []);
+    if (Platform.OS === "android") {
+      NavigationBar.setButtonStyleAsync("light");
+    }
+  }, [fontsLoaded]);
+
+  function switchViews() {
+    setTeamBuilderOpen(!teamBuilderOpen);
+  }
 
   return (
     <SafeAreaProvider>
       <Provider store={store}>
-        <StatusBar translucent={false} backgroundColor={BG_500} />
+        <StatusBar translucent={false} backgroundColor={BG_ROOT} />
         <SafeAreaView
           edges={["top", "left", "right", "bottom"]}
           style={[styles.container]}
         >
-          <Typing />
+          {teamBuilderOpen ? (
+            <TeamBuilder switchViews={switchViews}></TeamBuilder>
+          ) : (
+            <Typing switchViews={switchViews}></Typing>
+          )}
         </SafeAreaView>
       </Provider>
     </SafeAreaProvider>
   );
-}
+};
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor:BG_100,
+    backgroundColor: BG_ROOT,
   },
 });

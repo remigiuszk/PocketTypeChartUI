@@ -1,0 +1,38 @@
+import { PokeTypeModel } from "../../../../../TypeSelection/types";
+import { TeamMemberModel } from "../../../../types";
+import { ALL_TYPES_FIXTURE, TypeId } from "../types.fixture";
+
+const byId = new Map<number, PokeTypeModel>(ALL_TYPES_FIXTURE.map((t) => [t.id, t]));
+
+const t = (...ids: TypeId[]) => ids.map((id) => byId.get(id)!);
+
+export const teamB: TeamMemberModel[] = [
+  {
+    id: "m1",
+    name: "Charizard-ish",
+    types: t(TypeId.Fire, TypeId.Flying),
+    iconId: "x",
+    iconColor: "#000",
+  },
+  {
+    id: "m2",
+    name: "Venusaur-ish",
+    types: t(TypeId.Grass, TypeId.Poison),
+    iconId: "y",
+    iconColor: "#000",
+  },
+  {
+    id: "m3",
+    name: "Swampert-ish",
+    types: t(TypeId.Water, TypeId.Ground),
+    iconId: "z",
+    iconColor: "#000",
+  },
+  {
+    id: "m4",
+    name: "Dragonite-ish",
+    types: t(TypeId.Dragon, TypeId.Flying),
+    iconId: "w",
+    iconColor: "#000",
+  },
+];

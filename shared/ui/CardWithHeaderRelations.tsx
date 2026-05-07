@@ -1,7 +1,9 @@
-import { StyleProp, StyleSheet, View, ViewStyle } from "react-native";
-import { BG_500, BG_600, BORDER_100, PADDING, TEXT_300 } from "../../constants";
 import FontAwesome from "@expo/vector-icons/FontAwesome";
 import MaterialCommunityIcons from "@expo/vector-icons/MaterialCommunityIcons";
+import { ReactNode } from "react";
+import { StyleProp, StyleSheet, View, ViewStyle } from "react-native";
+
+import { BG_CARD, BORDER_INTERNAL, PADDING, TEXT_300 } from "../../constants";
 import { Title } from "../typohraphy/Title";
 import { TwoTypesHeader } from "./TwoTypesHeader";
 
@@ -9,7 +11,7 @@ type CardProps = {
   title: string;
   subtitle: string;
   iconName?: string;
-  children: any;
+  children: ReactNode;
   style?: StyleProp<ViewStyle>;
   sprites: string[];
 };
@@ -30,23 +32,20 @@ export const CardWithHeaderRelations = ({
           iconName !== undefined
             ? { alignItems: "flex-start" }
             : { alignItems: "center" },
-          iconName == "sword" ? { paddingLeft: 8 } : {},
+          iconName === "sword" ? { paddingLeft: 8 } : {},
         ]}
       >
         <View
-          style={[
-            styles.titleContainer,
-            iconName == "sword" ? { gap: 6 } : { gap: 12 },
-          ]}
+          style={[styles.titleContainer, iconName === "sword" ? { gap: 6 } : { gap: 12 }]}
         >
-          {iconName == "shield" ? (
+          {iconName === "shield" ? (
             <FontAwesome
               style={styles.iconShield}
               name="shield"
               size={36}
               color={TEXT_300}
             />
-          ) : iconName == "sword" ? (
+          ) : iconName === "sword" ? (
             <MaterialCommunityIcons
               style={styles.iconSword}
               name="sword"
@@ -63,10 +62,7 @@ export const CardWithHeaderRelations = ({
             ]}
           >
             <Title>{title}</Title>
-            <TwoTypesHeader
-              sprites={sprites}
-              message={subtitle}
-            ></TwoTypesHeader>
+            <TwoTypesHeader sprites={sprites} message={subtitle}></TwoTypesHeader>
           </View>
         </View>
       </View>
@@ -79,7 +75,8 @@ const styles = StyleSheet.create({
   card: {
     width: "100%",
     borderRadius: 16,
-    backgroundColor: BG_500,
+    overflow: "hidden",
+    backgroundColor: BG_CARD,
     shadowColor: "#000000",
     shadowOffset: {
       width: 0,
@@ -93,18 +90,16 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     flexDirection: "column",
     borderBottomWidth: 1,
-    borderBottomColor: BORDER_100,
-    backgroundColor: BG_600,
+    borderBottomColor: BORDER_INTERNAL,
+    backgroundColor: BG_CARD,
     borderTopLeftRadius: 16,
     borderTopRightRadius: 16,
     padding: 0,
     paddingHorizontal: PADDING,
     paddingVertical: PADDING / 2,
   },
-  iconShield: {
-  },
-  iconSword: {
-  },
+  iconShield: {},
+  iconSword: {},
   titleContainer: {
     alignItems: "flex-start",
     justifyContent: "center",
@@ -115,5 +110,12 @@ const styles = StyleSheet.create({
     alignItems: "flex-start",
     flexDirection: "column",
   },
-  content: { padding: PADDING / 2 },
+  content: {
+    margin: 0,
+    paddingTop: 8,
+    backgroundColor: BG_CARD,
+    width: "100%",
+    alignItems: "stretch",
+    justifyContent: "center",
+  },
 });

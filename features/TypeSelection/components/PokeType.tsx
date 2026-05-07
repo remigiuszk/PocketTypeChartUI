@@ -1,6 +1,7 @@
-import { Image, StyleSheet, Pressable, View } from "react-native";
+import { Image, Pressable, StyleSheet, View } from "react-native";
+
+import { SELECTION } from "../../../constants";
 import { PokeTypeModel } from "../types";
-import { ACCENT, PRIMARY, SELECTION } from "../../../constants";
 
 type PokeTypeProps = {
   pokeType: PokeTypeModel;
@@ -50,12 +51,13 @@ const styles = StyleSheet.create({
     resizeMode: "contain",
     width: "100%",
     height: "100%",
+    overflow: "hidden",
   },
   selected: {
     backgroundColor: SELECTION,
     paddingHorizontal: 0,
     paddingVertical: 2,
-    borderRadius:6,
+    borderRadius: 6,
     zIndex: 7,
     transform: [{ scale: 1.08 }],
   },

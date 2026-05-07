@@ -1,4 +1,5 @@
-import { ActivityIndicator, Text, View } from "react-native";
+import { ActivityIndicator, View } from "react-native";
+
 import { TEXT_100 } from "../../constants";
 
 export const Loading = () => {

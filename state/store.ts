@@ -1,14 +1,14 @@
 import { configureStore } from "@reduxjs/toolkit";
 
-import { pokeTypesApi } from "../features/TypeSelection/query";
 import { damageRelationsApi } from "../features/DamageRelations/query";
+import { pokeTypesApi } from "../features/TypeSelection/query";
 
 export const store = configureStore({
   reducer: {
     [pokeTypesApi.reducerPath]: pokeTypesApi.reducer,
     [damageRelationsApi.reducerPath]: damageRelationsApi.reducer,
   },
-  middleware: (getDefaultMiddleware: any) =>
+  middleware: (getDefaultMiddleware) =>
     getDefaultMiddleware({
       serializableCheck: false,
     })
