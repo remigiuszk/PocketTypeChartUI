@@ -9,7 +9,7 @@ export type OverviewRowData = {
   hintText: string;
   progressBarTotal?: number;
   progressBarActual?: number;
-  leadType?: PokeTypeModel;
+  leadType?: PokeTypeModel[];
   typeList?: PokeTypeModel[];
   affectedMembers?: TeamMemberModel[];
   suggestedTypes?: PokeTypeModel[];

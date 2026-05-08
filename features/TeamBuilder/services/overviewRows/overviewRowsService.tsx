@@ -38,7 +38,7 @@ export const overviewRowsService = (
         .setHintText(OVERVIEW_STRINGS.criticalWeakness.hintText)
         .setType(OverviewRowType.Weakness)
         .setSeverity(OverviewRowSeverity.High)
-        .setLeadType(allTypes.find((type) => type.id === weakness.attackingTypeId)!)
+        .setLeadType([allTypes.find((type) => type.id === weakness.attackingTypeId)!])
         .setProgressBar(members.length, weakness.memberIds.length)
         .setAffectedMembers(
           members.filter((member) => weakness.memberIds.includes(member.id)),
@@ -61,7 +61,7 @@ export const overviewRowsService = (
         .setSubText(OVERVIEW_STRINGS.majorWeakness.subText(weakness.memberIds.length))
         .setHintText(OVERVIEW_STRINGS.majorWeakness.hintText)
         .setType(OverviewRowType.Weakness)
-        .setLeadType(allTypes.find((type) => type.id === weakness.attackingTypeId)!)
+        .setLeadType([allTypes.find((type) => type.id === weakness.attackingTypeId)!])
         .setProgressBar(members.length, weakness.memberIds.length)
         .setAffectedMembers(
           members.filter((member) => weakness.memberIds.includes(member.id)),
@@ -120,7 +120,7 @@ export const overviewRowsService = (
         .setHintText(OVERVIEW_STRINGS.multiple4xWeaknesses.hintText)
         .setType(OverviewRowType.Weakness)
         .setProgressBar(members.length, stat.memberIds.length)
-        .setLeadType(allTypes.find((type) => type.id === stat.attackingTypeId)!)
+        .setLeadType([allTypes.find((type) => type.id === stat.attackingTypeId)!])
         .setAffectedMembers(
           members.filter((member) => stat.memberIds.includes(member.id)),
         );
@@ -146,33 +146,25 @@ export const overviewRowsService = (
 
   function noSafeSwitchAgainst(): OverviewRowData[] {
     const noSafeSwitchStats = stats.defensiveStats.noSafeSwitchAgainst;
-    const result: OverviewRowData[] = [];
+    if (noSafeSwitchStats.length === 0) return [];
 
-    for (const stat of noSafeSwitchStats) {
-      const severity =
-        stat.memberIds.length >= 2 ? OverviewRowSeverity.High : OverviewRowSeverity.Medium;
+    const leadType = noSafeSwitchStats
+      .map((s) => allTypes.find((t) => t.id === s.attackingTypeId)!)
+      .filter(Boolean);
 
-      const counteringTypeIds = allRelations
-        .filter((r) => r.attackingTypeId === stat.attackingTypeId && r.multiplier < 1)
-        .map((r) => r.defendingTypeId);
+    const affectedMemberIds = new Set(noSafeSwitchStats.flatMap((s) => s.memberIds));
 
-      const counteringTypes = allTypes.filter((t) => counteringTypeIds.includes(t.id));
+    const row = new OverviewRowDataBuilder()
+      .setHeader(OVERVIEW_STRINGS.noSafeSwitch.header)
+      .setSubText(OVERVIEW_STRINGS.noSafeSwitch.subText)
+      .setHintText(OVERVIEW_STRINGS.noSafeSwitch.hintText)
+      .setType(OverviewRowType.Weakness)
+      .setSeverity(OverviewRowSeverity.Medium)
+      .setLeadType(leadType)
+      .setAffectedMembers(members.filter((m) => affectedMemberIds.has(m.id)))
+      .build();
 
-      const row = new OverviewRowDataBuilder()
-        .setHeader(OVERVIEW_STRINGS.noSafeSwitch.header)
-        .setSubText(OVERVIEW_STRINGS.noSafeSwitch.subText(stat.memberIds.length))
-        .setHintText(OVERVIEW_STRINGS.noSafeSwitch.hintText)
-        .setType(OverviewRowType.Weakness)
-        .setSeverity(severity)
-        .setLeadType(allTypes.find((type) => type.id === stat.attackingTypeId)!)
-        .setAffectedMembers(members.filter((member) => stat.memberIds.includes(member.id)))
-        .setSuggestedTypes(counteringTypes, members)
-        .build();
-
-      result.push(row);
-    }
-
-    return result;
+    return [row];
   }
 
   function noSuperEffectiveCoverage(): OverviewRowData[] {
@@ -202,31 +194,46 @@ export const overviewRowsService = (
     const result: OverviewRowData[] = [];
     const totalSlots = members.reduce((sum, m) => sum + m.types.length, 0);
 
+    const groups = new Map<number, typeof resistedStats>();
     for (const stat of resistedStats) {
+      const existing = groups.get(stat.totalTypesResisted) ?? [];
+      groups.set(stat.totalTypesResisted, [...existing, stat]);
+    }
+
+    for (const [resistedCount, group] of groups) {
       const severity =
-        stat.totalTypesResisted / totalSlots >= 0.7
+        resistedCount / totalSlots >= 0.7
           ? OverviewRowSeverity.High
           : OverviewRowSeverity.Medium;
 
-      const suggestedTypeIds = allRelations
-        .filter((r) => r.defendingTypeId === stat.defendingTypeId && r.multiplier > 1)
-        .map((r) => r.attackingTypeId);
+      const leadType = group
+        .map((s) => allTypes.find((t) => t.id === s.defendingTypeId)!)
+        .filter(Boolean);
 
-      const suggestedTypes = allTypes.filter((t) => suggestedTypeIds.includes(t.id));
+      const affectedMemberIds = new Set(
+        group.flatMap((s) => s.affectedMembers.map((a) => a.memberId)),
+      );
+
+      const suggestedTypeIds = new Set(
+        group.flatMap((s) =>
+          allRelations
+            .filter((r) => r.defendingTypeId === s.defendingTypeId && r.multiplier > 1)
+            .map((r) => r.attackingTypeId),
+        ),
+      );
+      const suggestedTypes = allTypes.filter((t) => suggestedTypeIds.has(t.id));
 
       const row = new OverviewRowDataBuilder()
         .setHeader(OVERVIEW_STRINGS.severlyResistedTypes.header)
         .setSubText(
-          OVERVIEW_STRINGS.severlyResistedTypes.subText(stat.totalTypesResisted, totalSlots),
+          OVERVIEW_STRINGS.severlyResistedTypes.subText(resistedCount, totalSlots),
         )
         .setHintText(OVERVIEW_STRINGS.severlyResistedTypes.hintText)
         .setType(OverviewRowType.Weakness)
         .setSeverity(severity)
-        .setProgressBar(totalSlots, stat.totalTypesResisted)
-        .setLeadType(allTypes.find((type) => type.id === stat.defendingTypeId)!)
-        .setAffectedMembers(
-          members.filter((m) => stat.affectedMembers.some((a) => a.memberId === m.id)),
-        )
+        .setProgressBar(totalSlots, resistedCount)
+        .setLeadType(leadType)
+        .setAffectedMembers(members.filter((m) => affectedMemberIds.has(m.id)))
         .setSuggestedTypes(suggestedTypes, members)
         .build();
 
@@ -255,7 +262,7 @@ export const overviewRowsService = (
         .setHintText(OVERVIEW_STRINGS.overlappingOffensiveTypes.hintText)
         .setType(rowType)
         .setSeverity(OverviewRowSeverity.Medium)
-        .setLeadType(allTypes.find((type) => type.id === typeId)!)
+        .setLeadType([allTypes.find((type) => type.id === typeId)!])
         .setAffectedMembers(affectedMembers)
         .build();
 

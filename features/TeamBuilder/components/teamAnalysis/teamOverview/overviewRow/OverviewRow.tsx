@@ -56,17 +56,17 @@ export const OverviewRow = ({ style, rowData }: Props) => {
 
       <View style={styles.content}>
         <View style={styles.headerContainer}>
-          <ValueText style={{ textAlign: "left", fontSize: 14 }}>
-            {rowData.header}
-          </ValueText>
-          {rowData.leadType && (
-            <View style={[styles.leadTypeContainer]}>
-              <Image
-                style={styles.typeImage}
-                source={{ uri: rowData.leadType!.sprite }}
-              />
-            </View>
-          )}
+          <View style={styles.headerContent}>
+            <ValueText style={{ textAlign: "left", fontSize: 14 }}>
+              {rowData.header}
+            </ValueText>
+            {rowData.leadType &&
+              rowData.leadType.map((type) => (
+                <View key={type.id} style={styles.leadTypeContainer}>
+                  <Image style={styles.typeImage} source={{ uri: type.sprite }} />
+                </View>
+              ))}
+          </View>
           <View style={styles.hintContainer}>
             <HintButton
               title={rowData.header}
@@ -123,9 +123,7 @@ const styles = StyleSheet.create({
     flex: 1,
   },
   badgeContainer: {
-    justifyContent: "center",
-    alignItems: "center",
-    height: "100%",
+    alignSelf: "center",
   },
   hintContainer: {
     marginLeft: "auto",
@@ -152,7 +150,14 @@ const styles = StyleSheet.create({
   },
   headerContainer: {
     flexDirection: "row",
+    alignItems: "flex-start",
+  },
+  headerContent: {
+    flex: 1,
+    flexDirection: "row",
+    flexWrap: "wrap",
     alignItems: "center",
+    gap: 4,
   },
   typeListRow: {
     flexDirection: "row",

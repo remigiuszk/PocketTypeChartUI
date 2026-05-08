@@ -33,8 +33,7 @@ export const OVERVIEW_STRINGS = {
   },
   noSafeSwitch: {
     header: "No safe switch against: ",
-    subText: (count: number) =>
-      `${count} member${count === 1 ? "" : "s"} ${count === 1 ? "is" : "are"} vulnerable`,
+    subText: "No resistance or immunity in the team",
     hintText:
       "When no member of your team resists or is immune to an attacking type, you have no safe switch against it — any switch-in will take neutral or super-effective damage. This leaves you vulnerable to being swept, as your opponent can freely use that type without fear of a punishing switch-in. Consider adding a Pokémon that resists or is immune to this type to give your team a reliable answer.",
   },
@@ -47,7 +46,7 @@ export const OVERVIEW_STRINGS = {
   severlyResistedTypes: {
     header: "Team severely resisted by: ",
     subText: (resisted: number, total: number) =>
-      `${Math.round((resisted / total) * 100)}% of team types resisted or have no effect`,
+      `Resists ${Math.round((resisted / total) * 100)}% of your team's attacking moves`,
     hintText:
       "When a defending type resists the majority of your team's STAB moves, that type of Pokémon can switch in repeatedly with little risk, wall several team members at once, and force unfavourable trades. This creates a soft check that limits how much offensive pressure your team can apply. Consider adding a team member whose STAB type is not resisted by this type, or a move that hits it for neutral or super-effective damage.",
   },

@@ -29,7 +29,7 @@ type SpriteItem = { id: number; sprite: string };
 type Props = {
   style?: StyleProp<ViewStyle>;
   title: string;
-  leadType?: { sprite: string };
+  leadType?: SpriteItem[];
   hintText: string;
   accentColor: string;
   icon: React.ReactNode;
@@ -74,18 +74,17 @@ export const HintButton = ({
             <View style={styles.header}>
               {icon}
               <View style={styles.headerTitleRow}>
-                <Text style={styles.headerTitle} numberOfLines={1}>
-                  {title}
-                </Text>
-                {leadType && (
-                  <View style={styles.leadTypeContainer}>
-                    <Image
-                      style={styles.leadTypeImage}
-                      source={{ uri: leadType.sprite }}
-                      resizeMode="contain"
-                    />
-                  </View>
-                )}
+                <Text style={styles.headerTitle}>{title}</Text>
+                {leadType &&
+                  leadType.map((type) => (
+                    <View key={type.id} style={styles.leadTypeContainer}>
+                      <Image
+                        style={styles.leadTypeImage}
+                        source={{ uri: type.sprite }}
+                        resizeMode="contain"
+                      />
+                    </View>
+                  ))}
               </View>
             </View>
 
@@ -174,7 +173,7 @@ const styles = StyleSheet.create({
   },
   header: {
     flexDirection: "row",
-    alignItems: "flex-start",
+    alignItems: "center",
     gap: 6,
     paddingVertical: 14,
     paddingLeft: 18,
@@ -185,8 +184,9 @@ const styles = StyleSheet.create({
   headerTitleRow: {
     flexShrink: 1,
     flexDirection: "row",
-    alignItems: "flex-start",
-    gap: 3,
+    flexWrap: "wrap",
+    alignItems: "center",
+    gap: 4,
   },
   headerTitle: {
     flexShrink: 1,
