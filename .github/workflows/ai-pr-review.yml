@@ -2,7 +2,7 @@ name: AI PR Review
 
 on:
   pull_request:
-    types: [ opened, synchronize, reopened, ready_for_review ]
+    types: [ready_for_review]
 
 permissions:
   contents: read
@@ -14,8 +14,8 @@ env:
   REVIEW_EVENT: COMMENT
   # Configure which CLI to run for the review. Default is amp execute mode.
   REVIEW_CLI_BIN: claude
-  REVIEW_CLI_ARGS: -p --output-format json --max-turns 3
-  # Tweak to your liking  
+  REVIEW_CLI_ARGS: -p --output-format json --max-turns 3 --model claude-sonnet-4-5
+  # Tweak to your liking
   SYSTEM_PROMPT: |
     Review this patch like a thoughtful senior engineer.
     Prioritize correctness, security, performance, readability, and tests.
