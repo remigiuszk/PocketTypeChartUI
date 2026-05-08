@@ -20,6 +20,9 @@ export const overviewRowsService = (
     result.push(...majorWeaknesses());
     result.push(...multiple4xVulns());
     result.push(...noSafeSwitchAgainst());
+    result.push(...noSuperEffectiveCoverage());
+    result.push(...severlyResistedTypes());
+    result.push(...overlappingOffensiveTypes());
 
     return result.sort((a, b) => b.severity - a.severity);
   }
@@ -164,6 +167,96 @@ export const overviewRowsService = (
         .setLeadType(allTypes.find((type) => type.id === stat.attackingTypeId)!)
         .setAffectedMembers(members.filter((member) => stat.memberIds.includes(member.id)))
         .setSuggestedTypes(counteringTypes, members)
+        .build();
+
+      result.push(row);
+    }
+
+    return result;
+  }
+
+  function noSuperEffectiveCoverage(): OverviewRowData[] {
+    const uncoveredIds = stats.offensiveStats.noSuperEffectiveCoverage;
+    const result: OverviewRowData[] = [];
+    if (uncoveredIds.length < 3) return result;
+
+    const typeList = allTypes.filter((t) => uncoveredIds.includes(t.id));
+    const rowType =
+      uncoveredIds.length >= 7 ? OverviewRowType.Weakness : OverviewRowType.Suggestion;
+
+    const row = new OverviewRowDataBuilder()
+      .setHeader(OVERVIEW_STRINGS.noSuperEffectiveCoverage.header)
+      .setSubText(OVERVIEW_STRINGS.noSuperEffectiveCoverage.subText(uncoveredIds.length))
+      .setHintText(OVERVIEW_STRINGS.noSuperEffectiveCoverage.hintText)
+      .setType(rowType)
+      .setSeverity(OverviewRowSeverity.Medium)
+      .setTypeList(typeList)
+      .build();
+
+    result.push(row);
+    return result;
+  }
+
+  function severlyResistedTypes(): OverviewRowData[] {
+    const resistedStats = stats.offensiveStats.severlyResistedTypes;
+    const result: OverviewRowData[] = [];
+    const totalSlots = members.reduce((sum, m) => sum + m.types.length, 0);
+
+    for (const stat of resistedStats) {
+      const severity =
+        stat.totalTypesResisted / totalSlots >= 0.7
+          ? OverviewRowSeverity.High
+          : OverviewRowSeverity.Medium;
+
+      const suggestedTypeIds = allRelations
+        .filter((r) => r.defendingTypeId === stat.defendingTypeId && r.multiplier > 1)
+        .map((r) => r.attackingTypeId);
+
+      const suggestedTypes = allTypes.filter((t) => suggestedTypeIds.includes(t.id));
+
+      const row = new OverviewRowDataBuilder()
+        .setHeader(OVERVIEW_STRINGS.severlyResistedTypes.header)
+        .setSubText(
+          OVERVIEW_STRINGS.severlyResistedTypes.subText(stat.totalTypesResisted, totalSlots),
+        )
+        .setHintText(OVERVIEW_STRINGS.severlyResistedTypes.hintText)
+        .setType(OverviewRowType.Weakness)
+        .setSeverity(severity)
+        .setProgressBar(totalSlots, stat.totalTypesResisted)
+        .setLeadType(allTypes.find((type) => type.id === stat.defendingTypeId)!)
+        .setAffectedMembers(
+          members.filter((m) => stat.affectedMembers.some((a) => a.memberId === m.id)),
+        )
+        .setSuggestedTypes(suggestedTypes, members)
+        .build();
+
+      result.push(row);
+    }
+
+    return result;
+  }
+
+  function overlappingOffensiveTypes(): OverviewRowData[] {
+    const overlappingIds = stats.offensiveStats.overlappingOffensiveTypes;
+    const result: OverviewRowData[] = [];
+    const totalSlots = members.reduce((sum, m) => sum + m.types.length, 0);
+
+    for (const typeId of overlappingIds) {
+      const affectedMembers = members.filter((m) => m.types.some((t) => t.id === typeId));
+      const slotCount = affectedMembers.length;
+      const rowType =
+        slotCount / totalSlots >= 0.5
+          ? OverviewRowType.Weakness
+          : OverviewRowType.Suggestion;
+
+      const row = new OverviewRowDataBuilder()
+        .setHeader(OVERVIEW_STRINGS.overlappingOffensiveTypes.header)
+        .setSubText(OVERVIEW_STRINGS.overlappingOffensiveTypes.subText(slotCount))
+        .setHintText(OVERVIEW_STRINGS.overlappingOffensiveTypes.hintText)
+        .setType(rowType)
+        .setSeverity(OverviewRowSeverity.Medium)
+        .setLeadType(allTypes.find((type) => type.id === typeId)!)
+        .setAffectedMembers(affectedMembers)
         .build();
 
       result.push(row);

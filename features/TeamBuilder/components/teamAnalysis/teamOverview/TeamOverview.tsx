@@ -57,11 +57,13 @@ export const TeamOverview = ({ style, currentTeam }: Props) => {
   return (
     <ScrollView>
       <View style={[styles.overviewLayout, style]}>
-        <WeaknessesContainer
-          weaknessRowData={rowData.filter(
-            (rowData) => rowData.type === OverviewRowType.Weakness,
-          )}
-        ></WeaknessesContainer>
+        {rowData.some((row) => row.type === OverviewRowType.Weakness) && (
+          <WeaknessesContainer
+            weaknessRowData={rowData.filter(
+              (rowData) => rowData.type === OverviewRowType.Weakness,
+            )}
+          />
+        )}
         <MoreDetails teamRelatons={teamStats.relations}></MoreDetails>
       </View>
     </ScrollView>

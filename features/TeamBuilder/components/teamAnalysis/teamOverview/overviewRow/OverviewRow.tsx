@@ -96,9 +96,20 @@ export const OverviewRow = ({ style, rowData }: Props) => {
             </ValueText>
           </View>
         )}
-        <BodyText style={{ textAlign: "left", marginRight: 15, color: TEXT_MUTED }}>
-          {rowData.subText}
-        </BodyText>
+        {rowData.typeList && rowData.typeList.length > 0 ? (
+          <View style={styles.typeListRow}>
+            <BodyText style={{ color: TEXT_MUTED }}>{rowData.subText}</BodyText>
+            {rowData.typeList.map((type) => (
+              <View key={type.id} style={styles.typeListBadge}>
+                <Image style={styles.typeImage} source={{ uri: type.sprite }} />
+              </View>
+            ))}
+          </View>
+        ) : (
+          <BodyText style={{ textAlign: "left", marginRight: 15, color: TEXT_MUTED }}>
+            {rowData.subText}
+          </BodyText>
+        )}
       </View>
     </View>
   );
@@ -142,6 +153,18 @@ const styles = StyleSheet.create({
   headerContainer: {
     flexDirection: "row",
     alignItems: "center",
+  },
+  typeListRow: {
+    flexDirection: "row",
+    flexWrap: "wrap",
+    alignItems: "center",
+    gap: 4,
+  },
+  typeListBadge: {
+    height: 14,
+    aspectRatio: 200 / 44,
+    borderRadius: 4,
+    overflow: "hidden",
   },
   leadTypeContainer: {
     flexDirection: "row",

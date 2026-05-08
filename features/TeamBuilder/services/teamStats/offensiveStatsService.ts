@@ -33,7 +33,7 @@ export const offensiveStatsService = (
 
   function getSeverlyResistedBy() {
     const resists = [...relations.notVeryEffective, ...relations.noEffect];
-    const threshold = getThreshold();
+    const totalSlots = members.reduce((sum, m) => sum + m.types.length, 0);
     const stabCounts = getStabTypeCounts();
     const uniqueDefendingTypes = new Set(resists.map((r) => r.defendingTypeId));
 
@@ -50,7 +50,7 @@ export const offensiveStatsService = (
         .filter(([typeId]) => resistedAttackingTypes.has(typeId))
         .reduce((sum, [, count]) => sum + count, 0);
 
-      if (resistedStabCount >= threshold) {
+      if (resistedStabCount / totalSlots > 0.5) {
         const affectedMembers: AffectedMember[] = members
           .map((member) => {
             const resistedTypeIds = member.types
@@ -68,13 +68,6 @@ export const offensiveStatsService = (
         });
       }
     }
-  }
-
-  function getThreshold(): number {
-    const totalSlots = members.reduce((sum, m) => sum + m.types.length, 0);
-    if (totalSlots > 10) return 4;
-    if (totalSlots > 6) return 3;
-    return 2;
   }
 
   function getOverlappingOffensiveTypes(): number[] {
