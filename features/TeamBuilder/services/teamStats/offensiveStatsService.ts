@@ -3,6 +3,9 @@ import { TeamMemberModel } from "../../types";
 import { OffensiveRelations } from "../teamRelationsService/types";
 import { AffectedMember, OffensiveStats } from "./types";
 
+const SEVERELY_RESISTED_STAB_RATIO = 0.5;
+const OVERLAPPING_OFFENSIVE_MIN_SLOTS = 3;
+
 export const offensiveStatsService = (
   relations: OffensiveRelations,
   members: TeamMemberModel[],
@@ -50,7 +53,7 @@ export const offensiveStatsService = (
         .filter(([typeId]) => resistedAttackingTypes.has(typeId))
         .reduce((sum, [, count]) => sum + count, 0);
 
-      if (resistedStabCount / totalSlots > 0.5) {
+      if (resistedStabCount / totalSlots > SEVERELY_RESISTED_STAB_RATIO) {
         const affectedMembers: AffectedMember[] = members
           .map((member) => {
             const resistedTypeIds = member.types
@@ -73,7 +76,7 @@ export const offensiveStatsService = (
   function getOverlappingOffensiveTypes(): number[] {
     const stabCounts = getStabTypeCounts();
     return [...stabCounts.entries()]
-      .filter(([, count]) => count >= 3)
+      .filter(([, count]) => count >= OVERLAPPING_OFFENSIVE_MIN_SLOTS)
       .map(([typeId]) => typeId);
   }
 

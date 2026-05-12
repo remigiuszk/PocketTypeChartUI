@@ -6,6 +6,12 @@ import { Stats } from "../teamStats/types";
 import { OverviewRowDataBuilder } from "./OverviewRowDataBuilder";
 import { OverviewRowData, OverviewRowSeverity, OverviewRowType } from "./types";
 
+const MULTIPLE_4X_VULN_HIGH_SEVERITY_COUNT = 3;
+const MIN_UNCOVERED_TYPES_TO_SHOW = 3;
+const UNCOVERED_TYPES_WEAKNESS_THRESHOLD = 7;
+const SEVERELY_RESISTED_HIGH_SEVERITY_RATIO = 0.7;
+const OVERLAPPING_OFFENSIVE_WEAKNESS_RATIO = 0.5;
+
 export const overviewRowsService = (
   stats: Stats,
   allTypes: PokeTypeModel[],
@@ -126,7 +132,7 @@ export const overviewRowsService = (
         );
 
       const severity =
-        stat.affectedMembersCount >= 3
+        stat.affectedMembersCount >= MULTIPLE_4X_VULN_HIGH_SEVERITY_COUNT
           ? OverviewRowSeverity.High
           : OverviewRowSeverity.Medium;
 
@@ -170,11 +176,13 @@ export const overviewRowsService = (
   function noSuperEffectiveCoverage(): OverviewRowData[] {
     const uncoveredIds = stats.offensiveStats.noSuperEffectiveCoverage;
     const result: OverviewRowData[] = [];
-    if (uncoveredIds.length < 3) return result;
+    if (uncoveredIds.length < MIN_UNCOVERED_TYPES_TO_SHOW) return result;
 
     const typeList = allTypes.filter((t) => uncoveredIds.includes(t.id));
     const rowType =
-      uncoveredIds.length >= 7 ? OverviewRowType.Weakness : OverviewRowType.Suggestion;
+      uncoveredIds.length >= UNCOVERED_TYPES_WEAKNESS_THRESHOLD
+        ? OverviewRowType.Weakness
+        : OverviewRowType.Suggestion;
 
     const row = new OverviewRowDataBuilder()
       .setHeader(OVERVIEW_STRINGS.noSuperEffectiveCoverage.header)
@@ -202,7 +210,7 @@ export const overviewRowsService = (
 
     for (const [resistedCount, group] of groups) {
       const severity =
-        resistedCount / totalSlots >= 0.7
+        resistedCount / totalSlots >= SEVERELY_RESISTED_HIGH_SEVERITY_RATIO
           ? OverviewRowSeverity.High
           : OverviewRowSeverity.Medium;
 
@@ -252,7 +260,7 @@ export const overviewRowsService = (
       const affectedMembers = members.filter((m) => m.types.some((t) => t.id === typeId));
       const slotCount = affectedMembers.length;
       const rowType =
-        slotCount / totalSlots >= 0.5
+        slotCount / totalSlots >= OVERLAPPING_OFFENSIVE_WEAKNESS_RATIO
           ? OverviewRowType.Weakness
           : OverviewRowType.Suggestion;
 
