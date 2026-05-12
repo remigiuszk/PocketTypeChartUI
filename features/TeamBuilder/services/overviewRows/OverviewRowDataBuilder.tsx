@@ -36,7 +36,7 @@ export class OverviewRowDataBuilder {
     return this;
   }
 
-  setLeadType(leadType: PokeTypeModel) {
+  setLeadType(leadType: PokeTypeModel[]) {
     this.data.leadType = leadType;
     return this;
   }

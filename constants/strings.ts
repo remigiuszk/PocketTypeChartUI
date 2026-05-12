@@ -33,9 +33,28 @@ export const OVERVIEW_STRINGS = {
   },
   noSafeSwitch: {
     header: "No safe switch against: ",
-    subText: (count: number) => `${count} member${count === 1 ? "" : "s"} ${count === 1 ? "is" : "are"} vulnerable`,
+    subText: "No resistance or immunity in the team",
     hintText:
       "When no member of your team resists or is immune to an attacking type, you have no safe switch against it — any switch-in will take neutral or super-effective damage. This leaves you vulnerable to being swept, as your opponent can freely use that type without fear of a punishing switch-in. Consider adding a Pokémon that resists or is immune to this type to give your team a reliable answer.",
+  },
+  noSuperEffectiveCoverage: {
+    header: "Poor super effective coverage",
+    subText: (n: number) => `${n} type${n === 1 ? "" : "s"} left uncovered: `,
+    hintText:
+      "Super-effective coverage determines how many opposing Pokémon types your team can threaten offensively. When your team cannot hit a type for super-effective damage, any Pokémon of that type can switch in safely and take minimal risk — giving your opponent a free turn to set up, heal, or attack. The more types left uncovered, the more predictable and exploitable your team becomes. Consider adding a Pokémon whose STAB or coverage moves hit the listed types for super-effective damage.",
+  },
+  severlyResistedTypes: {
+    header: "Team severely resisted by: ",
+    subText: (resisted: number, total: number) =>
+      `Resists ${Math.round((resisted / total) * 100)}% of your team's attacking moves`,
+    hintText:
+      "When a defending type resists the majority of your team's STAB moves, that type of Pokémon can switch in repeatedly with little risk, wall several team members at once, and force unfavourable trades. This creates a soft check that limits how much offensive pressure your team can apply. Consider adding a team member whose STAB type is not resisted by this type, or a move that hits it for neutral or super-effective damage.",
+  },
+  overlappingOffensiveTypes: {
+    header: "Type overlap: ",
+    subText: (n: number) => `${n} member${n === 1 ? "" : "s"} share this type`,
+    hintText:
+      "Having multiple team members share the same STAB type concentrates your offensive coverage in one area while leaving others unaddressed. Opponents who carry a Pokémon that resists or is immune to this type can effectively wall several of your team members at once, limiting your attacking options. Diversifying your team's STAB types spreads pressure more evenly and makes your team harder to shut down with a single switch-in.",
   },
 };
 
