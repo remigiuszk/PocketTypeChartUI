@@ -8,19 +8,19 @@ export const BG_HINT: string = "#2A2A3A";
 export const BG_WEAKNESSES: string = "#130707";
 export const BG_WEAKNESS_WEAK: string = "#27221D";
 export const BG_WEAKNESS_WEAK_BADGE: string = "#362307";
-export const BG_STRENGHTS: string = "#121E16";
+export const BG_STRENGTHS: string = "#121E16";
 export const BG_SUGGESTIONS: string = "#12161E";
 
 export const TEXT_WEAKNESSES_CRITICAL: string = "#E24B4A";
 export const TEXT_WEAKNESSES_WEAK: string = "#BA7517";
-export const TEXT_STRENGHTS: string = "#1D9E75";
+export const TEXT_STRENGTHS: string = "#1D9E75";
 export const TEXT_SUGGESTIONS: string = "#378ADD";
 export const TEXT_HINT: string = "#686868";
 
 export const BORDER_DEFAULT: string = "#3a435a";
 export const BORDER_INTERNAL: string = "#2a2a3a";
 export const BORDER_WEAKNESSES: string = "#431D21";
-export const BORDER_STRENGHTS: string = "#143628";
+export const BORDER_STRENGTHS: string = "#143628";
 export const BORDER_SUGGESTIONS: string = "#172436";
 
 //export const ACCENT: string = "#f3f2d0ff";
@@ -37,9 +37,9 @@ export const test: string = "rgb(11, 130, 163)";
 
 export const WARNING: string = "#ffce85";
 
-export const STRENGHTS_BG: string = "rgba(107, 255, 139, 0.1)";
-export const STRENGHTS_BORDER: string = "rgba(107, 255, 149, 0.25)";
-export const STRENGHTS_CONTENT: string = "#abfec7";
+export const STRENGTHS_BG: string = "rgba(107, 255, 139, 0.1)";
+export const STRENGTHS_BORDER: string = "rgba(107, 255, 149, 0.25)";
+export const STRENGTHS_CONTENT: string = "#abfec7";
 
 export const OPTIONS_BG: string = "#3d6367a3";
 export const OPTIONS_BORDER: string = "#6dbfbec3";

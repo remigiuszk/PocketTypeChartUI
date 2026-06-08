@@ -1,8 +1,8 @@
 import { StyleSheet, View, ViewStyle } from "react-native";
 
-import { BORDER_100 } from "../../../../../../constants";
+import { BORDER_DEFAULT } from "../../../../../../constants";
 import { Subtitle } from "../../../../../../shared/typohraphy/Subtitle";
-import { HintButton } from "../../../../../../shared/ui/HintButton";
+// import { HintButton } from "../../../../../../shared/ui/HintButton";
 
 type Props = {
   style?: ViewStyle | ViewStyle[];
@@ -19,7 +19,7 @@ export const DetailsRow = ({ style, text, hintText, value }: Props) => {
       </View>
       <View style={styles.hintContainer}>
         <Subtitle style={styles.resultTextStyle}>{value}</Subtitle>
-        <HintButton hintText={hintText} />
+        {/* //<HintButton hintText={hintText} /> */}
       </View>
     </View>
   );
@@ -34,7 +34,7 @@ const styles = StyleSheet.create({
     alignItems: "flex-start",
     padding: 6,
     borderWidth: 1,
-    borderColor: BORDER_100,
+    borderColor: BORDER_DEFAULT,
     borderRadius: 6,
   },
   rowTextContainer: {

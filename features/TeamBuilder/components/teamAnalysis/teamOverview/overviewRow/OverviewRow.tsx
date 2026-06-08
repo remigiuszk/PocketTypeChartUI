@@ -4,7 +4,7 @@ import { Image, StyleSheet, View, ViewStyle } from "react-native";
 
 import {
   TEXT_MUTED,
-  TEXT_STRENGHTS,
+  TEXT_STRENGTHS,
   TEXT_SUGGESTIONS,
   TEXT_WEAKNESSES_CRITICAL,
   TEXT_WEAKNESSES_WEAK,
@@ -29,7 +29,7 @@ export const OverviewRow = ({ style, rowData }: Props) => {
 
   const accentColor = useMemo(() => {
     if (rowData.type === OverviewRowType.Suggestion) return TEXT_SUGGESTIONS;
-    if (rowData.type === OverviewRowType.Strength) return TEXT_STRENGHTS;
+    if (rowData.type === OverviewRowType.Strength) return TEXT_STRENGTHS;
     return rowData.severity === OverviewRowSeverity.High
       ? TEXT_WEAKNESSES_CRITICAL
       : TEXT_WEAKNESSES_WEAK;
@@ -37,7 +37,7 @@ export const OverviewRow = ({ style, rowData }: Props) => {
 
   const hintIcon = useMemo(() => {
     if (rowData.type === OverviewRowType.Strength)
-      return <FontAwesome6 name="star" size={18} color={TEXT_STRENGHTS} />;
+      return <FontAwesome6 name="star" size={18} color={TEXT_STRENGTHS} />;
     switch (rowData.severity) {
       case OverviewRowSeverity.High:
         return <Feather name="alert-triangle" size={18} color={TEXT_WEAKNESSES_CRITICAL} />;

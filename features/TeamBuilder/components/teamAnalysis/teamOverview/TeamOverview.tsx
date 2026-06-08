@@ -12,6 +12,7 @@ import { offensiveStatsService } from "../../../services/teamStats/offensiveStat
 import { Stats } from "../../../services/teamStats/types";
 import { TeamMemberModel } from "../../../types";
 import { MoreDetails } from "./MoreDetails";
+import { StrengthsContainer } from "./strengths/StrengthsContainer";
 import { WeaknessesContainer } from "./weaknesses/WeaknessesContainer";
 
 type Props = {
@@ -61,6 +62,13 @@ export const TeamOverview = ({ style, currentTeam }: Props) => {
           <WeaknessesContainer
             weaknessRowData={rowData.filter(
               (rowData) => rowData.type === OverviewRowType.Weakness,
+            )}
+          />
+        )}
+        {rowData.some((row) => row.type === OverviewRowType.Strength) && (
+          <StrengthsContainer
+            strengthRowData={rowData.filter(
+              (rowData) => rowData.type === OverviewRowType.Strength,
             )}
           />
         )}

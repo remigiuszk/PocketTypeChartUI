@@ -3,10 +3,10 @@ import { StyleSheet, View } from "react-native";
 
 import {
   BG_WEAKNESS_WEAK_BADGE,
-  BORDER_STRENGHTS,
+  BORDER_STRENGTHS,
   BORDER_SUGGESTIONS,
   BORDER_WEAKNESSES,
-  TEXT_STRENGHTS,
+  TEXT_STRENGTHS,
   TEXT_SUGGESTIONS,
   TEXT_WEAKNESSES_CRITICAL,
   TEXT_WEAKNESSES_WEAK,
@@ -25,7 +25,7 @@ export const OverviewRowBadge = ({ rowData }: Props) => {
   if (rowData.type === OverviewRowType.Strength) {
     return (
       <View style={[styles.badge, styles.badgeStrength]}>
-        <FontAwesome6 name="star" size={18} color={TEXT_STRENGHTS} />
+        <FontAwesome6 name="star" size={18} color={TEXT_STRENGTHS} />
       </View>
     );
   }
@@ -61,6 +61,6 @@ const styles = StyleSheet.create({
   },
   badgeCritical: { backgroundColor: BORDER_WEAKNESSES },
   badgeWeak: { backgroundColor: BG_WEAKNESS_WEAK_BADGE },
-  badgeStrength: { backgroundColor: BORDER_STRENGHTS },
+  badgeStrength: { backgroundColor: BORDER_STRENGTHS },
   badgeSuggestion: { backgroundColor: BORDER_SUGGESTIONS },
 });
