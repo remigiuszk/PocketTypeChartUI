@@ -52,6 +52,7 @@ export const PokeTypeList = ({
             ></PokeType>
           )}
           numColumns={3}
+          columnWrapperStyle={styles.column}
         />
       )}
     </View>
@@ -60,4 +61,7 @@ export const PokeTypeList = ({
 
 const styles = StyleSheet.create({
   container: {},
+  column: {
+    justifyContent: "center",
+  },
 });

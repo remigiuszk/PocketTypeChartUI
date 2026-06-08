@@ -22,6 +22,7 @@ import { MEMBER_ICONS } from "../../../../constants/icons";
 import { loadTeamMembers, saveTeamMembers } from "../../../../shared/storage/teamStorage";
 import { Subtitle } from "../../../../shared/typohraphy/Subtitle";
 import { Card } from "../../../../shared/ui/Card";
+import { ConfirmModal } from "../../../../shared/ui/ConfirmModal";
 import { OptionButton } from "../../../../shared/ui/OptionButton";
 import { TeamMemberModel } from "../../types";
 import { MemberDetails } from "./memberDetails/MemberDetails";
@@ -33,6 +34,7 @@ type Props = {
 
 export const TeamList = ({ onAnalyze }: Props) => {
   const [showModal, setShowModal] = useState<boolean>(false);
+  const [memberToDelete, setMemberToDelete] = useState<TeamMemberModel | null>(null);
   const [teamMembers, setTeamMembers] = useState<TeamMemberModel[]>([]);
   const [selectedMember, setSelectedMember] = useState<TeamMemberModel>({
     id: Crypto.randomUUID(),
@@ -63,20 +65,18 @@ export const TeamList = ({ onAnalyze }: Props) => {
   }
 
   function deleteMember(member: TeamMemberModel) {
-    Alert.alert(
-      "Delete team member",
-      "Are you sure you want to delete this team member?",
-      [
-        {
-          text: "Yes, delete",
-          onPress: () => setTeamMembers((prev) => prev.filter((x) => x.id !== member.id)),
-        },
-        {
-          text: "No",
-          style: "cancel",
-        },
-      ],
-    );
+    setMemberToDelete(member);
+  }
+
+  function confirmDelete() {
+    if (memberToDelete) {
+      setTeamMembers((prev) => prev.filter((x) => x.id !== memberToDelete.id));
+    }
+    setMemberToDelete(null);
+  }
+
+  function cancelDelete() {
+    setMemberToDelete(null);
   }
 
   function onConfirm(id: string, newMember: TeamMemberModel) {
@@ -167,6 +167,16 @@ export const TeamList = ({ onAnalyze }: Props) => {
         selectedMember={selectedMember}
         showModal={showModal}
       ></MemberDetails>
+      <ConfirmModal
+        visible={memberToDelete !== null}
+        title="Delete team member"
+        message="Are you sure you want to delete this team member?"
+        confirmLabel="Yes, delete"
+        cancelLabel="No"
+        destructive={true}
+        onConfirm={confirmDelete}
+        onCancel={cancelDelete}
+      ></ConfirmModal>
       {teamMembers.map((member: TeamMemberModel) => (
         <TeamMember
           member={member}

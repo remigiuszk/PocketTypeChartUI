@@ -1,4 +1,4 @@
-import { Image, Pressable, StyleSheet, View } from "react-native";
+import { Image, Platform, Pressable, StyleSheet, View } from "react-native";
 
 import { SELECTION } from "../../../constants";
 import { PokeTypeModel } from "../types";
@@ -34,7 +34,13 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     margin: 3,
-    height: 0,
+    // On native, Yoga lets aspectRatio override an explicit height: 0. On web,
+    // react-native-web maps aspectRatio to CSS aspect-ratio, which is ignored
+    // when height is a definite 0 — leaving the box (and image) collapsed.
+    height: Platform.OS === "web" ? undefined : 0,
+    // On a wide browser window each flex tile would otherwise become enormous;
+    // cap it so the grid scales with the screen but stays a sensible size.
+    ...Platform.select({ web: { maxWidth: 200 }, default: {} }),
     borderRadius: 6,
     overflow: "hidden",
     shadowColor: "#000000",
