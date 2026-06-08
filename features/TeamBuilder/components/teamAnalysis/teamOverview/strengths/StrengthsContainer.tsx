@@ -1,4 +1,4 @@
-import { FontAwesome6 } from "@expo/vector-icons";
+import { MaterialIcons } from "@expo/vector-icons";
 import { StyleSheet, View, ViewStyle } from "react-native";
 
 import {
@@ -20,7 +20,7 @@ export const StrengthsContainer = ({ style, strengthRowData }: Props) => {
     <View style={[styles.card, style]}>
       <View style={[styles.headerContainer]}>
         <View style={[styles.textContainer]}>
-          <FontAwesome6 style={[styles.header]} name="star" size={28} />
+          <MaterialIcons style={[styles.header]} name="catching-pokemon" size={32} />
           <Subtitle style={styles.header}>STRENGTHS</Subtitle>
         </View>
       </View>

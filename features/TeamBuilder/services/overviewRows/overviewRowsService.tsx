@@ -11,6 +11,7 @@ const MIN_UNCOVERED_TYPES_TO_SHOW = 3;
 const UNCOVERED_TYPES_WEAKNESS_THRESHOLD = 7;
 const SEVERELY_RESISTED_HIGH_SEVERITY_RATIO = 0.7;
 const OVERLAPPING_OFFENSIVE_WEAKNESS_RATIO = 0.5;
+const MIN_TEAM_SIZE_FOR_STRENGTHS = 3;
 
 export const overviewRowsService = (
   stats: Stats,
@@ -30,7 +31,48 @@ export const overviewRowsService = (
     result.push(...severlyResistedTypes());
     result.push(...overlappingOffensiveTypes());
 
+    if (members.length >= MIN_TEAM_SIZE_FOR_STRENGTHS) {
+      result.push(...noMajorWeaknesses());
+      result.push(...goodOffensiveCoverage());
+      result.push(...noOverlappingStab());
+    }
+
     return result.sort((a, b) => b.severity - a.severity);
+  }
+
+  function buildStrength(strings: {
+    header: string;
+    subText: string;
+    hintText: string;
+  }): OverviewRowData {
+    return new OverviewRowDataBuilder()
+      .setHeader(strings.header)
+      .setSubText(strings.subText)
+      .setHintText(strings.hintText)
+      .setType(OverviewRowType.Strength)
+      .setSeverity(OverviewRowSeverity.Medium)
+      .build();
+  }
+
+  function noMajorWeaknesses(): OverviewRowData[] {
+    if (stats.defensiveStats.criticalWeaknesses.length > 0) return [];
+    if (stats.defensiveStats.majorWeaknesses.length > 0) return [];
+
+    return [buildStrength(OVERVIEW_STRINGS.noMajorWeaknesses)];
+  }
+
+  function goodOffensiveCoverage(): OverviewRowData[] {
+    if (stats.offensiveStats.noSuperEffectiveCoverage.length >= MIN_UNCOVERED_TYPES_TO_SHOW)
+      return [];
+    if (stats.offensiveStats.severlyResistedTypes.length > 0) return [];
+
+    return [buildStrength(OVERVIEW_STRINGS.goodOffensiveCoverage)];
+  }
+
+  function noOverlappingStab(): OverviewRowData[] {
+    if (stats.offensiveStats.overlappingOffensiveTypes.length > 0) return [];
+
+    return [buildStrength(OVERVIEW_STRINGS.noOverlappingStab)];
   }
 
   function criticalWeaknesses(): OverviewRowData[] {

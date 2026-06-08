@@ -56,6 +56,24 @@ export const OVERVIEW_STRINGS = {
     hintText:
       "Having multiple team members share the same STAB type concentrates your offensive coverage in one area while leaving others unaddressed. Opponents who carry a Pokémon that resists or is immune to this type can effectively wall several of your team members at once, limiting your attacking options. Diversifying your team's STAB types spreads pressure more evenly and makes your team harder to shut down with a single switch-in.",
   },
+  noMajorWeaknesses: {
+    header: "No major weaknesses",
+    subText: "No attacking type threatens 3 or more of your members.",
+    hintText:
+      "A clean defensive spread means no single attacking type can pressure a large part of your team at once. Your opponent cannot lean on one type to force repeated unfavourable switches or threaten a sweep, so you keep more flexibility in how you play each matchup. Maintaining this balance as you adjust your team is one of the strongest defensive positions you can hold.",
+  },
+  goodOffensiveCoverage: {
+    header: "Great offensive coverage",
+    subText: "Your team hits nearly every type super-effectively.",
+    hintText:
+      "Broad super-effective coverage means almost no opposing type can switch in for free against your team. Wherever your opponent goes, at least one of your members can threaten significant damage, keeping constant offensive pressure and limiting safe pivots. This makes your team far less predictable and much harder to wall with a single defensive answer.",
+  },
+  noOverlappingStab: {
+    header: "No overlapping STAB",
+    subText: "Every member brings a unique offensive type.",
+    hintText:
+      "When every team member carries a different STAB type, your offensive pressure is spread evenly and no single defensive Pokémon can wall multiple members at once. Diverse STAB typing forces your opponent to respect each member individually and makes it much harder to find one switch-in that handles your whole team.",
+  },
 };
 
 export const HINT_HEADER_DEFAULT: string = "Why is this important?";
