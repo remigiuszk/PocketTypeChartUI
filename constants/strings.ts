@@ -74,6 +74,18 @@ export const OVERVIEW_STRINGS = {
     hintText:
       "When every team member carries a different STAB type, your offensive pressure is spread evenly and no single defensive Pokémon can wall multiple members at once. Diverse STAB typing forces your opponent to respect each member individually and makes it much harder to find one switch-in that handles your whole team.",
   },
+  missingBulkyType: {
+    header: "No defensive backbone",
+    subText: "Your team has no naturally bulky type.",
+    hintText:
+      "Defensively bulky types such as Normal, Rock, Steel, and Water tend to bring members that can switch in, soak up a hit, and stabilise the game. A team without any of them often has no reliable place to absorb pressure, forcing risky switches and letting opponents snowball. Consider adding one of these types to give your team a sturdier core to fall back on.",
+  },
+  missingCrowdControl: {
+    header: "No crowd control",
+    subText: "Your team has no reliable status / crowd-control type.",
+    hintText:
+      "Crowd-control types help you slow opponents down and flip unfavourable matchups: Electric brings paralysis (Nuzzle, Thunder Wave) to cut enemy Speed, while Grass brings powder moves (Spore, Sleep Powder, Stun Spore) to disable threats outright. Without a status spreader, fast or set-up sweepers are much harder to answer. Consider adding one of these types to gain some control over the pace of the battle.",
+  },
 };
 
 export const HINT_HEADER_DEFAULT: string = "Why is this important?";
