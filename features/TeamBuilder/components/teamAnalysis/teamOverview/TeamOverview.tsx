@@ -9,10 +9,12 @@ import { OverviewRowData, OverviewRowType } from "../../../services/overviewRows
 import { teamRelationsService } from "../../../services/teamRelationsService/teamRelationsService";
 import { defensiveStatsService } from "../../../services/teamStats/defensiveStatsService";
 import { offensiveStatsService } from "../../../services/teamStats/offensiveStatsService";
+import { suggestionStatsService } from "../../../services/teamStats/suggestionStatsService";
 import { Stats } from "../../../services/teamStats/types";
 import { TeamMemberModel } from "../../../types";
 import { MoreDetails } from "./MoreDetails";
 import { StrengthsContainer } from "./strengths/StrengthsContainer";
+import { SuggestionsContainer } from "./suggestions/SuggestionsContainer";
 import { WeaknessesContainer } from "./weaknesses/WeaknessesContainer";
 
 type Props = {
@@ -33,11 +35,13 @@ export const TeamOverview = ({ style, currentTeam }: Props) => {
       pokeTypesData ?? [],
     );
     const defService = defensiveStatsService(relations.defensiveRelations);
+    const sugService = suggestionStatsService(currentTeam);
 
     return {
       relations: relations,
       offensiveStats: offService.calculate(),
       defensiveStats: defService.calculate(),
+      suggestionStats: sugService.calculate(),
     };
   }, [currentTeam, data, pokeTypesData]);
 
@@ -69,6 +73,13 @@ export const TeamOverview = ({ style, currentTeam }: Props) => {
           <StrengthsContainer
             strengthRowData={rowData.filter(
               (rowData) => rowData.type === OverviewRowType.Strength,
+            )}
+          />
+        )}
+        {rowData.some((row) => row.type === OverviewRowType.Suggestion) && (
+          <SuggestionsContainer
+            suggestionRowData={rowData.filter(
+              (rowData) => rowData.type === OverviewRowType.Suggestion,
             )}
           />
         )}

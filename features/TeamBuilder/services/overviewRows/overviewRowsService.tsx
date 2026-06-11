@@ -2,9 +2,17 @@ import { OVERVIEW_STRINGS } from "../../../../constants";
 import { DamageRelationFullModel } from "../../../DamageRelations/types";
 import { PokeTypeModel } from "../../../TypeSelection/types";
 import { TeamMemberModel } from "../../types";
-import { Stats } from "../teamStats/types";
+import { Stats, TeamRole } from "../teamStats/types";
 import { OverviewRowDataBuilder } from "./OverviewRowDataBuilder";
 import { OverviewRowData, OverviewRowSeverity, OverviewRowType } from "./types";
+
+const MISSING_ROLE_STRINGS: Record<
+  TeamRole,
+  { header: string; subText: string; hintText: string }
+> = {
+  [TeamRole.BulkyType]: OVERVIEW_STRINGS.missingBulkyType,
+  [TeamRole.CrowdControl]: OVERVIEW_STRINGS.missingCrowdControl,
+};
 
 const MULTIPLE_4X_VULN_HIGH_SEVERITY_COUNT = 3;
 const MIN_UNCOVERED_TYPES_TO_SHOW = 3;
@@ -30,6 +38,7 @@ export const overviewRowsService = (
     result.push(...noSuperEffectiveCoverage());
     result.push(...severlyResistedTypes());
     result.push(...overlappingOffensiveTypes());
+    result.push(...missingRoleSuggestions());
 
     if (members.length >= MIN_TEAM_SIZE_FOR_STRENGTHS) {
       result.push(...noMajorWeaknesses());
@@ -314,6 +323,30 @@ export const overviewRowsService = (
         .setSeverity(OverviewRowSeverity.Medium)
         .setLeadType([allTypes.find((type) => type.id === typeId)!])
         .setAffectedMembers(affectedMembers)
+        .build();
+
+      result.push(row);
+    }
+
+    return result;
+  }
+
+  function missingRoleSuggestions(): OverviewRowData[] {
+    const result: OverviewRowData[] = [];
+
+    for (const missing of stats.suggestionStats.missingRoles) {
+      const strings = MISSING_ROLE_STRINGS[missing.role];
+      const suggestedTypes = allTypes.filter((t) =>
+        missing.suggestedTypeIds.includes(t.id),
+      );
+
+      const row = new OverviewRowDataBuilder()
+        .setHeader(strings.header)
+        .setSubText(strings.subText)
+        .setHintText(strings.hintText)
+        .setType(OverviewRowType.Suggestion)
+        .setSeverity(OverviewRowSeverity.Low)
+        .setSuggestedTypes(suggestedTypes, members)
         .build();
 
       result.push(row);

@@ -4,6 +4,7 @@ export type Stats = {
   relations: TeamRelationsResult;
   offensiveStats: OffensiveStats;
   defensiveStats: DefensiveStats;
+  suggestionStats: SuggestionStats;
 };
 
 export type DefensiveStats = {
@@ -34,4 +35,18 @@ export type SevereResistance = {
 export type AffectedMember = {
   memberId: string;
   resistedTypeIds: number[];
+};
+
+export enum TeamRole {
+  BulkyType = "bulkyType",
+  CrowdControl = "crowdControl",
+}
+
+export type MissingRole = {
+  role: TeamRole;
+  suggestedTypeIds: number[];
+};
+
+export type SuggestionStats = {
+  missingRoles: MissingRole[];
 };
