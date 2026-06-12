@@ -239,52 +239,51 @@ jobs:
           echo "[]" > comments.json
           if grep -q "<comment>" ai_output.xml; then
             echo "Processing inline comments for GitHub API..."
-            
-            # Use absolute line numbers with side (much more reliable than positions)
-            echo "Extracting comments with absolute line numbers..."
-            
+
             node -e "
             const fs = require('fs');
-            
+
             try {
-              // Read and parse XML comments
               const xmlText = fs.readFileSync('ai_output.xml', 'utf8');
               const comments = [];
-              
-              // Extract comment blocks
               const commentBlocks = xmlText.match(/<comment>[\s\S]*?<\/comment>/g) || [];
-              
+
               for (const block of commentBlocks) {
                 const fileMatch = block.match(/<file>(.*?)<\/file>/);
                 const lineMatch = block.match(/<line>(.*?)<\/line>/);
-                const bodyMatch = block.match(/<body>(.*?)<\/body>/);
-                
+                const bodyMatch = block.match(/<body>([\s\S]*?)<\/body>/);
+
                 if (fileMatch && lineMatch && bodyMatch) {
-                  const file = fileMatch[1].trim();
-                  const line = parseInt(lineMatch[1].trim());
-                  const body = bodyMatch[1].trim();
-                  
-                  // Use absolute line number with side (much more reliable than position)
                   comments.push({
-                    path: file,
-                    line: line,
+                    path: fileMatch[1].trim(),
+                    line: parseInt(lineMatch[1].trim()),
                     side: 'RIGHT',
-                    body: body.replace(/\"/g, '\\\"')
+                    body: bodyMatch[1].trim()
                   });
                 }
               }
-              
-              // Write result
+
               fs.writeFileSync('comments.json', JSON.stringify(comments));
-              
+
             } catch (error) {
-              // Fallback to empty array
               fs.writeFileSync('comments.json', '[]');
             }
             "
-            
+
             echo "Generated comments JSON:"
             cat comments.json
+
+            # Also append comments to review body as a fallback section
+            node -e "
+            const fs = require('fs');
+            const comments = JSON.parse(fs.readFileSync('comments.json', 'utf8'));
+            if (comments.length === 0) process.exit(0);
+            let md = '\n\n## Inline Comments\n';
+            for (const c of comments) {
+              md += '\n**\`' + c.path + '\` line ' + c.line + '**\n' + c.body + '\n';
+            }
+            fs.appendFileSync('review.md', md);
+            "
           fi
 
           # Create status JSON
@@ -298,19 +297,27 @@ jobs:
         run: |
           set -euo pipefail
 
-          # Build review payload with body + comments array
-          jq -n \
-            --arg event "${REVIEW_EVENT}" \
-            --arg body "$(cat review.md)" \
-            --argjson comments "$(cat comments.json)" \
-            '{ event: $event, body: $body, comments: $comments }' > review_payload.json
+          post_review() {
+            local comments_arg="$1"
+            jq -n \
+              --arg event "${REVIEW_EVENT}" \
+              --arg body "$(cat review.md)" \
+              --argjson comments "$comments_arg" \
+              '{ event: $event, body: $body, comments: $comments }' > review_payload.json
 
-          # Post the review
-          gh api \
-            -X POST \
-            -H "Accept: application/vnd.github+json" \
-            "repos/${{ github.repository }}/pulls/$PR/reviews" \
-            --input review_payload.json
+            gh api \
+              -X POST \
+              -H "Accept: application/vnd.github+json" \
+              "repos/${{ github.repository }}/pulls/$PR/reviews" \
+              --input review_payload.json
+          }
+
+          # Try with inline comments first; fall back to body-only if GitHub
+          # can't resolve a line number (HTTP 422).
+          if ! post_review "$(cat comments.json)" 2>/dev/null; then
+            echo "Inline comment post failed (line resolution error), retrying body-only..."
+            post_review "[]"
+          fi
 
       - name: Set commit status from AI StatusJSON
         if: always()
