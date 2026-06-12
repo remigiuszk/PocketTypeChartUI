@@ -23,6 +23,9 @@ type Props = {
   confirmLabel?: string;
   cancelLabel?: string;
   destructive?: boolean;
+  // When true, renders a single acknowledge button (an info/alert dialog) instead
+  // of a confirm/cancel pair. Used to replace native Alert.alert calls on web.
+  singleButton?: boolean;
   onConfirm: () => void;
   onCancel: () => void;
 };
@@ -34,6 +37,7 @@ export const ConfirmModal = ({
   confirmLabel = "Confirm",
   cancelLabel = "Cancel",
   destructive = false,
+  singleButton = false,
   onConfirm,
   onCancel,
 }: Props) => {
@@ -79,14 +83,18 @@ export const ConfirmModal = ({
               </Subtitle>
             </OptionButton>
 
-            <OptionButton onPress={onCancel} style={styles.buttonStyle} type="options">
-              <View style={[styles.iconCircle, styles.iconCircleOptions]}>
-                <Feather name="x" size={18} color={OPTIONS_CONTENT} />
-              </View>
-              <Subtitle style={{ fontSize: 16, fontWeight: 100, color: OPTIONS_CONTENT }}>
-                {cancelLabel}
-              </Subtitle>
-            </OptionButton>
+            {!singleButton && (
+              <OptionButton onPress={onCancel} style={styles.buttonStyle} type="options">
+                <View style={[styles.iconCircle, styles.iconCircleOptions]}>
+                  <Feather name="x" size={18} color={OPTIONS_CONTENT} />
+                </View>
+                <Subtitle
+                  style={{ fontSize: 16, fontWeight: 100, color: OPTIONS_CONTENT }}
+                >
+                  {cancelLabel}
+                </Subtitle>
+              </OptionButton>
+            )}
           </View>
         </View>
       </View>

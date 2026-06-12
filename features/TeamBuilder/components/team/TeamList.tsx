@@ -1,7 +1,7 @@
 import { Feather } from "@expo/vector-icons";
 import * as Crypto from "expo-crypto";
 import { useEffect, useRef, useState } from "react";
-import { Alert, Animated, StyleSheet, View } from "react-native";
+import { Animated, Pressable, StyleSheet } from "react-native";
 
 import {
   ALERT_CANT_ANALYZE_CONTENT,
@@ -14,11 +14,9 @@ import {
   BORDER_INTERNAL,
   EVALUATE_BACKGROUND,
   MEMBERS_COLORS,
-  OPTIONS_BG,
-  OPTIONS_BORDER,
-  OPTIONS_CONTENT,
 } from "../../../../constants";
 import { MEMBER_ICONS } from "../../../../constants/icons";
+import { IS_WEB } from "../../../../shared/layout/platform";
 import { loadTeamMembers, saveTeamMembers } from "../../../../shared/storage/teamStorage";
 import { Subtitle } from "../../../../shared/typohraphy/Subtitle";
 import { Card } from "../../../../shared/ui/Card";
@@ -28,6 +26,12 @@ import { TeamMemberModel } from "../../types";
 import { MemberDetails } from "./memberDetails/MemberDetails";
 import { TeamMember } from "./TeamMember";
 
+// "Add a new member" underline-tab colors (idle vs hover/press).
+const ADD_IDLE = "#9fd3d0";
+const ADD_ACTIVE = "#cdeeec";
+const ADD_BORDER_IDLE = "#2f4f53";
+const ADD_BORDER_ACTIVE = MEMBERS_COLORS[0]; // brand teal #1BC5BE
+
 type Props = {
   onAnalyze: (teamMembers: TeamMemberModel[]) => void;
 };
@@ -35,6 +39,13 @@ type Props = {
 export const TeamList = ({ onAnalyze }: Props) => {
   const [showModal, setShowModal] = useState<boolean>(false);
   const [memberToDelete, setMemberToDelete] = useState<TeamMemberModel | null>(null);
+  const [alertInfo, setAlertInfo] = useState<{ title: string; message: string } | null>(
+    null,
+  );
+  // Hover (web) / press (native) state for the add-member underline tab.
+  const [addActive, setAddActive] = useState<boolean>(false);
+  // Whether the details modal was opened to edit an existing member vs add new.
+  const [isEditing, setIsEditing] = useState<boolean>(false);
   const [teamMembers, setTeamMembers] = useState<TeamMemberModel[]>([]);
   const [selectedMember, setSelectedMember] = useState<TeamMemberModel>({
     id: Crypto.randomUUID(),
@@ -56,11 +67,13 @@ export const TeamList = ({ onAnalyze }: Props) => {
       iconColor: MEMBERS_COLORS[0],
     };
     setSelectedMember(newMember);
+    setIsEditing(false);
     setShowModal(true);
   }
 
   function editMember(member: TeamMemberModel) {
     setSelectedMember(member);
+    setIsEditing(true);
     setShowModal(true);
   }
 
@@ -83,7 +96,10 @@ export const TeamList = ({ onAnalyze }: Props) => {
     const validationResult = validateMember(newMember);
 
     if (validationResult.length > 0) {
-      Alert.alert(ALERT_CANT_CREATE_MEMBER_TITLE, validationResult);
+      setAlertInfo({
+        title: ALERT_CANT_CREATE_MEMBER_TITLE,
+        message: validationResult,
+      });
       return;
     }
 
@@ -120,7 +136,10 @@ export const TeamList = ({ onAnalyze }: Props) => {
     if (teamMembers && teamMembers.length > 1) {
       onAnalyze(teamMembers);
     } else {
-      Alert.alert(ALERT_CANT_ANALYZE_TITLE, ALERT_CANT_ANALYZE_CONTENT);
+      setAlertInfo({
+        title: ALERT_CANT_ANALYZE_TITLE,
+        message: ALERT_CANT_ANALYZE_CONTENT,
+      });
     }
   }
 
@@ -160,12 +179,22 @@ export const TeamList = ({ onAnalyze }: Props) => {
   }, [scale]);
 
   return (
-    <Card style={styles.card}>
+    <Card style={[styles.card, IS_WEB && styles.cardWeb]}>
+      <ConfirmModal
+        visible={alertInfo !== null}
+        title={alertInfo?.title ?? ""}
+        message={alertInfo?.message ?? ""}
+        confirmLabel="OK"
+        singleButton={true}
+        onConfirm={() => setAlertInfo(null)}
+        onCancel={() => setAlertInfo(null)}
+      ></ConfirmModal>
       <MemberDetails
         onClose={() => setShowModal(false)}
         onConfirm={(id: string, newMember: TeamMemberModel) => onConfirm(id, newMember)}
         selectedMember={selectedMember}
         showModal={showModal}
+        isEdit={isEditing}
       ></MemberDetails>
       <ConfirmModal
         visible={memberToDelete !== null}
@@ -186,16 +215,40 @@ export const TeamList = ({ onAnalyze }: Props) => {
         />
       ))}
       {teamMembers.length < 6 && (
-        <OptionButton onPress={addMember} style={styles.buttonStyle} type="options">
-          <View style={styles.addIconCircle}>
-            <Feather name="plus" size={18} color={OPTIONS_CONTENT} />
-          </View>
-          <Subtitle style={styles.addText}>Add a new member</Subtitle>
-        </OptionButton>
+        <Pressable
+          onPress={addMember}
+          onHoverIn={() => setAddActive(true)}
+          onHoverOut={() => setAddActive(false)}
+          onPressIn={() => setAddActive(true)}
+          onPressOut={() => setAddActive(false)}
+          hitSlop={8}
+          style={[
+            styles.addButton,
+            {
+              borderColor: addActive ? ADD_BORDER_ACTIVE : ADD_BORDER_IDLE,
+              backgroundColor: addActive
+                ? "rgba(27,197,190,0.06)"
+                : "rgba(255,255,255,0.012)",
+            },
+          ]}
+        >
+          <Feather
+            name="user-plus"
+            size={22}
+            color={addActive ? ADD_ACTIVE : ADD_IDLE}
+          />
+          <Subtitle style={[styles.addText, { color: addActive ? ADD_ACTIVE : ADD_IDLE }]}>
+            Add a new member
+          </Subtitle>
+        </Pressable>
       )}
       {teamMembers.length > 1 ? (
         <Animated.View style={{ transform: [{ scale }] }}>
-          <OptionButton onPress={analyze} style={styles.evaluateButtonStyle} type="info">
+          <OptionButton
+            onPress={analyze}
+            style={[styles.evaluateButtonStyle, IS_WEB && styles.actionButtonWeb]}
+            type="info"
+          >
             <Subtitle style={styles.evaluateText}>ANALYZE TEAM</Subtitle>
           </OptionButton>
         </Animated.View>
@@ -203,7 +256,7 @@ export const TeamList = ({ onAnalyze }: Props) => {
         <OptionButton
           disabled={true}
           onPress={analyze}
-          style={styles.inactiveButtonStyle}
+          style={[styles.inactiveButtonStyle, IS_WEB && styles.actionButtonWeb]}
           type="info"
         >
           <Subtitle style={styles.inactiveText}>ANALYZE TEAM</Subtitle>
@@ -215,11 +268,20 @@ export const TeamList = ({ onAnalyze }: Props) => {
 
 const styles = StyleSheet.create({
   card: { padding: 8 },
-  buttonStyle: {
+  // Keep the team list a card on wide web screens instead of a full-bleed bar.
+  cardWeb: { maxWidth: 720, alignSelf: "center", width: "100%" },
+  actionButtonWeb: { maxWidth: 360 },
+  // Empty roster-slot card (option F) carrying H's content/colors — a full-width
+  // rounded box with a solid 2px border, centered person-plus + label.
+  addButton: {
     width: "100%",
-    position: "relative",
-    height: 42,
+    minHeight: 60,
+    flexDirection: "row",
+    alignItems: "center",
+    justifyContent: "center",
+    gap: 12,
     borderWidth: 2,
+    borderRadius: 14,
   },
   evaluateButtonStyle: {
     width: "60%",
@@ -248,20 +310,9 @@ const styles = StyleSheet.create({
     shadowOpacity: 0.9,
     shadowRadius: 8,
   },
-  addIconCircle: {
-    width: 32,
-    height: 32,
-    borderRadius: 16,
-    alignItems: "center",
-    justifyContent: "center",
-
-    backgroundColor: OPTIONS_BG,
-    borderWidth: 2,
-    borderColor: OPTIONS_BORDER,
-  },
   addText: {
-    color: OPTIONS_CONTENT,
-    fontSize: 18,
+    fontSize: 14,
+    letterSpacing: 1,
     textTransform: "uppercase",
     fontWeight: 800,
   },

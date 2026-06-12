@@ -1,23 +1,13 @@
 import { Feather } from "@expo/vector-icons";
 import { useEffect, useState } from "react";
-import { Modal, StyleSheet, View } from "react-native";
+import { Modal, Pressable, StyleSheet, View } from "react-native";
 
-import {
-  BG_LAYOUT,
-  BORDER_DEFAULT,
-  ERROR_BG,
-  ERROR_BORDER,
-  ERROR_CONTENT,
-  OPTIONS_BG,
-  OPTIONS_BORDER,
-  OPTIONS_CONTENT,
-  TEXT_300,
-} from "../../../../../constants";
+import { BG_BUTTON, BG_LAYOUT, test, TEXT_300 } from "../../../../../constants";
 import { Error } from "../../../../../shared/components/Error";
 import { Loading } from "../../../../../shared/components/Loading";
+import { IS_WEB } from "../../../../../shared/layout/platform";
 import { Subtitle } from "../../../../../shared/typohraphy/Subtitle";
 import { CardWithHeader } from "../../../../../shared/ui/CardWithHeader";
-import { OptionButton } from "../../../../../shared/ui/OptionButton";
 import { TwoTypesHeader } from "../../../../../shared/ui/TwoTypesHeader";
 import { PokeTypeList } from "../../../../TypeSelection/components/PokeTypeList";
 import { useGetAllPokeTypesQuery } from "../../../../TypeSelection/query";
@@ -26,11 +16,75 @@ import { TeamMemberModel } from "../../../types";
 import { MemberIconSelection } from "./MemberIconSelection";
 import { MemberName } from "./MemberName";
 
+type PillTint = {
+  bgIdle: string;
+  bgActive: string;
+  border: string;
+  content: string;
+  glow: string;
+};
+
+const CONFIRM_TINT: PillTint = {
+  bgIdle: "rgba(27,197,190,0.12)",
+  bgActive: "rgba(27,197,190,0.22)",
+  border: "#1BC5BE",
+  content: "#bff0ed",
+  glow: "#1BC5BE",
+};
+
+const CANCEL_TINT: PillTint = {
+  bgIdle: "rgba(255,107,107,0.10)",
+  bgActive: "rgba(255,107,107,0.18)",
+  border: "rgba(255,107,107,0.55)",
+  content: "#ffb3b3",
+  glow: "#ff6b6b",
+};
+
+// Pill button with a soft glow on hover (web) / press (native). No icon circle.
+const PillButton = ({
+  label,
+  icon,
+  tint,
+  onPress,
+}: {
+  label: string;
+  icon: "check" | "x";
+  tint: PillTint;
+  onPress: () => void;
+}) => {
+  const [active, setActive] = useState(false);
+  return (
+    <Pressable
+      onPress={onPress}
+      onHoverIn={() => setActive(true)}
+      onHoverOut={() => setActive(false)}
+      onPressIn={() => setActive(true)}
+      onPressOut={() => setActive(false)}
+      style={[
+        styles.pill,
+        {
+          backgroundColor: active ? tint.bgActive : tint.bgIdle,
+          borderColor: tint.border,
+          shadowColor: tint.glow,
+          shadowOpacity: active ? 0.5 : 0,
+          shadowRadius: active ? 10 : 0,
+          shadowOffset: { width: 0, height: 0 },
+          elevation: active ? 6 : 0,
+        },
+      ]}
+    >
+      <Feather name={icon} size={18} color={tint.content} />
+      <Subtitle style={{ fontSize: 16, color: tint.content }}>{label}</Subtitle>
+    </Pressable>
+  );
+};
+
 type Props = {
   showModal: boolean;
   selectedMember: TeamMemberModel;
   onConfirm: (id: string, newMember: TeamMemberModel) => void;
   onClose: () => void;
+  isEdit?: boolean;
 };
 
 export const MemberDetails = ({
@@ -38,6 +92,7 @@ export const MemberDetails = ({
   selectedMember,
   onConfirm,
   onClose,
+  isEdit = false,
 }: Props) => {
   const [newMember, setNewMember] = useState<TeamMemberModel>(selectedMember);
   const { data, isLoading, isFetching, error, refetch } = useGetAllPokeTypesQuery();
@@ -94,15 +149,15 @@ export const MemberDetails = ({
       supportedOrientations={["landscape", "portrait"]}
     >
       <View style={styles.backdrop}>
-        <View style={styles.container}>
+        <View style={[styles.container, IS_WEB && styles.containerWeb]}>
           {isLoading || isFetching ? (
             <Loading />
           ) : error ? (
             <Error onRetry={refetch} />
           ) : (
             <CardWithHeader
-              title="Select typing"
-              subtitle="Choose up to two types for your team member"
+              title={isEdit ? "Edit member" : "New member"}
+              titleStyle={[styles.headerText, IS_WEB && styles.headerTextWeb]}
               style={{ gap: 12 }}
             >
               <View style={styles.content}>
@@ -134,31 +189,18 @@ export const MemberDetails = ({
                   selectedIconId={newMember.iconId}
                 ></MemberIconSelection>
                 <View style={styles.buttonsContainer}>
-                  <OptionButton
+                  <PillButton
+                    label="Confirm"
+                    icon="check"
+                    tint={CONFIRM_TINT}
                     onPress={confirm}
-                    style={styles.buttonStyle}
-                    type="options"
-                  >
-                    <View style={[styles.iconCircle, styles.iconCircleOptions]}>
-                      <Feather name="check" size={18} color={OPTIONS_CONTENT} />
-                    </View>
-                    <Subtitle
-                      style={{ fontSize: 16, fontWeight: 100, color: OPTIONS_CONTENT }}
-                    >
-                      Confirm
-                    </Subtitle>
-                  </OptionButton>
-
-                  <OptionButton onPress={cancel} style={styles.buttonStyle} type="error">
-                    <View style={[styles.iconCircle, styles.iconCircleError]}>
-                      <Feather name="x" size={18} color={ERROR_CONTENT} />
-                    </View>
-                    <Subtitle
-                      style={{ fontSize: 16, fontWeight: 100, color: ERROR_CONTENT }}
-                    >
-                      Cancel
-                    </Subtitle>
-                  </OptionButton>
+                  />
+                  <PillButton
+                    label="Cancel"
+                    icon="x"
+                    tint={CANCEL_TINT}
+                    onPress={cancel}
+                  />
                 </View>
               </View>
             </CardWithHeader>
@@ -184,6 +226,20 @@ const styles = StyleSheet.create({
     borderRadius: 10,
     width: "98%",
   },
+  containerWeb: { maxWidth: 520 },
+  // Title styled like the screen section headers (TeamBuilderHeader text).
+  headerText: {
+    fontSize: 22,
+    fontWeight: "600",
+    letterSpacing: 2.5,
+    textTransform: "uppercase",
+    marginVertical: 8,
+    color: TEXT_300,
+    textShadowColor: test,
+    textShadowOffset: { width: 1.5, height: 1.5 },
+    textShadowRadius: 1,
+  },
+  headerTextWeb: { fontFamily: "Inter_600SemiBold" },
   content: {
     gap: 12,
     paddingHorizontal: 12,
@@ -199,10 +255,7 @@ const styles = StyleSheet.create({
     overflow: "hidden",
     width: "100%",
     gap: 6,
-    backgroundColor: BG_LAYOUT,
-
-    borderWidth: 1,
-    borderColor: BORDER_DEFAULT,
+    backgroundColor: BG_BUTTON,
   },
   buttonsContainer: {
     flexDirection: "row",
@@ -213,27 +266,14 @@ const styles = StyleSheet.create({
     gap: 24,
     marginBottom: 12,
   },
-  buttonStyle: {
+  pill: {
     width: "40%",
-  },
-  iconCircle: {
-    width: 26,
-    height: 26,
-    borderRadius: 13,
+    height: 46,
+    flexDirection: "row",
     alignItems: "center",
     justifyContent: "center",
-    borderWidth: 1,
-  },
-  iconCircleOptions: {
-    backgroundColor: OPTIONS_BG,
-    borderColor: OPTIONS_BORDER,
-  },
-  iconCircleError: {
-    backgroundColor: ERROR_BG,
-    borderColor: ERROR_BORDER,
-  },
-  pressed: {
-    transform: [{ scale: 0.96 }],
-    opacity: 0.9,
+    gap: 9,
+    borderRadius: 999,
+    borderWidth: 1.5,
   },
 });
