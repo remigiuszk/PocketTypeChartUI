@@ -6,6 +6,7 @@ import {
   BORDER_SUGGESTIONS,
   TEXT_SUGGESTIONS,
 } from "../../../../../../constants";
+import { IS_WEB } from "../../../../../../shared/layout/platform";
 import { Subtitle } from "../../../../../../shared/typohraphy/Subtitle";
 import { OverviewRowData } from "../../../../services/overviewRows/types";
 import { OverviewRow } from "../overviewRow/OverviewRow";
@@ -17,7 +18,7 @@ type Props = {
 
 export const SuggestionsContainer = ({ style, suggestionRowData }: Props) => {
   return (
-    <View style={[styles.card, style]}>
+    <View style={[styles.card, IS_WEB && styles.cardWeb, style]}>
       <View style={[styles.headerContainer]}>
         <View style={[styles.textContainer]}>
           <MaterialIcons style={[styles.header]} name="lightbulb" size={32} />
@@ -53,6 +54,8 @@ const styles = StyleSheet.create({
     borderColor: BORDER_SUGGESTIONS,
     flex: 1,
   },
+  // On web the page scrolls (no bounded height); flex:1 makes this stretch.
+  cardWeb: { flexGrow: 0, flexShrink: 0, flexBasis: "auto" },
   separator: {
     height: 1,
     backgroundColor: BORDER_SUGGESTIONS,

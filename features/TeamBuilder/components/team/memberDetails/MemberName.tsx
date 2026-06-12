@@ -2,7 +2,7 @@ import { Feather } from "@expo/vector-icons";
 import { useEffect, useState } from "react";
 import { Pressable, StyleSheet, TextInput, View, ViewStyle } from "react-native";
 
-import { BG_LAYOUT, BORDER_DEFAULT, TEXT_100 } from "../../../../../constants";
+import { BG_BUTTON, TEXT_100 } from "../../../../../constants";
 
 type Props = {
   style?: ViewStyle | ViewStyle[];
@@ -46,15 +46,14 @@ const styles = StyleSheet.create({
     alignItems: "center",
   },
   wrapper: {
-    borderWidth: 1,
-    borderColor: BORDER_DEFAULT,
     borderRadius: 16,
     width: "65%",
     flexDirection: "row",
     alignItems: "center",
     textAlign: "center",
     paddingHorizontal: 12,
-    backgroundColor: BG_LAYOUT,
+    paddingVertical: 8,
+    backgroundColor: BG_BUTTON,
   },
   input: {
     flex: 1,

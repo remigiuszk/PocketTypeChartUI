@@ -111,3 +111,9 @@ export const MORE_DETAILS_SUPER_EFF: string = "Super-effective to:";
 export const MORE_DETAILS_NOT_VERY_EFF: string = "Not very effective to:";
 export const MORE_DETAILS_NO_EFF: string = "No effect on: ";
 export const MORE_DETAILS_NO_COVERAGE: string = "No coverage to:";
+
+// Web footer "get the app" promotion. TODO: replace with the real store listing
+// URLs once the app is published.
+export const APP_AD_TAGLINE: string = "Prefer it on your phone? Get the native app.";
+export const APP_STORE_URL: string = "#"; // TODO: App Store listing URL
+export const PLAY_STORE_URL: string = "#"; // TODO: Google Play listing URL

@@ -1,14 +1,14 @@
 import { useMemo, useState } from "react";
-import { ScrollView, StyleSheet, View } from "react-native";
+import { StyleSheet, View } from "react-native";
 
-import { BG_ROOT } from "../constants";
 import { Relations } from "../features/DamageRelations/components/Relations";
 import { PokeTypeList } from "../features/TypeSelection/components/PokeTypeList";
 import { useGetAllPokeTypesQuery } from "../features/TypeSelection/query";
 import { PokeTypeModel } from "../features/TypeSelection/types";
-import { NavBar } from "../shared/components/NavBar";
+import { ContentScroll } from "../shared/components/ContentScroll";
 import { NoTypesSelected } from "../shared/components/NoTypesSelected";
-import { TopBar } from "../shared/components/TopBar";
+import { Screen } from "../shared/components/Screen";
+import { IS_WEB } from "../shared/layout/platform";
 import { TeamBuilderHeader } from "../shared/typohraphy/TeamBuilderHeader";
 
 type Props = {
@@ -43,12 +43,13 @@ export const Typing = ({ switchViews }: Props) => {
   }
 
   return (
-    <View style={styles.container}>
-      <TopBar
-        typesSelected={selectedType && selectedType.length > 0}
-        clearSelection={clearSelection}
-      ></TopBar>
-      <View style={{ margin: 12, marginBottom: 0, flex: 1, gap: 16 }}>
+    <Screen
+      teamBuilderOpen={false}
+      switchViews={switchViews}
+      typesSelected={selectedType && selectedType.length > 0}
+      clearSelection={clearSelection}
+    >
+      <View style={[styles.content, !IS_WEB && styles.contentNative]}>
         <View style={styles.typesContainer}>
           <TeamBuilderHeader
             title="TYPE CHART"
@@ -65,22 +66,19 @@ export const Typing = ({ switchViews }: Props) => {
           />
         </View>
         {selectedType.length > 0 ? (
-          <ScrollView>
+          <ContentScroll>
             <Relations selectedTypes={normalizedSelected}></Relations>
-          </ScrollView>
+          </ContentScroll>
         ) : (
           data && data.length > 0 && <NoTypesSelected></NoTypesSelected>
         )}
       </View>
-      <NavBar switchViews={switchViews} teamBuilderOpen={false}></NavBar>
-    </View>
+    </Screen>
   );
 };
 
 const styles = StyleSheet.create({
-  container: {
-    backgroundColor: BG_ROOT,
-    flex: 1,
-  },
+  content: { margin: 12, marginBottom: 0, gap: 16 },
+  contentNative: { flex: 1 },
   typesContainer: { alignItems: "stretch", gap: 6 },
 });

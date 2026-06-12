@@ -6,6 +6,7 @@ import {
   BORDER_STRENGTHS,
   TEXT_STRENGTHS,
 } from "../../../../../../constants";
+import { IS_WEB } from "../../../../../../shared/layout/platform";
 import { Subtitle } from "../../../../../../shared/typohraphy/Subtitle";
 import { OverviewRowData } from "../../../../services/overviewRows/types";
 import { OverviewRow } from "../overviewRow/OverviewRow";
@@ -17,7 +18,7 @@ type Props = {
 
 export const StrengthsContainer = ({ style, strengthRowData }: Props) => {
   return (
-    <View style={[styles.card, style]}>
+    <View style={[styles.card, IS_WEB && styles.cardWeb, style]}>
       <View style={[styles.headerContainer]}>
         <View style={[styles.textContainer]}>
           <MaterialIcons style={[styles.header]} name="catching-pokemon" size={32} />
@@ -53,6 +54,8 @@ const styles = StyleSheet.create({
     borderColor: BORDER_STRENGTHS,
     flex: 1,
   },
+  // On web the page scrolls (no bounded height); flex:1 collapses the card.
+  cardWeb: { flexGrow: 0, flexShrink: 0, flexBasis: "auto" },
   separator: {
     height: 1,
     backgroundColor: BORDER_STRENGTHS,
