@@ -90,17 +90,7 @@ export const OVERVIEW_STRINGS = {
 
 export const HINT_HEADER_DEFAULT: string = "Why is this important?";
 
-export const ALERT_CANT_CREATE_MEMBER_TITLE: string = "Cannot create a team member";
-export const ALERT_CANT_CREATE_NO_TYPES: string =
-  "Cannot create a team member with no types, please select at least one type and try again.";
-export const ALERT_CANT_CREATE_NO_NAME: string =
-  "Cannot create a team member with no name, please input a name and try again.";
-export const ALERT_CANT_CREATE_NAME_EXISTS: string =
-  "Specified team member name already exists in your team. Select a different name and try again.";
 
-export const ALERT_CANT_ANALYZE_TITLE: string = "Cannot procceed to team analysis";
-export const ALERT_CANT_ANALYZE_CONTENT: string =
-  "Cannot procceed to team analysis, there are not enough team members selected. Please select typing of at least two team members to procceed.";
 
 export const MORE_DETAILS_VULN: string = "No. of vulnerabilities";
 export const MORE_DETAILS_RESISTANCES: string = "No. of resistances";

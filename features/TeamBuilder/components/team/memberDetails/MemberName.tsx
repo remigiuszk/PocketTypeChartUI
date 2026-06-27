@@ -2,15 +2,16 @@ import { Feather } from "@expo/vector-icons";
 import { useEffect, useState } from "react";
 import { Pressable, StyleSheet, TextInput, View, ViewStyle } from "react-native";
 
-import { BG_BUTTON, TEXT_100 } from "../../../../../constants";
+import { BG_BUTTON, ERROR_CONTENT, TEXT_100 } from "../../../../../constants";
 
 type Props = {
   style?: ViewStyle | ViewStyle[];
   memberName: string;
+  hasError?: boolean;
   onNameChange: (name: string) => void;
 };
 
-export const MemberName = ({ style, memberName, onNameChange }: Props) => {
+export const MemberName = ({ style, memberName, hasError, onNameChange }: Props) => {
   const [localName, setLocalName] = useState(memberName);
 
   useEffect(() => {
@@ -23,11 +24,13 @@ export const MemberName = ({ style, memberName, onNameChange }: Props) => {
 
   return (
     <View style={[styles.container, style]}>
-      <Pressable style={styles.wrapper}>
+      <Pressable style={[styles.wrapper, hasError && styles.wrapperError]}>
         <View style={{ width: 18 }} />
         <TextInput
           style={styles.input}
           value={localName}
+          placeholder="Enter member name"
+          placeholderTextColor="#4e4e62"
           onChangeText={setLocalName}
           onBlur={commitChange}
           onEndEditing={commitChange}
@@ -54,10 +57,15 @@ const styles = StyleSheet.create({
     paddingHorizontal: 12,
     paddingVertical: 8,
     backgroundColor: BG_BUTTON,
+    borderWidth: 1,
+    borderColor: "transparent",
+  },
+  wrapperError: {
+    borderColor: ERROR_CONTENT,
   },
   input: {
     flex: 1,
-    fontWeight: "400",
+    fontWeight: "300",
     fontFamily: "System",
     textAlign: "center",
     color: TEXT_100,

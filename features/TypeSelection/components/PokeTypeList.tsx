@@ -1,7 +1,7 @@
 import { SerializedError } from "@reduxjs/toolkit";
 import { FetchBaseQueryError } from "@reduxjs/toolkit/query";
-import { useEffect, useState } from "react";
-import { FlatList, StyleSheet, View } from "react-native";
+import { useState } from "react";
+import { Dimensions, FlatList, StyleSheet, View } from "react-native";
 
 import { Error } from "../../../shared/components/Error";
 import { Loading } from "../../../shared/components/Loading";
@@ -19,13 +19,8 @@ type PokeTypeListProps = {
   onToggle: (pokeType: PokeTypeModel) => void;
 };
 
-// Target tile width on web; the column count is derived from how many of these
-// fit the available width.
 const WEB_TARGET_TILE_WIDTH = 150;
 
-// Pick a column count that divides `count` evenly (so every row has the same
-// number of tiles) and is no wider than `maxCols`. Falls back to maxCols if the
-// count has no suitable divisor (e.g. a prime count).
 const balancedColumns = (count: number, maxCols: number): number => {
   const cap = Math.max(2, maxCols);
   let best = 1;
@@ -44,13 +39,10 @@ export const PokeTypeList = ({
   refetch,
   onToggle,
 }: PokeTypeListProps) => {
-  const [selectedTypes, setSelectedTypes] = useState<PokeTypeModel[]>([]);
-  // Available width measured on web; used to derive a balanced column count.
-  const [availWidth, setAvailWidth] = useState<number | null>(null);
-
-  useEffect(() => {
-    setSelectedTypes(memberTypes ?? []);
-  }, [memberTypes]);
+  const selectedTypes = memberTypes ?? [];
+  const [availWidth, setAvailWidth] = useState<number>(
+    () => Dimensions.get("window").width,
+  );
 
   const types = data ?? [];
 
@@ -63,17 +55,10 @@ export const PokeTypeList = ({
   );
 
   let webGrid = null;
-  if (IS_WEB && availWidth !== null && types.length > 0) {
+  if (IS_WEB && types.length > 0) {
     const fit = Math.max(2, Math.floor(availWidth / WEB_TARGET_TILE_WIDTH));
     const columns = balancedColumns(types.length, fit);
-    // Keep tiles at the target size (shrinking only if the row wouldn't fit), so
-    // the grid is exactly columns * tileWidth wide and stays centered/narrower.
-    const tileWidth = Math.min(
-      WEB_TARGET_TILE_WIDTH,
-      Math.floor(availWidth / columns),
-    );
-    // Grid is exactly as wide as its rows, centered — so it shrinks to fit the
-    // balanced layout instead of stretching the section's full width.
+    const tileWidth = Math.min(WEB_TARGET_TILE_WIDTH, Math.floor(availWidth / columns));
     webGrid = (
       <View style={[styles.webGrid, { width: tileWidth * columns }]}>
         {types.map((item) => (

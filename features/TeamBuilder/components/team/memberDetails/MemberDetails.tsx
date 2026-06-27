@@ -1,13 +1,23 @@
-import { Feather } from "@expo/vector-icons";
 import { useEffect, useState } from "react";
-import { Modal, Pressable, StyleSheet, View } from "react-native";
+import { Keyboard, Modal, StyleSheet, Text, TouchableWithoutFeedback, View } from "react-native";
 
-import { BG_BUTTON, BG_LAYOUT, test, TEXT_300 } from "../../../../../constants";
+import {
+  BG_BUTTON,
+  BG_LAYOUT,
+  ERROR_CONTENT,
+  TEXT_300,
+  TEXT_SHADOW,
+} from "../../../../../constants";
 import { Error } from "../../../../../shared/components/Error";
 import { Loading } from "../../../../../shared/components/Loading";
 import { IS_WEB } from "../../../../../shared/layout/platform";
 import { Subtitle } from "../../../../../shared/typohraphy/Subtitle";
 import { CardWithHeader } from "../../../../../shared/ui/CardWithHeader";
+import {
+  CANCEL_TINT,
+  CONFIRM_TINT,
+  PillButton,
+} from "../../../../../shared/ui/PillButton";
 import { TwoTypesHeader } from "../../../../../shared/ui/TwoTypesHeader";
 import { PokeTypeList } from "../../../../TypeSelection/components/PokeTypeList";
 import { useGetAllPokeTypesQuery } from "../../../../TypeSelection/query";
@@ -16,73 +26,12 @@ import { TeamMemberModel } from "../../../types";
 import { MemberIconSelection } from "./MemberIconSelection";
 import { MemberName } from "./MemberName";
 
-type PillTint = {
-  bgIdle: string;
-  bgActive: string;
-  border: string;
-  content: string;
-  glow: string;
-};
-
-const CONFIRM_TINT: PillTint = {
-  bgIdle: "rgba(27,197,190,0.12)",
-  bgActive: "rgba(27,197,190,0.22)",
-  border: "#1BC5BE",
-  content: "#bff0ed",
-  glow: "#1BC5BE",
-};
-
-const CANCEL_TINT: PillTint = {
-  bgIdle: "rgba(255,107,107,0.10)",
-  bgActive: "rgba(255,107,107,0.18)",
-  border: "rgba(255,107,107,0.55)",
-  content: "#ffb3b3",
-  glow: "#ff6b6b",
-};
-
-// Pill button with a soft glow on hover (web) / press (native). No icon circle.
-const PillButton = ({
-  label,
-  icon,
-  tint,
-  onPress,
-}: {
-  label: string;
-  icon: "check" | "x";
-  tint: PillTint;
-  onPress: () => void;
-}) => {
-  const [active, setActive] = useState(false);
-  return (
-    <Pressable
-      onPress={onPress}
-      onHoverIn={() => setActive(true)}
-      onHoverOut={() => setActive(false)}
-      onPressIn={() => setActive(true)}
-      onPressOut={() => setActive(false)}
-      style={[
-        styles.pill,
-        {
-          backgroundColor: active ? tint.bgActive : tint.bgIdle,
-          borderColor: tint.border,
-          shadowColor: tint.glow,
-          shadowOpacity: active ? 0.5 : 0,
-          shadowRadius: active ? 10 : 0,
-          shadowOffset: { width: 0, height: 0 },
-          elevation: active ? 6 : 0,
-        },
-      ]}
-    >
-      <Feather name={icon} size={18} color={tint.content} />
-      <Subtitle style={{ fontSize: 16, color: tint.content }}>{label}</Subtitle>
-    </Pressable>
-  );
-};
+type ValidationError = { field: "name" | "types"; message: string };
 
 type Props = {
   showModal: boolean;
   selectedMember: TeamMemberModel;
-  onConfirm: (id: string, newMember: TeamMemberModel) => void;
+  onConfirm: (id: string, newMember: TeamMemberModel) => ValidationError | null;
   onClose: () => void;
   isEdit?: boolean;
 };
@@ -95,10 +44,12 @@ export const MemberDetails = ({
   isEdit = false,
 }: Props) => {
   const [newMember, setNewMember] = useState<TeamMemberModel>(selectedMember);
+  const [validationError, setValidationError] = useState<ValidationError | null>(null);
   const { data, isLoading, isFetching, error, refetch } = useGetAllPokeTypesQuery();
 
   useEffect(() => {
     setNewMember(selectedMember);
+    setValidationError(null);
   }, [selectedMember]);
 
   function toggleType(type: PokeTypeModel) {
@@ -112,10 +63,20 @@ export const MemberDetails = ({
       }
       return { ...prev, types: [...prev.types, type] };
     });
+    if (validationError?.field === "types") setValidationError(null);
   }
 
   function confirm() {
-    onConfirm(selectedMember.id, newMember);
+    if (newMember.types.length === 0) {
+      setValidationError({ field: "types", message: "Please select at least one type." });
+      return;
+    }
+    if (newMember.name.trim().length === 0) {
+      setValidationError({ field: "name", message: "Please enter a name." });
+      return;
+    }
+    const result = onConfirm(selectedMember.id, newMember);
+    if (result) setValidationError(result);
   }
 
   function cancel() {
@@ -123,21 +84,16 @@ export const MemberDetails = ({
   }
 
   function onNameChange(name: string) {
-    setNewMember((prev) => {
-      return { ...prev, name: name };
-    });
+    setNewMember((prev) => ({ ...prev, name }));
+    if (validationError?.field === "name") setValidationError(null);
   }
 
   function onColorSelected(color: string) {
-    setNewMember((prev) => {
-      return { ...prev, iconColor: color };
-    });
+    setNewMember((prev) => ({ ...prev, iconColor: color }));
   }
 
   function onIconSelected(iconId: string) {
-    setNewMember((prev) => {
-      return { ...prev, iconId: iconId };
-    });
+    setNewMember((prev) => ({ ...prev, iconId: iconId }));
   }
 
   return (
@@ -148,6 +104,7 @@ export const MemberDetails = ({
       statusBarTranslucent={true}
       supportedOrientations={["landscape", "portrait"]}
     >
+      <TouchableWithoutFeedback onPress={Keyboard.dismiss} accessible={false}>
       <View style={styles.backdrop}>
         <View style={[styles.container, IS_WEB && styles.containerWeb]}>
           {isLoading || isFetching ? (
@@ -161,10 +118,14 @@ export const MemberDetails = ({
               style={{ gap: 12 }}
             >
               <View style={styles.content}>
+                {validationError?.field === "name" && (
+                  <Text style={styles.errorText}>{validationError.message}</Text>
+                )}
                 <MemberName
                   onNameChange={onNameChange}
                   memberName={newMember.name}
-                ></MemberName>
+                  hasError={validationError?.field === "name"}
+                />
                 <PokeTypeList
                   memberTypes={newMember.types}
                   data={data}
@@ -173,27 +134,36 @@ export const MemberDetails = ({
                   error={error}
                   refetch={refetch}
                   onToggle={toggleType}
-                ></PokeTypeList>
-                <View style={styles.selectedContainer}>
+                />
+                {validationError?.field === "types" && (
+                  <Text style={styles.errorText}>{validationError.message}</Text>
+                )}
+                <View
+                  style={[
+                    styles.selectedContainer,
+                    validationError?.field === "types" && styles.selectedContainerError,
+                  ]}
+                >
                   <Subtitle style={{ color: TEXT_300 }}>Currently selected:</Subtitle>
                   <TwoTypesHeader
                     imageHeight={20}
                     message=""
                     sprites={newMember.types.map((x) => x.sprite)}
-                  ></TwoTypesHeader>
+                  />
                 </View>
                 <MemberIconSelection
                   onColorSelected={onColorSelected}
                   onIconSelected={onIconSelected}
                   selectedColor={newMember.iconColor}
                   selectedIconId={newMember.iconId}
-                ></MemberIconSelection>
+                />
                 <View style={styles.buttonsContainer}>
                   <PillButton
                     label="Confirm"
                     icon="check"
                     tint={CONFIRM_TINT}
                     onPress={confirm}
+                    disabled={validationError !== null}
                   />
                   <PillButton
                     label="Cancel"
@@ -207,6 +177,7 @@ export const MemberDetails = ({
           )}
         </View>
       </View>
+      </TouchableWithoutFeedback>
     </Modal>
   );
 };
@@ -227,7 +198,6 @@ const styles = StyleSheet.create({
     width: "98%",
   },
   containerWeb: { maxWidth: 520 },
-  // Title styled like the screen section headers (TeamBuilderHeader text).
   headerText: {
     fontSize: 22,
     fontWeight: "600",
@@ -235,7 +205,7 @@ const styles = StyleSheet.create({
     textTransform: "uppercase",
     marginVertical: 8,
     color: TEXT_300,
-    textShadowColor: test,
+    textShadowColor: TEXT_SHADOW,
     textShadowOffset: { width: 1.5, height: 1.5 },
     textShadowRadius: 1,
   },
@@ -244,6 +214,12 @@ const styles = StyleSheet.create({
     gap: 12,
     paddingHorizontal: 12,
     justifyContent: "center",
+  },
+  errorText: {
+    color: ERROR_CONTENT,
+    fontSize: 12,
+    textAlign: "center",
+    marginBottom: -4,
   },
   selectedContainer: {
     flexDirection: "row",
@@ -256,6 +232,11 @@ const styles = StyleSheet.create({
     width: "100%",
     gap: 6,
     backgroundColor: BG_BUTTON,
+    borderWidth: 1,
+    borderColor: "transparent",
+  },
+  selectedContainerError: {
+    borderColor: ERROR_CONTENT,
   },
   buttonsContainer: {
     flexDirection: "row",
@@ -265,15 +246,5 @@ const styles = StyleSheet.create({
     width: "100%",
     gap: 24,
     marginBottom: 12,
-  },
-  pill: {
-    width: "40%",
-    height: 46,
-    flexDirection: "row",
-    alignItems: "center",
-    justifyContent: "center",
-    gap: 9,
-    borderRadius: 999,
-    borderWidth: 1.5,
   },
 });

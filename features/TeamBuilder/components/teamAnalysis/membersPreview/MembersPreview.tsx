@@ -1,14 +1,13 @@
 import { Feather, FontAwesome6 } from "@expo/vector-icons";
 import { LinearGradient } from "expo-linear-gradient";
-import { useRef, useState } from "react";
-import { Pressable, ScrollView, StyleSheet, View, ViewStyle } from "react-native";
+import { useEffect, useRef, useState } from "react";
+import { Animated, Pressable, ScrollView, StyleSheet, View, ViewStyle } from "react-native";
 
 import {
   BG_LAYOUT,
   EVALUATE_BACKGROUND,
   OPTIONS_BG,
   OPTIONS_BORDER,
-  OPTIONS_CONTENT,
 } from "../../../../../constants";
 import { IS_WEB } from "../../../../../shared/layout/platform";
 import { Subtitle } from "../../../../../shared/typohraphy/Subtitle";
@@ -26,6 +25,7 @@ const SCROLL_STEP = 180;
 
 export const MembersPreview = ({ style, teamMembers, onChangeTeam }: Props) => {
   const scrollRef = useRef<ScrollView>(null);
+  const [scale] = useState(() => new Animated.Value(1));
   const [scrollX, setScrollX] = useState(0);
   const [contentWidth, setContentWidth] = useState(0);
   const [viewWidth, setViewWidth] = useState(0);
@@ -48,16 +48,29 @@ export const MembersPreview = ({ style, teamMembers, onChangeTeam }: Props) => {
         )
       : 0;
 
+  useEffect(() => {
+    const pulse = Animated.loop(
+      Animated.sequence([
+        Animated.timing(scale, { toValue: 1.015, duration: 600, useNativeDriver: true }),
+        Animated.timing(scale, { toValue: 1, duration: 600, useNativeDriver: true }),
+      ]),
+    );
+    pulse.start();
+    return () => pulse.stop();
+  }, [scale]);
+
   return (
     <View style={[styles.container, style]}>
-      <OptionButton
-        style={[styles.buttonStyle, IS_WEB && styles.buttonStyleWeb]}
-        onPress={onChangeTeam}
-        type="info"
-      >
-        <FontAwesome6 name="arrows-rotate" size={15} color="#FFFFFF" />
-        <Subtitle style={styles.addText}>change team</Subtitle>
-      </OptionButton>
+      <Animated.View style={{ transform: [{ scale }] }}>
+        <OptionButton
+          style={[styles.buttonStyle, IS_WEB && styles.buttonStyleWeb]}
+          onPress={onChangeTeam}
+          type="info"
+        >
+          <FontAwesome6 name="arrows-rotate" size={15} color="#FFFFFF" style={styles.icon} />
+          <Subtitle style={styles.addText}>change team</Subtitle>
+        </OptionButton>
+      </Animated.View>
       <View style={styles.membersContainer}>
         <View style={{ position: "relative" }}>
           <ScrollView
@@ -158,21 +171,28 @@ const styles = StyleSheet.create({
     borderWidth: 2,
     borderColor: OPTIONS_BORDER,
   },
+  icon: {
+    textShadowColor: "rgba(0,0,0,0.8)",
+    textShadowOffset: { width: 0, height: 1 },
+    textShadowRadius: 3,
+  },
   addText: {
     color: "#FFFFFF",
     fontSize: 14,
     fontWeight: "800",
     letterSpacing: 0.8,
     textTransform: "uppercase",
-    textShadowColor: "#000000",
-    textShadowOffset: { width: 2, height: 2 },
-    textShadowRadius: 10,
+    textShadowColor: "rgba(0,0,0,0.8)",
+    textShadowOffset: { width: 0, height: 1 },
+    textShadowRadius: 3,
   },
   buttonStyle: {
-    width: "60%",
+    width: "40%",
     height: 36,
     alignSelf: "flex-start",
+    marginTop: 8,
     marginBottom: 6,
+    marginLeft: 8,
     backgroundColor: EVALUATE_BACKGROUND,
     borderRadius: 14,
     shadowColor: "black",

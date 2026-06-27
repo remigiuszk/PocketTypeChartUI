@@ -34,12 +34,7 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     margin: 3,
-    // On native, Yoga lets aspectRatio override an explicit height: 0. On web,
-    // react-native-web maps aspectRatio to CSS aspect-ratio, which is ignored
-    // when height is a definite 0 — leaving the box (and image) collapsed.
     height: Platform.OS === "web" ? undefined : 0,
-    // Tile width is now bounded by the centered page container + responsive
-    // column count (see PokeTypeList), so no per-tile maxWidth cap is needed.
     borderRadius: 6,
     overflow: "hidden",
     shadowColor: "#000000",

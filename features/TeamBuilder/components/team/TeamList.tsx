@@ -4,12 +4,6 @@ import { useEffect, useRef, useState } from "react";
 import { Animated, Pressable, StyleSheet } from "react-native";
 
 import {
-  ALERT_CANT_ANALYZE_CONTENT,
-  ALERT_CANT_ANALYZE_TITLE,
-  ALERT_CANT_CREATE_MEMBER_TITLE,
-  ALERT_CANT_CREATE_NAME_EXISTS,
-  ALERT_CANT_CREATE_NO_NAME,
-  ALERT_CANT_CREATE_NO_TYPES,
   BORDER_DEFAULT,
   BORDER_INTERNAL,
   EVALUATE_BACKGROUND,
@@ -26,7 +20,6 @@ import { TeamMemberModel } from "../../types";
 import { MemberDetails } from "./memberDetails/MemberDetails";
 import { TeamMember } from "./TeamMember";
 
-// "Add a new member" underline-tab colors (idle vs hover/press).
 const ADD_IDLE = "#9fd3d0";
 const ADD_ACTIVE = "#cdeeec";
 const ADD_BORDER_IDLE = "#2f4f53";
@@ -39,12 +32,7 @@ type Props = {
 export const TeamList = ({ onAnalyze }: Props) => {
   const [showModal, setShowModal] = useState<boolean>(false);
   const [memberToDelete, setMemberToDelete] = useState<TeamMemberModel | null>(null);
-  const [alertInfo, setAlertInfo] = useState<{ title: string; message: string } | null>(
-    null,
-  );
-  // Hover (web) / press (native) state for the add-member underline tab.
   const [addActive, setAddActive] = useState<boolean>(false);
-  // Whether the details modal was opened to edit an existing member vs add new.
   const [isEditing, setIsEditing] = useState<boolean>(false);
   const [teamMembers, setTeamMembers] = useState<TeamMemberModel[]>([]);
   const [selectedMember, setSelectedMember] = useState<TeamMemberModel>({
@@ -56,12 +44,12 @@ export const TeamList = ({ onAnalyze }: Props) => {
   });
 
   const didLoad = useRef(false);
-  const scale = useRef(new Animated.Value(1)).current;
+  const [scale] = useState(() => new Animated.Value(1));
 
   function addMember() {
     const newMember: TeamMemberModel = {
       id: Crypto.randomUUID(),
-      name: "Team member #" + (teamMembers.length + 1),
+      name: "",
       types: [],
       iconId: MEMBER_ICONS[0].id,
       iconColor: MEMBERS_COLORS[0],
@@ -92,17 +80,13 @@ export const TeamList = ({ onAnalyze }: Props) => {
     setMemberToDelete(null);
   }
 
-  function onConfirm(id: string, newMember: TeamMemberModel) {
-    const validationResult = validateMember(newMember);
-
-    if (validationResult.length > 0) {
-      setAlertInfo({
-        title: ALERT_CANT_CREATE_MEMBER_TITLE,
-        message: validationResult,
-      });
-      return;
+  function onConfirm(
+    id: string,
+    newMember: TeamMemberModel,
+  ): { field: "name" | "types"; message: string } | null {
+    if (teamMembers.some((x) => x.name === newMember.name && x.id !== newMember.id)) {
+      return { field: "name", message: "This name is already taken by another team member." };
     }
-
     setTeamMembers((prev) => {
       if (prev.some((x) => x.id === id)) {
         return prev.map((member) =>
@@ -119,27 +103,12 @@ export const TeamList = ({ onAnalyze }: Props) => {
       } else return [...prev, newMember];
     });
     setShowModal(false);
-  }
-
-  function validateMember(newMember: TeamMemberModel): string {
-    if (newMember.types.length === 0) return ALERT_CANT_CREATE_NO_TYPES;
-
-    if (newMember.name.length === 0) return ALERT_CANT_CREATE_NO_NAME;
-
-    if (teamMembers.some((x) => x.name === newMember.name && x.id !== newMember.id))
-      return ALERT_CANT_CREATE_NAME_EXISTS;
-
-    return "";
+    return null;
   }
 
   function analyze() {
-    if (teamMembers && teamMembers.length > 1) {
+    if (teamMembers.length >= 3) {
       onAnalyze(teamMembers);
-    } else {
-      setAlertInfo({
-        title: ALERT_CANT_ANALYZE_TITLE,
-        message: ALERT_CANT_ANALYZE_CONTENT,
-      });
     }
   }
 
@@ -180,15 +149,7 @@ export const TeamList = ({ onAnalyze }: Props) => {
 
   return (
     <Card style={[styles.card, IS_WEB && styles.cardWeb]}>
-      <ConfirmModal
-        visible={alertInfo !== null}
-        title={alertInfo?.title ?? ""}
-        message={alertInfo?.message ?? ""}
-        confirmLabel="OK"
-        singleButton={true}
-        onConfirm={() => setAlertInfo(null)}
-        onCancel={() => setAlertInfo(null)}
-      ></ConfirmModal>
+
       <MemberDetails
         onClose={() => setShowModal(false)}
         onConfirm={(id: string, newMember: TeamMemberModel) => onConfirm(id, newMember)}
@@ -215,34 +176,38 @@ export const TeamList = ({ onAnalyze }: Props) => {
         />
       ))}
       {teamMembers.length < 6 && (
-        <Pressable
-          onPress={addMember}
-          onHoverIn={() => setAddActive(true)}
-          onHoverOut={() => setAddActive(false)}
-          onPressIn={() => setAddActive(true)}
-          onPressOut={() => setAddActive(false)}
-          hitSlop={8}
-          style={[
-            styles.addButton,
-            {
-              borderColor: addActive ? ADD_BORDER_ACTIVE : ADD_BORDER_IDLE,
-              backgroundColor: addActive
-                ? "rgba(27,197,190,0.06)"
-                : "rgba(255,255,255,0.012)",
-            },
-          ]}
-        >
-          <Feather
-            name="user-plus"
-            size={22}
-            color={addActive ? ADD_ACTIVE : ADD_IDLE}
-          />
-          <Subtitle style={[styles.addText, { color: addActive ? ADD_ACTIVE : ADD_IDLE }]}>
-            Add a new member
-          </Subtitle>
-        </Pressable>
+        <Animated.View style={{ transform: [{ scale }] }}>
+          <Pressable
+            onPress={addMember}
+            onHoverIn={() => setAddActive(true)}
+            onHoverOut={() => setAddActive(false)}
+            onPressIn={() => setAddActive(true)}
+            onPressOut={() => setAddActive(false)}
+            hitSlop={8}
+            style={[
+              styles.addButton,
+              {
+                borderColor: addActive ? ADD_BORDER_ACTIVE : ADD_BORDER_IDLE,
+                backgroundColor: addActive
+                  ? "rgba(27,197,190,0.06)"
+                  : "rgba(255,255,255,0.012)",
+              },
+            ]}
+          >
+            <Feather
+              name="user-plus"
+              size={22}
+              color={addActive ? ADD_ACTIVE : ADD_IDLE}
+            />
+            <Subtitle
+              style={[styles.addText, { color: addActive ? ADD_ACTIVE : ADD_IDLE }]}
+            >
+              Add a new member
+            </Subtitle>
+          </Pressable>
+        </Animated.View>
       )}
-      {teamMembers.length > 1 ? (
+      {teamMembers.length >= 3 ? (
         <Animated.View style={{ transform: [{ scale }] }}>
           <OptionButton
             onPress={analyze}
@@ -268,11 +233,8 @@ export const TeamList = ({ onAnalyze }: Props) => {
 
 const styles = StyleSheet.create({
   card: { padding: 8 },
-  // Keep the team list a card on wide web screens instead of a full-bleed bar.
   cardWeb: { maxWidth: 720, alignSelf: "center", width: "100%" },
   actionButtonWeb: { maxWidth: 360 },
-  // Empty roster-slot card (option F) carrying H's content/colors — a full-width
-  // rounded box with a solid 2px border, centered person-plus + label.
   addButton: {
     width: "100%",
     minHeight: 60,
@@ -322,10 +284,9 @@ const styles = StyleSheet.create({
     fontWeight: "800",
     letterSpacing: 0.8,
 
-    // outline
-    textShadowColor: "#000000",
-    textShadowOffset: { width: 2, height: 2 },
-    textShadowRadius: 10,
+    textShadowColor: "rgba(0,0,0,0.8)",
+    textShadowOffset: { width: 0, height: 1 },
+    textShadowRadius: 3,
   },
   inactiveText: {
     color: BORDER_DEFAULT,

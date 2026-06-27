@@ -17,10 +17,6 @@ type Props = {
 
 const SCROLL_STEP = 180;
 
-// A horizontal list that scrolls. On web a mouse wheel won't scroll it
-// horizontally, so the edge gradients become clickable scroll buttons — the left
-// one only appears once the list has been scrolled away from the start. On native
-// the list scrolls by touch and shows a static right-edge hint.
 const ScrollableRow = ({ children }: { children: ReactNode }) => {
   const scrollRef = useRef<ScrollView>(null);
   const [scrollX, setScrollX] = useState(0);
@@ -137,10 +133,7 @@ export const MemberIconSelection = ({
           {MEMBERS_COLORS.map((color) => {
             return (
               <Pressable
-                style={[
-                  styles.itemContainer,
-                  selectedColor === color && styles.selected,
-                ]}
+                style={[styles.itemContainer, selectedColor === color && styles.selected]}
                 key={color}
                 onPress={() => selectColor(color)}
               >
@@ -189,8 +182,6 @@ const styles = StyleSheet.create({
   scrollRow: {
     position: "relative",
   },
-  // Bound the row to the popup width on web so the horizontal list scrolls
-  // inside the modal instead of overflowing past its edges.
   scrollRowWeb: {
     width: "100%",
     maxWidth: "100%",
@@ -198,7 +189,7 @@ const styles = StyleSheet.create({
   },
   scrollContent: {
     paddingHorizontal: 8,
-    paddingRight: 32, // miejsce żeby ostatni element nie był pod gradientem
+    paddingRight: 32,
     alignItems: "center",
   },
   scrollHint: {
