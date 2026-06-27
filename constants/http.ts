@@ -1,4 +1,7 @@
-export const BASE_URL: string = "http://192.168.100.10:5062/api"; // victus
+import { Platform } from "react-native";
+
+export const BASE_URL: string =
+  Platform.OS === "web" ? "http://localhost:5062/api" : "http://192.168.100.10:5062/api"; // victus
 
 //export const BASE_URL: string = "http://192.168.100.4:5062/api";
 //export const BASE_URL: string =
