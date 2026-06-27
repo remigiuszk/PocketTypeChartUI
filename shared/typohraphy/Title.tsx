@@ -2,11 +2,12 @@ import { StyleSheet, Text, View } from "react-native";
 
 import { TITLE_FONT_SIZE } from "../../constants";
 import { TEXT_500 } from "../../constants/colors";
+import { IS_WEB } from "../layout/platform";
 
 export const Title = ({ children }: any) => {
   return (
     <View style={styles.container}>
-      <Text style={styles.text}>{children}</Text>
+      <Text style={[styles.text, IS_WEB && styles.textWeb]}>{children}</Text>
     </View>
   );
 };
@@ -22,4 +23,5 @@ const styles = StyleSheet.create({
     letterSpacing: 1.5,
     textTransform: "uppercase",
   },
+  textWeb: { fontFamily: "Inter_600SemiBold" },
 });

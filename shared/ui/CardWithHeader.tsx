@@ -1,7 +1,7 @@
 import FontAwesome from "@expo/vector-icons/FontAwesome";
 import MaterialCommunityIcons from "@expo/vector-icons/MaterialCommunityIcons";
 import { ReactNode } from "react";
-import { StyleProp, StyleSheet, View, ViewStyle } from "react-native";
+import { StyleProp, StyleSheet, TextStyle, View, ViewStyle } from "react-native";
 
 import {
   BG_CARD,
@@ -19,6 +19,7 @@ type CardProps = {
   iconName?: string;
   children: ReactNode;
   style?: StyleProp<ViewStyle>;
+  titleStyle?: StyleProp<TextStyle>;
 };
 
 export const CardWithHeader = ({
@@ -27,6 +28,7 @@ export const CardWithHeader = ({
   iconName,
   children,
   style,
+  titleStyle,
 }: CardProps) => {
   return (
     <View style={[styles.card, style]}>
@@ -52,7 +54,7 @@ export const CardWithHeader = ({
                 : { alignItems: "center" },
             ]}
           >
-            <DisplayHeader>{title}</DisplayHeader>
+            <DisplayHeader style={titleStyle}>{title}</DisplayHeader>
             {subtitle && <MutedText>{subtitle}</MutedText>}
           </View>
         </View>

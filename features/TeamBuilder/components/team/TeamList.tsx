@@ -1,24 +1,16 @@
 import { Feather } from "@expo/vector-icons";
 import * as Crypto from "expo-crypto";
 import { useEffect, useRef, useState } from "react";
-import { Alert, Animated, StyleSheet, View } from "react-native";
+import { Animated, Pressable, StyleSheet } from "react-native";
 
 import {
-  ALERT_CANT_ANALYZE_CONTENT,
-  ALERT_CANT_ANALYZE_TITLE,
-  ALERT_CANT_CREATE_MEMBER_TITLE,
-  ALERT_CANT_CREATE_NAME_EXISTS,
-  ALERT_CANT_CREATE_NO_NAME,
-  ALERT_CANT_CREATE_NO_TYPES,
   BORDER_DEFAULT,
   BORDER_INTERNAL,
   EVALUATE_BACKGROUND,
   MEMBERS_COLORS,
-  OPTIONS_BG,
-  OPTIONS_BORDER,
-  OPTIONS_CONTENT,
 } from "../../../../constants";
 import { MEMBER_ICONS } from "../../../../constants/icons";
+import { IS_WEB } from "../../../../shared/layout/platform";
 import { loadTeamMembers, saveTeamMembers } from "../../../../shared/storage/teamStorage";
 import { Subtitle } from "../../../../shared/typohraphy/Subtitle";
 import { Card } from "../../../../shared/ui/Card";
@@ -28,6 +20,11 @@ import { TeamMemberModel } from "../../types";
 import { MemberDetails } from "./memberDetails/MemberDetails";
 import { TeamMember } from "./TeamMember";
 
+const ADD_IDLE = "#9fd3d0";
+const ADD_ACTIVE = "#cdeeec";
+const ADD_BORDER_IDLE = "#2f4f53";
+const ADD_BORDER_ACTIVE = MEMBERS_COLORS[0]; // brand teal #1BC5BE
+
 type Props = {
   onAnalyze: (teamMembers: TeamMemberModel[]) => void;
 };
@@ -35,6 +32,8 @@ type Props = {
 export const TeamList = ({ onAnalyze }: Props) => {
   const [showModal, setShowModal] = useState<boolean>(false);
   const [memberToDelete, setMemberToDelete] = useState<TeamMemberModel | null>(null);
+  const [addActive, setAddActive] = useState<boolean>(false);
+  const [isEditing, setIsEditing] = useState<boolean>(false);
   const [teamMembers, setTeamMembers] = useState<TeamMemberModel[]>([]);
   const [selectedMember, setSelectedMember] = useState<TeamMemberModel>({
     id: Crypto.randomUUID(),
@@ -45,22 +44,24 @@ export const TeamList = ({ onAnalyze }: Props) => {
   });
 
   const didLoad = useRef(false);
-  const scale = useRef(new Animated.Value(1)).current;
+  const [scale] = useState(() => new Animated.Value(1));
 
   function addMember() {
     const newMember: TeamMemberModel = {
       id: Crypto.randomUUID(),
-      name: "Team member #" + (teamMembers.length + 1),
+      name: "",
       types: [],
       iconId: MEMBER_ICONS[0].id,
       iconColor: MEMBERS_COLORS[0],
     };
     setSelectedMember(newMember);
+    setIsEditing(false);
     setShowModal(true);
   }
 
   function editMember(member: TeamMemberModel) {
     setSelectedMember(member);
+    setIsEditing(true);
     setShowModal(true);
   }
 
@@ -79,14 +80,13 @@ export const TeamList = ({ onAnalyze }: Props) => {
     setMemberToDelete(null);
   }
 
-  function onConfirm(id: string, newMember: TeamMemberModel) {
-    const validationResult = validateMember(newMember);
-
-    if (validationResult.length > 0) {
-      Alert.alert(ALERT_CANT_CREATE_MEMBER_TITLE, validationResult);
-      return;
+  function onConfirm(
+    id: string,
+    newMember: TeamMemberModel,
+  ): { field: "name" | "types"; message: string } | null {
+    if (teamMembers.some((x) => x.name === newMember.name && x.id !== newMember.id)) {
+      return { field: "name", message: "This name is already taken by another team member." };
     }
-
     setTeamMembers((prev) => {
       if (prev.some((x) => x.id === id)) {
         return prev.map((member) =>
@@ -103,24 +103,12 @@ export const TeamList = ({ onAnalyze }: Props) => {
       } else return [...prev, newMember];
     });
     setShowModal(false);
-  }
-
-  function validateMember(newMember: TeamMemberModel): string {
-    if (newMember.types.length === 0) return ALERT_CANT_CREATE_NO_TYPES;
-
-    if (newMember.name.length === 0) return ALERT_CANT_CREATE_NO_NAME;
-
-    if (teamMembers.some((x) => x.name === newMember.name && x.id !== newMember.id))
-      return ALERT_CANT_CREATE_NAME_EXISTS;
-
-    return "";
+    return null;
   }
 
   function analyze() {
-    if (teamMembers && teamMembers.length > 1) {
+    if (teamMembers.length >= 3) {
       onAnalyze(teamMembers);
-    } else {
-      Alert.alert(ALERT_CANT_ANALYZE_TITLE, ALERT_CANT_ANALYZE_CONTENT);
     }
   }
 
@@ -160,12 +148,14 @@ export const TeamList = ({ onAnalyze }: Props) => {
   }, [scale]);
 
   return (
-    <Card style={styles.card}>
+    <Card style={[styles.card, IS_WEB && styles.cardWeb]}>
+
       <MemberDetails
         onClose={() => setShowModal(false)}
         onConfirm={(id: string, newMember: TeamMemberModel) => onConfirm(id, newMember)}
         selectedMember={selectedMember}
         showModal={showModal}
+        isEdit={isEditing}
       ></MemberDetails>
       <ConfirmModal
         visible={memberToDelete !== null}
@@ -186,16 +176,44 @@ export const TeamList = ({ onAnalyze }: Props) => {
         />
       ))}
       {teamMembers.length < 6 && (
-        <OptionButton onPress={addMember} style={styles.buttonStyle} type="options">
-          <View style={styles.addIconCircle}>
-            <Feather name="plus" size={18} color={OPTIONS_CONTENT} />
-          </View>
-          <Subtitle style={styles.addText}>Add a new member</Subtitle>
-        </OptionButton>
-      )}
-      {teamMembers.length > 1 ? (
         <Animated.View style={{ transform: [{ scale }] }}>
-          <OptionButton onPress={analyze} style={styles.evaluateButtonStyle} type="info">
+          <Pressable
+            onPress={addMember}
+            onHoverIn={() => setAddActive(true)}
+            onHoverOut={() => setAddActive(false)}
+            onPressIn={() => setAddActive(true)}
+            onPressOut={() => setAddActive(false)}
+            hitSlop={8}
+            style={[
+              styles.addButton,
+              {
+                borderColor: addActive ? ADD_BORDER_ACTIVE : ADD_BORDER_IDLE,
+                backgroundColor: addActive
+                  ? "rgba(27,197,190,0.06)"
+                  : "rgba(255,255,255,0.012)",
+              },
+            ]}
+          >
+            <Feather
+              name="user-plus"
+              size={22}
+              color={addActive ? ADD_ACTIVE : ADD_IDLE}
+            />
+            <Subtitle
+              style={[styles.addText, { color: addActive ? ADD_ACTIVE : ADD_IDLE }]}
+            >
+              Add a new member
+            </Subtitle>
+          </Pressable>
+        </Animated.View>
+      )}
+      {teamMembers.length >= 3 ? (
+        <Animated.View style={{ transform: [{ scale }] }}>
+          <OptionButton
+            onPress={analyze}
+            style={[styles.evaluateButtonStyle, IS_WEB && styles.actionButtonWeb]}
+            type="info"
+          >
             <Subtitle style={styles.evaluateText}>ANALYZE TEAM</Subtitle>
           </OptionButton>
         </Animated.View>
@@ -203,7 +221,7 @@ export const TeamList = ({ onAnalyze }: Props) => {
         <OptionButton
           disabled={true}
           onPress={analyze}
-          style={styles.inactiveButtonStyle}
+          style={[styles.inactiveButtonStyle, IS_WEB && styles.actionButtonWeb]}
           type="info"
         >
           <Subtitle style={styles.inactiveText}>ANALYZE TEAM</Subtitle>
@@ -215,11 +233,17 @@ export const TeamList = ({ onAnalyze }: Props) => {
 
 const styles = StyleSheet.create({
   card: { padding: 8 },
-  buttonStyle: {
+  cardWeb: { maxWidth: 720, alignSelf: "center", width: "100%" },
+  actionButtonWeb: { maxWidth: 360 },
+  addButton: {
     width: "100%",
-    position: "relative",
-    height: 42,
+    minHeight: 60,
+    flexDirection: "row",
+    alignItems: "center",
+    justifyContent: "center",
+    gap: 12,
     borderWidth: 2,
+    borderRadius: 14,
   },
   evaluateButtonStyle: {
     width: "60%",
@@ -248,20 +272,9 @@ const styles = StyleSheet.create({
     shadowOpacity: 0.9,
     shadowRadius: 8,
   },
-  addIconCircle: {
-    width: 32,
-    height: 32,
-    borderRadius: 16,
-    alignItems: "center",
-    justifyContent: "center",
-
-    backgroundColor: OPTIONS_BG,
-    borderWidth: 2,
-    borderColor: OPTIONS_BORDER,
-  },
   addText: {
-    color: OPTIONS_CONTENT,
-    fontSize: 18,
+    fontSize: 14,
+    letterSpacing: 1,
     textTransform: "uppercase",
     fontWeight: 800,
   },
@@ -271,10 +284,9 @@ const styles = StyleSheet.create({
     fontWeight: "800",
     letterSpacing: 0.8,
 
-    // outline
-    textShadowColor: "#000000",
-    textShadowOffset: { width: 2, height: 2 },
-    textShadowRadius: 10,
+    textShadowColor: "rgba(0,0,0,0.8)",
+    textShadowOffset: { width: 0, height: 1 },
+    textShadowRadius: 3,
   },
   inactiveText: {
     color: BORDER_DEFAULT,

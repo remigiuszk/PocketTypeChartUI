@@ -1,6 +1,7 @@
 import { useMemo } from "react";
-import { ScrollView, StyleSheet, View, ViewStyle } from "react-native";
+import { StyleSheet, View, ViewStyle } from "react-native";
 
+import { ContentScroll } from "../../../../../shared/components/ContentScroll";
 import { Loading } from "../../../../../shared/components/Loading";
 import { useGetAllRelationsQuery } from "../../../../DamageRelations/query";
 import { useGetAllPokeTypesQuery } from "../../../../TypeSelection/query";
@@ -60,7 +61,7 @@ export const TeamOverview = ({ style, currentTeam }: Props) => {
     return <Loading />;
   }
   return (
-    <ScrollView>
+    <ContentScroll>
       <View style={[styles.overviewLayout, style]}>
         {rowData.some((row) => row.type === OverviewRowType.Weakness) && (
           <WeaknessesContainer
@@ -85,7 +86,7 @@ export const TeamOverview = ({ style, currentTeam }: Props) => {
         )}
         <MoreDetails teamRelatons={teamStats.relations}></MoreDetails>
       </View>
-    </ScrollView>
+    </ContentScroll>
   );
 };
 

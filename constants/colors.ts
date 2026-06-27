@@ -33,7 +33,7 @@ export const TEXT_MUTED: string = "#747486";
 
 export const SELECTION: string = "#ffffffff";
 
-export const test: string = "rgb(11, 130, 163)";
+export const TEXT_SHADOW: string = "rgb(11, 130, 163)";
 
 export const WARNING: string = "#ffce85";
 

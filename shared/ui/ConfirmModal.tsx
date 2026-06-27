@@ -1,20 +1,16 @@
-import { Feather } from "@expo/vector-icons";
 import { Modal, Pressable, StyleSheet, Text, View } from "react-native";
 
-import {
-  BG_LAYOUT,
-  BORDER_DEFAULT,
-  ERROR_BG,
-  ERROR_BORDER,
-  ERROR_CONTENT,
-  OPTIONS_BG,
-  OPTIONS_BORDER,
-  OPTIONS_CONTENT,
-  TEXT_300,
-  TEXT_MUTED,
-} from "../../constants";
+import { BG_LAYOUT, BORDER_DEFAULT, TEXT_300, TEXT_MUTED } from "../../constants";
 import { Subtitle } from "../typohraphy/Subtitle";
-import { OptionButton } from "./OptionButton";
+import { CANCEL_TINT, CONFIRM_TINT, PillButton, PillTint } from "./PillButton";
+
+const NEUTRAL_TINT: PillTint = {
+  bgIdle: "#3d6367a3",
+  bgActive: "rgba(61,99,103,0.80)",
+  border: "#6dbfbec3",
+  content: "rgb(229, 237, 209)",
+  glow: "#6dbfbec3",
+};
 
 type Props = {
   visible: boolean;
@@ -23,6 +19,9 @@ type Props = {
   confirmLabel?: string;
   cancelLabel?: string;
   destructive?: boolean;
+  // When true, renders a single acknowledge button (an info/alert dialog) instead
+  // of a confirm/cancel pair. Used to replace native Alert.alert calls on web.
+  singleButton?: boolean;
   onConfirm: () => void;
   onCancel: () => void;
 };
@@ -34,11 +33,13 @@ export const ConfirmModal = ({
   confirmLabel = "Confirm",
   cancelLabel = "Cancel",
   destructive = false,
+  singleButton = false,
   onConfirm,
   onCancel,
 }: Props) => {
-  const confirmType = destructive ? "error" : "options";
-  const confirmContent = destructive ? ERROR_CONTENT : OPTIONS_CONTENT;
+  const confirmTint = destructive ? NEUTRAL_TINT : CONFIRM_TINT;
+  const cancelTint = destructive ? CANCEL_TINT : NEUTRAL_TINT;
+  const confirmIcon = destructive ? "trash-2" : "check";
 
   return (
     <Modal
@@ -57,36 +58,21 @@ export const ConfirmModal = ({
           <Text style={styles.message}>{message}</Text>
 
           <View style={styles.buttonsContainer}>
-            <OptionButton
+            <PillButton
+              label={confirmLabel}
+              icon={confirmIcon}
+              tint={confirmTint}
               onPress={onConfirm}
-              style={styles.buttonStyle}
-              type={confirmType}
-            >
-              <View
-                style={[
-                  styles.iconCircle,
-                  destructive ? styles.iconCircleError : styles.iconCircleOptions,
-                ]}
-              >
-                <Feather
-                  name={destructive ? "trash-2" : "check"}
-                  size={18}
-                  color={confirmContent}
-                />
-              </View>
-              <Subtitle style={{ fontSize: 16, fontWeight: 100, color: confirmContent }}>
-                {confirmLabel}
-              </Subtitle>
-            </OptionButton>
+            />
 
-            <OptionButton onPress={onCancel} style={styles.buttonStyle} type="options">
-              <View style={[styles.iconCircle, styles.iconCircleOptions]}>
-                <Feather name="x" size={18} color={OPTIONS_CONTENT} />
-              </View>
-              <Subtitle style={{ fontSize: 16, fontWeight: 100, color: OPTIONS_CONTENT }}>
-                {cancelLabel}
-              </Subtitle>
-            </OptionButton>
+            {!singleButton && (
+              <PillButton
+                label={cancelLabel}
+                icon="x"
+                tint={cancelTint}
+                onPress={onCancel}
+              />
+            )}
           </View>
         </View>
       </View>
@@ -129,24 +115,5 @@ const styles = StyleSheet.create({
     alignItems: "center",
     gap: 24,
     marginTop: 4,
-  },
-  buttonStyle: {
-    width: "40%",
-  },
-  iconCircle: {
-    width: 26,
-    height: 26,
-    borderRadius: 13,
-    alignItems: "center",
-    justifyContent: "center",
-    borderWidth: 1,
-  },
-  iconCircleOptions: {
-    backgroundColor: OPTIONS_BG,
-    borderColor: OPTIONS_BORDER,
-  },
-  iconCircleError: {
-    backgroundColor: ERROR_BG,
-    borderColor: ERROR_BORDER,
   },
 });

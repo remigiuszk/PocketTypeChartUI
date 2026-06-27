@@ -1,12 +1,11 @@
 import { useState } from "react";
 import { StyleSheet, View } from "react-native";
 
-import { BG_ROOT } from "../constants";
 import { TeamList } from "../features/TeamBuilder/components/team/TeamList";
 import { TeamAnalysis } from "../features/TeamBuilder/components/teamAnalysis/TeamAnalysis";
 import { TeamMemberModel } from "../features/TeamBuilder/types";
-import { NavBar } from "../shared/components/NavBar";
-import { TopBar } from "../shared/components/TopBar";
+import { Screen } from "../shared/components/Screen";
+import { IS_WEB } from "../shared/layout/platform";
 import { TeamBuilderHeader } from "../shared/typohraphy/TeamBuilderHeader";
 import { Card } from "../shared/ui/Card";
 
@@ -28,43 +27,27 @@ export const TeamBuilder = ({ switchViews }: Props) => {
   }
 
   return (
-    <View style={styles.container}>
-      <TopBar clearSelection={() => {}}></TopBar>
-      <View style={{ flex: 1 }}>
-        {analysisOn ? (
-          <TeamAnalysis
-            onChangeTeam={onChangeTeam}
-            currentTeam={currentTeam}
-          ></TeamAnalysis>
-        ) : (
-          <View style={{ padding: 6, flex: 1, gap: 16 }}>
-            <Card>
-              <TeamBuilderHeader
-                title="TEAM BUILDER"
-                subtitle="Select up to 6 team members to analyze synergy and get improvement reccomendations"
-              />
-            </Card>
-            <TeamList
-              onAnalyze={(teamMembers: TeamMemberModel[]) => onEvaluate(teamMembers)}
-            ></TeamList>
-          </View>
-        )}
-      </View>
-      <NavBar switchViews={switchViews} teamBuilderOpen={true}></NavBar>
-    </View>
+    <Screen teamBuilderOpen={true} switchViews={switchViews}>
+      {analysisOn ? (
+        <TeamAnalysis onChangeTeam={onChangeTeam} currentTeam={currentTeam}></TeamAnalysis>
+      ) : (
+        <View style={[styles.builder, !IS_WEB && styles.builderNative]}>
+          <Card>
+            <TeamBuilderHeader
+              title="TEAM BUILDER"
+              subtitle="Select up to 6 team members to analyze synergy and get improvement reccomendations"
+            />
+          </Card>
+          <TeamList
+            onAnalyze={(teamMembers: TeamMemberModel[]) => onEvaluate(teamMembers)}
+          ></TeamList>
+        </View>
+      )}
+    </Screen>
   );
 };
 
 const styles = StyleSheet.create({
-  container: {
-    backgroundColor: BG_ROOT,
-    flex: 1,
-  },
-  content: {
-    padding: 10,
-    flex: 1,
-    flexDirection: "column",
-    alignItems: "center",
-    justifyContent: "flex-start",
-  },
+  builder: { padding: 6, gap: 16 },
+  builderNative: { flex: 1 },
 });

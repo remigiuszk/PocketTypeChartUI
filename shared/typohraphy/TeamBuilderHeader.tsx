@@ -1,6 +1,7 @@
 import { StyleSheet, Text, View } from "react-native";
 
 import { ACCENT, BG_ROOT, test, TEXT_100, TEXT_300 } from "../../constants";
+import { IS_WEB } from "../layout/platform";
 
 type Props = {
   title: string;
@@ -10,9 +11,11 @@ type Props = {
 export const TeamBuilderHeader = ({ title, subtitle }: Props) => {
   return (
     <View style={styles.container}>
-      <Text style={styles.title}>{title}</Text>
+      <Text style={[styles.title, IS_WEB && styles.titleWeb]}>{title}</Text>
 
-      {subtitle && <Text style={styles.subtitle}>{subtitle}</Text>}
+      {subtitle && (
+        <Text style={[styles.subtitle, IS_WEB && styles.subtitleWeb]}>{subtitle}</Text>
+      )}
     </View>
   );
 };
@@ -55,4 +58,6 @@ const styles = StyleSheet.create({
     textAlign: "center",
     letterSpacing: 0.5,
   },
+  titleWeb: { fontFamily: "Inter_600SemiBold" },
+  subtitleWeb: { fontFamily: "Inter_400Regular" },
 });
