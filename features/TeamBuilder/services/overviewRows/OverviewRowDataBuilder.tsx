@@ -1,6 +1,11 @@
 import { PokeTypeModel } from "../../../TypeSelection/types";
 import { TeamMemberModel } from "../../types";
-import { OverviewRowData, OverviewRowSeverity, OverviewRowType } from "./types";
+import {
+  MemberResistanceBreakdown,
+  OverviewRowData,
+  OverviewRowSeverity,
+  OverviewRowType,
+} from "./types";
 
 export class OverviewRowDataBuilder {
   private data: Partial<OverviewRowData> = { severity: OverviewRowSeverity.Medium };
@@ -55,6 +60,21 @@ export class OverviewRowDataBuilder {
     const existingTypeIds = new Set(members.flatMap((m) => m.types.map((t) => t.id)));
 
     this.data.suggestedTypes = suggestedTypes.filter((t) => !existingTypeIds.has(t.id));
+    return this;
+  }
+
+  setCollapsible(value: boolean) {
+    this.data.collapsible = value;
+    return this;
+  }
+
+  setCollapsibleLabel(label: string) {
+    this.data.collapsibleLabel = label;
+    return this;
+  }
+
+  setMemberResistanceBreakdown(breakdown: MemberResistanceBreakdown[]) {
+    this.data.memberResistanceBreakdown = breakdown;
     return this;
   }
 

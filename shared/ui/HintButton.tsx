@@ -1,5 +1,6 @@
 import { FontAwesome5 } from "@expo/vector-icons";
 import { useState } from "react";
+import { ReactNode } from "react";
 import {
   Dimensions,
   Image,
@@ -26,6 +27,11 @@ import {
 
 type SpriteItem = { id: number; sprite: string };
 
+export type BreakdownSection = {
+  label: string;
+  content: ReactNode;
+};
+
 type Props = {
   style?: StyleProp<ViewStyle>;
   title: string;
@@ -34,6 +40,7 @@ type Props = {
   accentColor: string;
   icon: React.ReactNode;
   suggestedTypes?: SpriteItem[];
+  breakdown?: BreakdownSection;
 };
 
 export const HintButton = ({
@@ -44,6 +51,7 @@ export const HintButton = ({
   accentColor,
   icon,
   suggestedTypes,
+  breakdown,
 }: Props) => {
   const [visible, setVisible] = useState(false);
 
@@ -111,10 +119,12 @@ export const HintButton = ({
                 </View>
               )}
 
-              <View style={[styles.section, styles.sectionLast]}>
-                <Text style={styles.sectionLabel}>All related relations</Text>
-                <Text style={styles.placeholderText}>Coming soon</Text>
-              </View>
+              {breakdown && (
+                <View style={[styles.section, styles.sectionLast]}>
+                  <Text style={styles.sectionLabel}>{breakdown.label}</Text>
+                  {breakdown.content}
+                </View>
+              )}
             </ScrollView>
 
             {/* Bottom close button */}

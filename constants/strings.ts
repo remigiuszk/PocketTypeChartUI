@@ -32,14 +32,15 @@ export const OVERVIEW_STRINGS = {
       "Multiple members share a 4x vulnerability to the same type, meaning they take quadruple damage from it. This is extremely dangerous — a single Pokemon of that type can threaten several members of your team at once. Consider replacing one of the affected members with a Pokemon that resists or is immune to this type.",
   },
   noSafeSwitch: {
-    header: "No safe switch against: ",
+    header: (n: number) => `No safe switch against ${n} type${n === 1 ? "" : "s"}`,
     subText: "No resistance or immunity in the team",
     hintText:
       "When no member of your team resists or is immune to an attacking type, you have no safe switch against it — any switch-in will take neutral or super-effective damage. This leaves you vulnerable to being swept, as your opponent can freely use that type without fear of a punishing switch-in. Consider adding a Pokémon that resists or is immune to this type to give your team a reliable answer.",
   },
   noSuperEffectiveCoverage: {
-    header: "Poor super effective coverage",
-    subText: (n: number) => `${n} type${n === 1 ? "" : "s"} left uncovered: `,
+    header: (n: number) =>
+      `Poor super effective coverage. ${n} type${n === 1 ? "" : "s"} left uncovered.`,
+    subText: "",
     hintText:
       "Super-effective coverage determines how many opposing Pokémon types your team can threaten offensively. When your team cannot hit a type for super-effective damage, any Pokémon of that type can switch in safely and take minimal risk — giving your opponent a free turn to set up, heal, or attack. The more types left uncovered, the more predictable and exploitable your team becomes. Consider adding a Pokémon whose STAB or coverage moves hit the listed types for super-effective damage.",
   },
