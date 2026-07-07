@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { StyleSheet, View } from "react-native";
 
+import { WEB_CONTENT_WIDTH } from "../constants/style";
 import { TeamList } from "../features/TeamBuilder/components/team/TeamList";
 import { TeamAnalysis } from "../features/TeamBuilder/components/teamAnalysis/TeamAnalysis";
 import { TeamMemberModel } from "../features/TeamBuilder/types";
@@ -31,7 +32,9 @@ export const TeamBuilder = ({ switchViews }: Props) => {
       {analysisOn ? (
         <TeamAnalysis onChangeTeam={onChangeTeam} currentTeam={currentTeam}></TeamAnalysis>
       ) : (
-        <View style={[styles.builder, !IS_WEB && styles.builderNative]}>
+        <View
+          style={[styles.builder, !IS_WEB && styles.builderNative, IS_WEB && styles.builderWeb]}
+        >
           <Card>
             <TeamBuilderHeader
               title="TEAM BUILDER"
@@ -50,4 +53,5 @@ export const TeamBuilder = ({ switchViews }: Props) => {
 const styles = StyleSheet.create({
   builder: { padding: 6, gap: 16 },
   builderNative: { flex: 1 },
+  builderWeb: { maxWidth: WEB_CONTENT_WIDTH, alignSelf: "center", width: "100%" },
 });

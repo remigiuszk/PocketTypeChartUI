@@ -1,11 +1,14 @@
 import { Image, StyleSheet, Text, View } from "react-native";
 
 import {
+  BG_CARD,
   BG_WEAKNESS_WEAK,
   BG_WEAKNESSES,
+  BORDER_INTERNAL,
   TEXT_WEAKNESSES_CRITICAL,
   TEXT_WEAKNESSES_WEAK,
 } from "../../../../../../constants";
+import { IS_WEB } from "../../../../../../shared/layout/platform";
 import { PokeTypeModel } from "../../../../../TypeSelection/types";
 import { MemberPreview } from "../../membersPreview/MemberPreview";
 
@@ -31,9 +34,14 @@ export const ResistanceBreakdownSection = ({ items }: Props) => (
         item.multiplier <= 0.25 ? TEXT_WEAKNESSES_CRITICAL : TEXT_WEAKNESSES_WEAK;
       const pillBg = item.multiplier <= 0.25 ? BG_WEAKNESSES : BG_WEAKNESS_WEAK;
       return (
-        <View key={item.id} style={styles.row}>
+        <View key={item.id} style={[styles.row, IS_WEB && styles.rowWeb]}>
           <MemberPreview
-            style={styles.memberCard}
+            style={
+              IS_WEB
+                ? [styles.memberCard, styles.memberCardWeb]
+                : styles.memberCard
+            }
+            iconSize={IS_WEB ? 26 : undefined}
             member={{
               id: item.id,
               name: item.name,
@@ -43,8 +51,16 @@ export const ResistanceBreakdownSection = ({ items }: Props) => (
             }}
             resistedTypeIds={item.resistedTypeIds}
           />
-          <View style={[styles.pill, { borderColor: pillColor, backgroundColor: pillBg }]}>
-            <Text style={[styles.pillText, { color: pillColor }]}>×{item.multiplier}</Text>
+          <View
+            style={[
+              styles.pill,
+              IS_WEB && styles.pillWeb,
+              { borderColor: pillColor, backgroundColor: pillBg },
+            ]}
+          >
+            <Text style={[styles.pillText, { color: pillColor }]}>
+              ×{item.multiplier}
+            </Text>
           </View>
           <View style={styles.defendingTypes}>
             {item.defendingTypes.map((t) => (
@@ -61,16 +77,30 @@ export const ResistanceBreakdownSection = ({ items }: Props) => (
 
 const styles = StyleSheet.create({
   list: {
-    gap: 6,
+    gap: IS_WEB ? 8 : 6,
   },
   row: {
     flexDirection: "row",
     alignItems: "center",
-    gap: 6,
+    gap: 24,
+  },
+  rowWeb: {
+    alignSelf: "flex-start",
+    backgroundColor: BG_CARD,
+    borderWidth: 1,
+    borderColor: BORDER_INTERNAL,
+    borderRadius: 10,
+    paddingVertical: 8,
+    paddingHorizontal: 14,
   },
   memberCard: {
-    flex: 1,
+    flexShrink: 1,
     minWidth: 0,
+  },
+  memberCardWeb: {
+    flexShrink: 0,
+    flexGrow: 0,
+    width: 120,
   },
   pill: {
     paddingHorizontal: 9,
@@ -79,6 +109,9 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     alignItems: "center",
     justifyContent: "center",
+  },
+  pillWeb: {
+    minWidth: 58,
   },
   pillText: {
     fontSize: 12,

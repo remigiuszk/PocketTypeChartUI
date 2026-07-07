@@ -1,6 +1,7 @@
 import { useMemo, useState } from "react";
 import { StyleSheet, View } from "react-native";
 
+import { WEB_CONTENT_WIDTH } from "../constants/style";
 import { Relations } from "../features/DamageRelations/components/Relations";
 import { PokeTypeList } from "../features/TypeSelection/components/PokeTypeList";
 import { useGetAllPokeTypesQuery } from "../features/TypeSelection/query";
@@ -49,7 +50,9 @@ export const Typing = ({ switchViews }: Props) => {
       typesSelected={selectedType && selectedType.length > 0}
       clearSelection={clearSelection}
     >
-      <View style={[styles.content, !IS_WEB && styles.contentNative]}>
+      <View
+        style={[styles.content, !IS_WEB && styles.contentNative, IS_WEB && styles.contentWeb]}
+      >
         <View style={styles.typesContainer}>
           <TeamBuilderHeader
             title="TYPE CHART"
@@ -80,5 +83,6 @@ export const Typing = ({ switchViews }: Props) => {
 const styles = StyleSheet.create({
   content: { margin: 12, marginBottom: 0, gap: 16 },
   contentNative: { flex: 1 },
+  contentWeb: { maxWidth: WEB_CONTENT_WIDTH, alignSelf: "center", width: "100%" },
   typesContainer: { alignItems: "stretch", gap: 6 },
 });

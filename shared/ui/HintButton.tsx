@@ -24,6 +24,7 @@ import {
   TEXT_300,
   TEXT_MUTED,
 } from "../../constants";
+import { IS_WEB } from "../layout/platform";
 
 type SpriteItem = { id: number; sprite: string };
 
@@ -75,7 +76,12 @@ export const HintButton = ({
         <View style={styles.overlay}>
           <Pressable style={StyleSheet.absoluteFillObject} onPress={close} />
 
-          <View style={[styles.card, { width: screenWidth - 48 }]}>
+          <View
+            style={[
+              styles.card,
+              IS_WEB ? styles.cardWeb : { width: screenWidth - 48 },
+            ]}
+          >
             <View style={[styles.accentBar, { backgroundColor: accentColor }]} />
 
             {/* Header */}
@@ -173,6 +179,10 @@ const styles = StyleSheet.create({
     borderColor: BORDER_DEFAULT,
     overflow: "hidden",
     maxHeight: "80%",
+  },
+  cardWeb: {
+    width: "90%",
+    maxWidth: 400,
   },
   accentBar: {
     position: "absolute",

@@ -9,9 +9,15 @@ type Props = {
   style?: ViewStyle | ViewStyle[];
   member: TeamMemberModel;
   resistedTypeIds?: number[];
+  iconSize?: number;
 };
 
-export const MemberPreview = ({ style, member, resistedTypeIds }: Props) => {
+export const MemberPreview = ({
+  style,
+  member,
+  resistedTypeIds,
+  iconSize = 20,
+}: Props) => {
   const icon = MEMBER_ICONS.find((x) => x.id === member.iconId)!;
   const IconComp = icon.library;
 
@@ -21,7 +27,7 @@ export const MemberPreview = ({ style, member, resistedTypeIds }: Props) => {
     <View
       style={[styles.container, inResistanceContext && styles.containerResistance, style]}
     >
-      <IconComp name={icon.name} size={20} color={member.iconColor} />
+      <IconComp name={icon.name} size={iconSize} color={member.iconColor} />
       <View style={styles.nameTypeContainer}>
         <Text
           numberOfLines={1}
