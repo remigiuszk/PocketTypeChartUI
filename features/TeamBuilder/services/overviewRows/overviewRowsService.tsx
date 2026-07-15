@@ -119,16 +119,9 @@ export const overviewRowsService = (
             multiplier: combinedMultiplier,
           }));
 
-        if (resistedTypes.length === 0 && member.types.length > 0) {
-          resistedTypes.push({
-            type: member.types[0],
-            defendingType: attackingType,
-            multiplier: combinedMultiplier,
-          });
-        }
-
         return { member, resistedTypes };
-      });
+      })
+      .filter((b) => b.resistedTypes.length > 0);
   }
 
   function superEffectiveAgainst(attackingTypeId: number): PokeTypeModel[] {

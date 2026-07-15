@@ -82,7 +82,7 @@ const styles = StyleSheet.create({
   row: {
     flexDirection: "row",
     alignItems: "center",
-    gap: 24,
+    gap: IS_WEB ? 24 : 8,
   },
   rowWeb: {
     alignSelf: "flex-start",
