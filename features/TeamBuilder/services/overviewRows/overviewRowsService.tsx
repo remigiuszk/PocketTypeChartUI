@@ -90,6 +90,54 @@ export const overviewRowsService = (
     return [buildStrength(OVERVIEW_STRINGS.noOverlappingStab)];
   }
 
+  function buildWeaknessBreakdown(weakness: {
+    attackingTypeId: number;
+    memberIds: string[];
+  }): MemberResistanceBreakdown[] {
+    const attackingType = allTypes.find((t) => t.id === weakness.attackingTypeId)!;
+
+    return members
+      .filter((m) => weakness.memberIds.includes(m.id))
+      .map((member) => {
+        const combinedMultiplier =
+          stats.relations.defensiveRelations.vulnerabilities.find(
+            (r) => r.memberId === member.id && r.attackingTypeId === weakness.attackingTypeId,
+          )?.multiplier ?? 2;
+
+        const resistedTypes: ResistanceDetail[] = member.types
+          .filter((memberType) =>
+            allRelations.some(
+              (r) =>
+                r.attackingTypeId === weakness.attackingTypeId &&
+                r.defendingTypeId === memberType.id &&
+                r.multiplier > 1,
+            ),
+          )
+          .map((memberType) => ({
+            type: memberType,
+            defendingType: attackingType,
+            multiplier: combinedMultiplier,
+          }));
+
+        if (resistedTypes.length === 0 && member.types.length > 0) {
+          resistedTypes.push({
+            type: member.types[0],
+            defendingType: attackingType,
+            multiplier: combinedMultiplier,
+          });
+        }
+
+        return { member, resistedTypes };
+      });
+  }
+
+  function superEffectiveAgainst(attackingTypeId: number): PokeTypeModel[] {
+    const typeIds = allRelations
+      .filter((r) => r.defendingTypeId === attackingTypeId && r.multiplier > 1)
+      .map((r) => r.attackingTypeId);
+    return allTypes.filter((t) => typeIds.includes(t.id));
+  }
+
   function criticalWeaknesses(): OverviewRowData[] {
     const criticalWeaknesses = stats.defensiveStats.criticalWeaknesses;
     const result: OverviewRowData[] = [];
@@ -106,6 +154,8 @@ export const overviewRowsService = (
         .setAffectedMembers(
           members.filter((member) => weakness.memberIds.includes(member.id)),
         )
+        .setSuggestedTypes(superEffectiveAgainst(weakness.attackingTypeId), members)
+        .setMemberResistanceBreakdown(buildWeaknessBreakdown(weakness))
         .build();
 
       result.push(row);
@@ -128,7 +178,9 @@ export const overviewRowsService = (
         .setProgressBar(members.length, weakness.memberIds.length)
         .setAffectedMembers(
           members.filter((member) => weakness.memberIds.includes(member.id)),
-        );
+        )
+        .setSuggestedTypes(superEffectiveAgainst(weakness.attackingTypeId), members)
+        .setMemberResistanceBreakdown(buildWeaknessBreakdown(weakness));
       if (weakness.memberIds.length >= members.length - 1) {
         row.setSeverity(OverviewRowSeverity.High);
       } else {
@@ -193,13 +245,10 @@ export const overviewRowsService = (
           ? OverviewRowSeverity.High
           : OverviewRowSeverity.Medium;
 
-      const counteringTypeIds = allRelations
-        .filter((r) => r.attackingTypeId === stat.attackingTypeId && r.multiplier < 1)
-        .map((r) => r.defendingTypeId);
-
-      const counteringTypes = allTypes.filter((t) => counteringTypeIds.includes(t.id));
-
-      row.setSeverity(severity).setSuggestedTypes(counteringTypes, members);
+      row
+        .setSeverity(severity)
+        .setSuggestedTypes(superEffectiveAgainst(stat.attackingTypeId), members)
+        .setMemberResistanceBreakdown(buildWeaknessBreakdown(stat));
 
       result.push(row.build());
     }

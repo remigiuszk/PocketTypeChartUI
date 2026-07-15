@@ -30,9 +30,9 @@ type Props = {
 export const ResistanceBreakdownSection = ({ items }: Props) => (
   <View style={styles.list}>
     {items.map((item) => {
-      const pillColor =
-        item.multiplier <= 0.25 ? TEXT_WEAKNESSES_CRITICAL : TEXT_WEAKNESSES_WEAK;
-      const pillBg = item.multiplier <= 0.25 ? BG_WEAKNESSES : BG_WEAKNESS_WEAK;
+      const isCritical = item.multiplier <= 0.25 || item.multiplier >= 4;
+      const pillColor = isCritical ? TEXT_WEAKNESSES_CRITICAL : TEXT_WEAKNESSES_WEAK;
+      const pillBg = isCritical ? BG_WEAKNESSES : BG_WEAKNESS_WEAK;
       return (
         <View key={item.id} style={[styles.row, IS_WEB && styles.rowWeb]}>
           <MemberPreview
@@ -100,7 +100,8 @@ const styles = StyleSheet.create({
   memberCardWeb: {
     flexShrink: 0,
     flexGrow: 0,
-    width: 120,
+    width: 155,
+    overflow: "hidden",
   },
   pill: {
     paddingHorizontal: 9,
