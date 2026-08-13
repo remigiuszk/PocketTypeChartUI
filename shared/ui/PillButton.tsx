@@ -36,7 +36,7 @@ export const PillButton = ({
   disabled = false,
 }: {
   label: string;
-  icon: "check" | "x" | "trash-2";
+  icon: "check" | "x" | "trash-2" | "refresh-cw";
   tint: PillTint;
   onPress: () => void;
   disabled?: boolean;

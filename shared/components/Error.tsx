@@ -1,8 +1,8 @@
 import { Image, StyleSheet, View } from "react-native";
 
-import { BG_ROOT } from "../../constants";
+import { TEXT_100 } from "../../constants";
 import { Subtitle } from "../typohraphy/Subtitle";
-import DefaultButton from "../ui/DefaultButton";
+import { CONFIRM_TINT, PillButton } from "../ui/PillButton";
 
 type ErrorStateProps = {
   onRetry: () => void;
@@ -12,10 +12,13 @@ export const Error = ({ onRetry }: ErrorStateProps) => {
   return (
     <View style={styles.container}>
       <Image style={styles.image} source={require("../../assets/img/error.png")}></Image>
-      <Subtitle style={styles.subHeader}>Something went wrong :( </Subtitle>
-      <DefaultButton click={onRetry}>
-        <Subtitle style={styles.buttonText}>Refresh</Subtitle>
-      </DefaultButton>
+      <Subtitle style={styles.header}>Connection error</Subtitle>
+      <PillButton
+        label="Refresh"
+        icon="refresh-cw"
+        tint={CONFIRM_TINT}
+        onPress={onRetry}
+      />
     </View>
   );
 };
@@ -24,13 +27,20 @@ const styles = StyleSheet.create({
   container: {
     width: "100%",
     flexDirection: "column",
-    justifyContent: "flex-start",
+    justifyContent: "center",
     alignItems: "center",
+    paddingVertical: 12,
   },
   image: {
+    width: 260,
+    height: 175,
     resizeMode: "contain",
-    height: "65%",
+    marginBottom: 8,
   },
-  subHeader: { fontSize: 24, marginBottom: 6 },
-  buttonText: { color: BG_ROOT, fontWeight: 600, fontSize: 18 },
+  header: {
+    fontSize: 18,
+    color: TEXT_100,
+    fontFamily: "Inter_300Light",
+    marginBottom: 12,
+  },
 });
