@@ -1,7 +1,7 @@
 import FontAwesome6 from "@expo/vector-icons/FontAwesome6";
-import { Image, Pressable, StyleSheet, View } from "react-native";
+import { Image, Pressable, StyleSheet, useWindowDimensions, View } from "react-native";
 
-import { ACCENT, BG_ROOT, BORDER_INTERNAL, TEXT_300 } from "../../constants";
+import { ACCENT, BG_ROOT, BORDER_INTERNAL } from "../../constants";
 import { IS_WEB } from "../layout/platform";
 import { MutedText } from "../typohraphy/MutedText";
 import { Subtitle } from "../typohraphy/Subtitle";
@@ -14,28 +14,29 @@ type Props = {
   switchViews?: () => void;
 };
 
+// Below this width the brand icon and the nav tabs no longer both fit on one
+// row with labels, so the labels are dropped and the tabs go icon-only.
+const WEB_COMPACT_BREAKPOINT = 480;
+
 export const TopBar = ({
   typesSelected,
   clearSelection,
   teamBuilderOpen = false,
   switchViews,
 }: Props) => {
+  const { width } = useWindowDimensions();
+  const isCompact = width < WEB_COMPACT_BREAKPOINT;
+
   // Web: full-width header with the Type Chart / Team Builder nav moved in (the
   // bottom NavBar is dropped on web). Native keeps its original three-column bar.
   if (IS_WEB) {
     return (
-      <View style={styles.webContainer}>
+      <View style={[styles.webContainer, isCompact && styles.webContainerCompact]}>
         <View style={styles.webBrand}>
           <Image
-            style={styles.webBrandIcon}
+            style={[styles.webBrandIcon, isCompact && styles.webBrandIconCompact]}
             source={require("../../assets/img/icon.png")}
           />
-          <View>
-            <Subtitle style={styles.webBrandText}>POCKET</Subtitle>
-            <Subtitle style={[styles.webBrandText, styles.webBrandTextBold]}>
-              TYPE CHART
-            </Subtitle>
-          </View>
         </View>
 
         <View style={styles.webTabs}>
@@ -44,12 +45,14 @@ export const TopBar = ({
             label="Type Chart"
             active={!teamBuilderOpen}
             onPress={teamBuilderOpen ? switchViews : undefined}
+            compact={isCompact}
           />
           <WebNavTab
             icon="users"
             label="Team Builder"
             active={teamBuilderOpen}
             onPress={!teamBuilderOpen ? switchViews : undefined}
+            compact={isCompact}
           />
         </View>
 
@@ -66,16 +69,13 @@ export const TopBar = ({
 
   return (
     <View style={styles.container}>
-      <View style={styles.appName}>
-        <Subtitle style={styles.nameText}>POCKET</Subtitle>
-        <Subtitle style={styles.nameText}>TYPE</Subtitle>
-        <Subtitle style={styles.nameText}>CHART</Subtitle>
-      </View>
       <View style={styles.icon}>
-        <Image
-          style={styles.iconImg}
-          source={require("../../assets/img/icon.png")}
-        ></Image>
+        <View style={styles.iconClip}>
+          <Image
+            style={styles.iconImg}
+            source={require("../../assets/img/icon.png")}
+          ></Image>
+        </View>
       </View>
       <View style={styles.options}>
         {typesSelected && (
@@ -93,19 +93,27 @@ type WebNavTabProps = {
   label: string;
   active: boolean;
   onPress?: () => void;
+  compact?: boolean;
 };
 
-const WebNavTab = ({ icon, label, active, onPress }: WebNavTabProps) => (
+const WebNavTab = ({ icon, label, active, onPress, compact = false }: WebNavTabProps) => (
   <Pressable
     style={({ pressed }) => [
       styles.webTab,
+      compact && styles.webTabCompact,
       active && styles.webTabActive,
       pressed && styles.webTabPressed,
     ]}
     onPress={active ? undefined : onPress}
   >
     <FontAwesome6 name={icon} size={15} color={active ? ACCENT : "#555"} />
-    <MutedText style={[styles.webTabLabel, active && styles.webTabLabelActive]}>
+    <MutedText
+      style={[
+        styles.webTabLabel,
+        compact && styles.webTabLabelCompact,
+        active && styles.webTabLabelActive,
+      ]}
+    >
       {label}
     </MutedText>
   </Pressable>
@@ -113,34 +121,28 @@ const WebNavTab = ({ icon, label, active, onPress }: WebNavTabProps) => (
 
 const styles = StyleSheet.create({
   container: {
-    height: "8%",
+    height: "16%",
     width: "100%",
     flexDirection: "row",
     backgroundColor: BG_ROOT,
     paddingHorizontal: 10,
     marginBottom: 1,
   },
-  appName: {
+  icon: {
     flex: 1,
     justifyContent: "center",
     alignItems: "flex-start",
-    alignContent: "center",
-    flexDirection: "column",
-    padding: 6,
   },
-  nameText: {
-    fontSize: 12,
-    color: TEXT_300,
-    fontWeight: "ultralight",
-    fontFamily: "Raleway-Thin",
-  },
-  icon: {
-    flex: 1,
+  iconClip: {
+    height: "100%",
+    aspectRatio: 1,
+    overflow: "hidden",
     justifyContent: "center",
     alignItems: "center",
   },
   iconImg: {
-    height: "100%",
+    width: "157%",
+    height: "157%",
     resizeMode: "contain",
   },
   options: {
@@ -165,6 +167,10 @@ const styles = StyleSheet.create({
     borderBottomWidth: 1,
     borderBottomColor: BORDER_INTERNAL,
   },
+  webContainerCompact: {
+    gap: 8,
+    paddingHorizontal: 12,
+  },
   webBrand: {
     flex: 1,
     flexDirection: "row",
@@ -173,19 +179,13 @@ const styles = StyleSheet.create({
     minWidth: 0,
   },
   webBrandIcon: {
-    width: 34,
-    height: 34,
+    width: 64,
+    height: 64,
     resizeMode: "contain",
   },
-  webBrandText: {
-    fontSize: 12,
-    color: TEXT_300,
-    letterSpacing: 2,
-    fontWeight: "300",
-  },
-  webBrandTextBold: {
-    fontWeight: "600",
-    letterSpacing: 3,
+  webBrandIconCompact: {
+    width: 40,
+    height: 40,
   },
   webTabs: {
     flexDirection: "row",
@@ -201,6 +201,9 @@ const styles = StyleSheet.create({
     borderTopWidth: 2,
     borderTopColor: "transparent",
   },
+  webTabCompact: {
+    paddingHorizontal: 10,
+  },
   webTabActive: {
     backgroundColor: "#22223a",
     borderTopColor: ACCENT,
@@ -212,6 +215,9 @@ const styles = StyleSheet.create({
     fontSize: 13,
     color: "#555",
     fontWeight: "600",
+  },
+  webTabLabelCompact: {
+    fontSize: 11,
   },
   webTabLabelActive: {
     color: ACCENT,
