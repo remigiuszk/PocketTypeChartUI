@@ -84,7 +84,11 @@ export const TeamOverview = ({ style, currentTeam }: Props) => {
             )}
           />
         )}
-        <MoreDetails teamRelatons={teamStats.relations}></MoreDetails>
+        <MoreDetails
+          teamRelations={teamStats.relations}
+          currentTeam={currentTeam}
+          allTypes={pokeTypesData ?? []}
+        />
       </View>
     </ContentScroll>
   );

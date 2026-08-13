@@ -93,15 +93,26 @@ export const HINT_HEADER_DEFAULT: string = "Why is this important?";
 
 
 
-export const MORE_DETAILS_VULN: string = "No. of vulnerabilities";
-export const MORE_DETAILS_RESISTANCES: string = "No. of resistances";
-export const MORE_DETAILS_IMMUNITIES: string = "No. of immunities";
-export const MORE_DETAILS_WORST_MATCHUP: string = "Worst matchup";
+export const MORE_DETAILS_VULN: string = "Vulnerabilities";
+export const MORE_DETAILS_RESISTANCES: string = "Resistances";
+export const MORE_DETAILS_IMMUNITIES: string = "Immunities";
 
-export const MORE_DETAILS_SUPER_EFF: string = "Super-effective to:";
-export const MORE_DETAILS_NOT_VERY_EFF: string = "Not very effective to:";
-export const MORE_DETAILS_NO_EFF: string = "No effect on: ";
-export const MORE_DETAILS_NO_COVERAGE: string = "No coverage to:";
+export const MORE_DETAILS_SUPER_EFF: string = "Super-effective hits";
+export const MORE_DETAILS_NOT_VERY_EFF: string = "Resisted hits";
+export const MORE_DETAILS_NO_EFF: string = "No-effect hits";
+
+export const MORE_DETAILS_HINT_VULN: string =
+  "Total defensive match-ups where a member takes super-effective damage (×2 or ×4). A higher count means more attacking types can threaten your team — it's an upper bound on your defensive exposure, not a direct problem count.";
+export const MORE_DETAILS_HINT_RESIST: string =
+  "Total defensive match-ups where a member takes reduced damage (×0.5 or ×0.25). More resistances means more types your team can safely absorb hits from.";
+export const MORE_DETAILS_HINT_IMMUNE: string =
+  "Total match-ups where a member is completely immune (×0). Each immunity is a free pivot opportunity — you can switch in with zero damage taken, gaining a free turn.";
+export const MORE_DETAILS_HINT_SE: string =
+  "Total offensive match-ups where a member's STAB type hits a defending type for super-effective damage (×2). Higher means your team can threaten more types offensively.";
+export const MORE_DETAILS_HINT_NVE: string =
+  "Total offensive match-ups where a member's STAB type deals reduced damage (×0.5). A high number means many opposing types can safely tank your attacks.";
+export const MORE_DETAILS_HINT_NO_EFF: string =
+  "Total offensive match-ups where a member's STAB type deals no damage (×0) — the defending type is completely immune. These are complete offensive dead-ends against those types.";
 
 // Web footer "get the app" promotion. TODO: replace with the real store listing
 // URLs once the app is published.
