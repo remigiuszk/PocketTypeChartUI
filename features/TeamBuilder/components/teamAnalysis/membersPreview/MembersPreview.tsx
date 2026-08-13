@@ -15,6 +15,10 @@ import { OptionButton } from "../../../../../shared/ui/OptionButton";
 import { TeamMemberModel } from "../../../types";
 import { MemberPreview } from "./MemberPreview";
 
+// react-native-web supports CSS "sticky" positioning at runtime, but RN's own
+// ViewStyle typing doesn't know about it — cast around the type gap.
+const STICKY_WEB_STYLE = { position: "sticky", top: 0, zIndex: 20 } as unknown as ViewStyle;
+
 type Props = {
   style?: ViewStyle | ViewStyle[];
   teamMembers: TeamMemberModel[];
@@ -60,7 +64,7 @@ export const MembersPreview = ({ style, teamMembers, onChangeTeam }: Props) => {
   }, [scale]);
 
   return (
-    <View style={[styles.container, style]}>
+    <View style={[styles.container, IS_WEB && STICKY_WEB_STYLE, style]}>
       <Animated.View style={{ transform: [{ scale }] }}>
         <OptionButton
           style={[styles.buttonStyle, IS_WEB && styles.buttonStyleWeb]}

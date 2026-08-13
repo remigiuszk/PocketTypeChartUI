@@ -1,5 +1,6 @@
 import { FontAwesome5 } from "@expo/vector-icons";
 import { useState } from "react";
+import { ReactNode } from "react";
 import {
   Dimensions,
   Image,
@@ -23,8 +24,14 @@ import {
   TEXT_300,
   TEXT_MUTED,
 } from "../../constants";
+import { IS_WEB } from "../layout/platform";
 
 type SpriteItem = { id: number; sprite: string };
+
+export type BreakdownSection = {
+  label: string;
+  content: ReactNode;
+};
 
 type Props = {
   style?: StyleProp<ViewStyle>;
@@ -34,6 +41,7 @@ type Props = {
   accentColor: string;
   icon: React.ReactNode;
   suggestedTypes?: SpriteItem[];
+  breakdown?: BreakdownSection;
 };
 
 export const HintButton = ({
@@ -44,6 +52,7 @@ export const HintButton = ({
   accentColor,
   icon,
   suggestedTypes,
+  breakdown,
 }: Props) => {
   const [visible, setVisible] = useState(false);
 
@@ -67,7 +76,12 @@ export const HintButton = ({
         <View style={styles.overlay}>
           <Pressable style={StyleSheet.absoluteFillObject} onPress={close} />
 
-          <View style={[styles.card, { width: screenWidth - 48 }]}>
+          <View
+            style={[
+              styles.card,
+              IS_WEB ? styles.cardWeb : { width: screenWidth - 48 },
+            ]}
+          >
             <View style={[styles.accentBar, { backgroundColor: accentColor }]} />
 
             {/* Header */}
@@ -111,10 +125,12 @@ export const HintButton = ({
                 </View>
               )}
 
-              <View style={[styles.section, styles.sectionLast]}>
-                <Text style={styles.sectionLabel}>All related relations</Text>
-                <Text style={styles.placeholderText}>Coming soon</Text>
-              </View>
+              {breakdown && (
+                <View style={[styles.section, styles.sectionLast]}>
+                  <Text style={styles.sectionLabel}>{breakdown.label}</Text>
+                  {breakdown.content}
+                </View>
+              )}
             </ScrollView>
 
             {/* Bottom close button */}
@@ -163,6 +179,10 @@ const styles = StyleSheet.create({
     borderColor: BORDER_DEFAULT,
     overflow: "hidden",
     maxHeight: "80%",
+  },
+  cardWeb: {
+    width: "90%",
+    maxWidth: 400,
   },
   accentBar: {
     position: "absolute",

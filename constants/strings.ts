@@ -32,14 +32,15 @@ export const OVERVIEW_STRINGS = {
       "Multiple members share a 4x vulnerability to the same type, meaning they take quadruple damage from it. This is extremely dangerous — a single Pokemon of that type can threaten several members of your team at once. Consider replacing one of the affected members with a Pokemon that resists or is immune to this type.",
   },
   noSafeSwitch: {
-    header: "No safe switch against: ",
+    header: (n: number) => `No safe switch against ${n} type${n === 1 ? "" : "s"}`,
     subText: "No resistance or immunity in the team",
     hintText:
       "When no member of your team resists or is immune to an attacking type, you have no safe switch against it — any switch-in will take neutral or super-effective damage. This leaves you vulnerable to being swept, as your opponent can freely use that type without fear of a punishing switch-in. Consider adding a Pokémon that resists or is immune to this type to give your team a reliable answer.",
   },
   noSuperEffectiveCoverage: {
-    header: "Poor super effective coverage",
-    subText: (n: number) => `${n} type${n === 1 ? "" : "s"} left uncovered: `,
+    header: (n: number) =>
+      `Poor super effective coverage. ${n} type${n === 1 ? "" : "s"} left uncovered.`,
+    subText: "",
     hintText:
       "Super-effective coverage determines how many opposing Pokémon types your team can threaten offensively. When your team cannot hit a type for super-effective damage, any Pokémon of that type can switch in safely and take minimal risk — giving your opponent a free turn to set up, heal, or attack. The more types left uncovered, the more predictable and exploitable your team becomes. Consider adding a Pokémon whose STAB or coverage moves hit the listed types for super-effective damage.",
   },
@@ -92,15 +93,26 @@ export const HINT_HEADER_DEFAULT: string = "Why is this important?";
 
 
 
-export const MORE_DETAILS_VULN: string = "No. of vulnerabilities";
-export const MORE_DETAILS_RESISTANCES: string = "No. of resistances";
-export const MORE_DETAILS_IMMUNITIES: string = "No. of immunities";
-export const MORE_DETAILS_WORST_MATCHUP: string = "Worst matchup";
+export const MORE_DETAILS_VULN: string = "Vulnerabilities";
+export const MORE_DETAILS_RESISTANCES: string = "Resistances";
+export const MORE_DETAILS_IMMUNITIES: string = "Immunities";
 
-export const MORE_DETAILS_SUPER_EFF: string = "Super-effective to:";
-export const MORE_DETAILS_NOT_VERY_EFF: string = "Not very effective to:";
-export const MORE_DETAILS_NO_EFF: string = "No effect on: ";
-export const MORE_DETAILS_NO_COVERAGE: string = "No coverage to:";
+export const MORE_DETAILS_SUPER_EFF: string = "Super-effective hits";
+export const MORE_DETAILS_NOT_VERY_EFF: string = "Resisted hits";
+export const MORE_DETAILS_NO_EFF: string = "No-effect hits";
+
+export const MORE_DETAILS_HINT_VULN: string =
+  "Total defensive match-ups where a member takes super-effective damage (×2 or ×4). A higher count means more attacking types can threaten your team — it's an upper bound on your defensive exposure, not a direct problem count.";
+export const MORE_DETAILS_HINT_RESIST: string =
+  "Total defensive match-ups where a member takes reduced damage (×0.5 or ×0.25). More resistances means more types your team can safely absorb hits from.";
+export const MORE_DETAILS_HINT_IMMUNE: string =
+  "Total match-ups where a member is completely immune (×0). Each immunity is a free pivot opportunity — you can switch in with zero damage taken, gaining a free turn.";
+export const MORE_DETAILS_HINT_SE: string =
+  "Total offensive match-ups where a member's STAB type hits a defending type for super-effective damage (×2). Higher means your team can threaten more types offensively.";
+export const MORE_DETAILS_HINT_NVE: string =
+  "Total offensive match-ups where a member's STAB type deals reduced damage (×0.5). A high number means many opposing types can safely tank your attacks.";
+export const MORE_DETAILS_HINT_NO_EFF: string =
+  "Total offensive match-ups where a member's STAB type deals no damage (×0) — the defending type is completely immune. These are complete offensive dead-ends against those types.";
 
 // Web footer "get the app" promotion. TODO: replace with the real store listing
 // URLs once the app is published.
