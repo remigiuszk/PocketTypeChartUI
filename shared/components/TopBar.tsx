@@ -42,14 +42,14 @@ export const TopBar = ({
         <View style={styles.webTabs}>
           <WebNavTab
             icon="fire-flame-curved"
-            label="Type Chart"
+            label={isCompact ? "Chart" : "Type Chart"}
             active={!teamBuilderOpen}
             onPress={teamBuilderOpen ? switchViews : undefined}
             compact={isCompact}
           />
           <WebNavTab
             icon="users"
-            label="Team Builder"
+            label={isCompact ? "Team" : "Team Builder"}
             active={teamBuilderOpen}
             onPress={!teamBuilderOpen ? switchViews : undefined}
             compact={isCompact}
@@ -58,8 +58,13 @@ export const TopBar = ({
 
         <View style={styles.webAction}>
           {typesSelected && (
-            <DefaultButton style={styles.webButton} click={clearSelection}>
-              <Subtitle style={styles.buttonText}>CLEAR SELECTED</Subtitle>
+            <DefaultButton
+              style={[styles.webButton, isCompact && styles.webButtonCompact]}
+              click={clearSelection}
+            >
+              <Subtitle style={[styles.buttonText, isCompact && styles.buttonTextCompact]}>
+                CLEAR SELECTED
+              </Subtitle>
             </DefaultButton>
           )}
         </View>
@@ -106,7 +111,7 @@ const WebNavTab = ({ icon, label, active, onPress, compact = false }: WebNavTabP
     ]}
     onPress={active ? undefined : onPress}
   >
-    <FontAwesome6 name={icon} size={15} color={active ? ACCENT : "#555"} />
+    <FontAwesome6 name={icon} size={compact ? 12 : 15} color={active ? ACCENT : "#555"} />
     <MutedText
       style={[
         styles.webTabLabel,
@@ -184,8 +189,8 @@ const styles = StyleSheet.create({
     resizeMode: "contain",
   },
   webBrandIconCompact: {
-    width: 40,
-    height: 40,
+    width: 52,
+    height: 52,
   },
   webTabs: {
     flexDirection: "row",
@@ -202,7 +207,9 @@ const styles = StyleSheet.create({
     borderTopColor: "transparent",
   },
   webTabCompact: {
-    paddingHorizontal: 10,
+    gap: 5,
+    paddingVertical: 6,
+    paddingHorizontal: 8,
   },
   webTabActive: {
     backgroundColor: "#22223a",
@@ -227,4 +234,6 @@ const styles = StyleSheet.create({
     alignItems: "flex-end",
   },
   webButton: { paddingVertical: 6, paddingHorizontal: 14 },
+  webButtonCompact: { paddingVertical: 4, paddingHorizontal: 8 },
+  buttonTextCompact: { fontSize: 10 },
 });
