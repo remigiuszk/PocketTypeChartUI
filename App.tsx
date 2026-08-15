@@ -14,13 +14,22 @@ import { SafeAreaProvider, SafeAreaView } from "react-native-safe-area-context";
 import { Provider } from "react-redux";
 
 import { BG_ROOT } from "./constants/colors";
+import { useGetAllPokeTypesQuery } from "./features/TypeSelection/query";
 import { TeamBuilder } from "./screens/TeamBuilder";
 import { Typing } from "./screens/Typing";
+import { AppSplash } from "./shared/components/AppSplash";
 import { store } from "./state/store";
 
 SplashScreen.preventAutoHideAsync();
 
-export const App = () => {
+// DEBUG ONLY — forces AppSplash to stay on screen so it can be designed
+// without racing real font/network loads. Set back to false before shipping.
+const DEBUG_ALWAYS_SHOW_SPLASH = false;
+
+// Rendered inside <Provider> so it can warm the poketypes cache before
+// anything else mounts — the add-member flow has no loading state of its
+// own and renders an empty type list if poketypes haven't arrived yet.
+const AppContent = () => {
   const [teamBuilderOpen, setTeamBuilderOpen] = useState<boolean>(false);
   const [fontsLoaded] = useFonts({
     Inter_300Light,
@@ -28,35 +37,51 @@ export const App = () => {
     Inter_500Medium,
     Inter_600SemiBold,
   });
+  const { isSuccess: typesLoaded, error: typesError } = useGetAllPokeTypesQuery();
+
+  const appReady = fontsLoaded && (typesLoaded || !!typesError);
 
   useEffect(() => {
-    if (fontsLoaded) {
-      SplashScreen.hideAsync();
-    }
+    // Hand off to the custom (animated) splash as soon as JS has mounted,
+    // rather than waiting for appReady — the native splash is static and
+    // AppSplash doesn't depend on the fonts/data we're still loading.
+    SplashScreen.hideAsync();
 
     if (Platform.OS === "android") {
       NavigationBar.setButtonStyleAsync("light");
     }
-  }, [fontsLoaded]);
+  }, []);
 
   function switchViews() {
     setTeamBuilderOpen(!teamBuilderOpen);
   }
 
+  if (DEBUG_ALWAYS_SHOW_SPLASH || !appReady) {
+    return <AppSplash />;
+  }
+
+  return (
+    <>
+      <StatusBar translucent={false} backgroundColor={BG_ROOT} />
+      <SafeAreaView
+        edges={["top", "left", "right", "bottom"]}
+        style={[styles.container]}
+      >
+        {teamBuilderOpen ? (
+          <TeamBuilder switchViews={switchViews}></TeamBuilder>
+        ) : (
+          <Typing switchViews={switchViews}></Typing>
+        )}
+      </SafeAreaView>
+    </>
+  );
+};
+
+export const App = () => {
   return (
     <SafeAreaProvider>
       <Provider store={store}>
-        <StatusBar translucent={false} backgroundColor={BG_ROOT} />
-        <SafeAreaView
-          edges={["top", "left", "right", "bottom"]}
-          style={[styles.container]}
-        >
-          {teamBuilderOpen ? (
-            <TeamBuilder switchViews={switchViews}></TeamBuilder>
-          ) : (
-            <Typing switchViews={switchViews}></Typing>
-          )}
-        </SafeAreaView>
+        <AppContent />
       </Provider>
     </SafeAreaProvider>
   );
