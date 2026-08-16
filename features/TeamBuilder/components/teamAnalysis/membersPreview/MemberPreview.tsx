@@ -1,4 +1,4 @@
-import { Image, StyleSheet, Text, View, ViewStyle } from "react-native";
+import { Image, StyleProp, StyleSheet, Text, View, ViewStyle } from "react-native";
 
 import { BG_BUTTON, BORDER_DEFAULT, TEXT_100 } from "../../../../../constants";
 import { MEMBER_ICONS } from "../../../../../constants/icons";
@@ -6,7 +6,7 @@ import { TwoTypesHeader } from "../../../../../shared/ui/TwoTypesHeader";
 import { TeamMemberModel } from "../../../types";
 
 type Props = {
-  style?: ViewStyle | ViewStyle[];
+  style?: StyleProp<ViewStyle>;
   member: TeamMemberModel;
   resistedTypeIds?: number[];
   iconSize?: number;

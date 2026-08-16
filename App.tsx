@@ -18,6 +18,7 @@ import { useGetAllPokeTypesQuery } from "./features/TypeSelection/query";
 import { TeamBuilder } from "./screens/TeamBuilder";
 import { Typing } from "./screens/Typing";
 import { AppSplash } from "./shared/components/AppSplash";
+import { IS_WEB } from "./shared/layout/platform";
 import { store } from "./state/store";
 
 SplashScreen.preventAutoHideAsync();
@@ -76,6 +77,15 @@ const AppContent = () => {
     </>
   );
 };
+
+// iOS Safari's rubber-band overscroll briefly extends the viewport past the
+// document, revealing whatever's behind it — which defaults to white since
+// the generated index.html never sets a background on html/body. Matching
+// that background to the app shell keeps the bounce from flashing white.
+if (IS_WEB) {
+  document.documentElement.style.backgroundColor = BG_ROOT;
+  document.body.style.backgroundColor = BG_ROOT;
+}
 
 export const App = () => {
   return (

@@ -244,6 +244,7 @@ const styles = StyleSheet.create({
   content: {
     flexDirection: "column",
     flex: 1,
+    minWidth: 0,
   },
   progressBarContainer: {
     flexDirection: "row",
