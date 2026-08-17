@@ -51,7 +51,11 @@ export const Typing = ({ switchViews }: Props) => {
       clearSelection={clearSelection}
     >
       <View
-        style={[styles.content, !IS_WEB && styles.contentNative, IS_WEB && styles.contentWeb]}
+        style={[
+          styles.content,
+          !IS_WEB && styles.contentNative,
+          IS_WEB && styles.contentWeb,
+        ]}
       >
         <View style={styles.typesContainer}>
           <TeamBuilderHeader
@@ -81,8 +85,8 @@ export const Typing = ({ switchViews }: Props) => {
 };
 
 const styles = StyleSheet.create({
-  content: { margin: 12, marginBottom: 0, gap: 16 },
+  content: { margin: 12, gap: 16 },
   contentNative: { flex: 1 },
   contentWeb: { maxWidth: WEB_CONTENT_WIDTH, alignSelf: "center", width: "100%" },
-  typesContainer: { alignItems: "stretch", gap: 6 },
+  typesContainer: { alignItems: "stretch", gap: 16 },
 });

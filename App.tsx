@@ -64,10 +64,7 @@ const AppContent = () => {
   return (
     <>
       <StatusBar translucent={false} backgroundColor={BG_ROOT} />
-      <SafeAreaView
-        edges={["top", "left", "right", "bottom"]}
-        style={[styles.container]}
-      >
+      <SafeAreaView edges={["top", "left", "right", "bottom"]} style={[styles.container]}>
         {teamBuilderOpen ? (
           <TeamBuilder switchViews={switchViews}></TeamBuilder>
         ) : (
@@ -78,10 +75,6 @@ const AppContent = () => {
   );
 };
 
-// iOS Safari's rubber-band overscroll briefly extends the viewport past the
-// document, revealing whatever's behind it — which defaults to white since
-// the generated index.html never sets a background on html/body. Matching
-// that background to the app shell keeps the bounce from flashing white.
 if (IS_WEB) {
   document.documentElement.style.backgroundColor = BG_ROOT;
   document.body.style.backgroundColor = BG_ROOT;

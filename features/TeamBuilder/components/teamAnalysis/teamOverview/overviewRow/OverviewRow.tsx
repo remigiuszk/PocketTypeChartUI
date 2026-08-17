@@ -265,13 +265,14 @@ const styles = StyleSheet.create({
   headerContainer: {
     flexDirection: "row",
     alignItems: "flex-start",
+    gap: 1,
   },
   headerContent: {
     flex: 1,
     flexDirection: "row",
     flexWrap: "wrap",
     alignItems: "center",
-    gap: 4,
+    gap: 0,
   },
   typeListRow: {
     flexDirection: "row",

@@ -100,7 +100,6 @@ const styles = StyleSheet.create({
     justifyContent: "flex-start",
     alignItems: "flex-start",
     gap: 12,
-    paddingHorizontal: 6,
   },
   container: {},
   strengths: {},

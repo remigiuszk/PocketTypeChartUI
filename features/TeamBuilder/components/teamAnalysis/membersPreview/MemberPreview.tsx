@@ -10,6 +10,7 @@ type Props = {
   member: TeamMemberModel;
   resistedTypeIds?: number[];
   iconSize?: number;
+  compact?: boolean;
 };
 
 export const MemberPreview = ({
@@ -17,6 +18,7 @@ export const MemberPreview = ({
   member,
   resistedTypeIds,
   iconSize = 20,
+  compact = false,
 }: Props) => {
   const icon = MEMBER_ICONS.find((x) => x.id === member.iconId)!;
   const IconComp = icon.library;
@@ -39,7 +41,7 @@ export const MemberPreview = ({
           {member.name}
         </Text>
         {resistedTypeIds ? (
-          <View style={styles.typesRow}>
+          <View style={[styles.typesRow, compact && styles.typesRowCompact]}>
             {member.types.map((type) => {
               const resisted = resistedTypeIds.includes(type.id);
               return (
@@ -47,12 +49,13 @@ export const MemberPreview = ({
                   key={type.id}
                   style={[
                     styles.typeBorderWrap,
+                    compact && styles.typeBorderWrapCompact,
                     resisted
                       ? styles.typeBorderWrapHighlighted
                       : styles.typeBorderWrapDimmed,
                   ]}
                 >
-                  <View style={styles.typeContainer}>
+                  <View style={[styles.typeContainer, compact && styles.typeContainerCompact]}>
                     <Image style={styles.typeImage} source={{ uri: type.sprite }} />
                   </View>
                 </View>
@@ -112,9 +115,16 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     gap: 3,
   },
+  typesRowCompact: {
+    gap: 2,
+  },
   typeBorderWrap: {
     borderRadius: 3,
     borderWidth: 1.5,
+  },
+  typeBorderWrapCompact: {
+    borderRadius: 2,
+    borderWidth: 1,
   },
   typeBorderWrapHighlighted: {
     borderColor: "#e07b00",
@@ -128,6 +138,9 @@ const styles = StyleSheet.create({
     aspectRatio: 200 / 44,
     borderRadius: 2,
     overflow: "hidden",
+  },
+  typeContainerCompact: {
+    height: 10,
   },
   typeImage: {
     width: "100%",

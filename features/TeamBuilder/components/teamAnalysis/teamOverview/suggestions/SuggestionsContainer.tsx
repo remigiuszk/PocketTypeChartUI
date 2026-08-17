@@ -54,7 +54,6 @@ const styles = StyleSheet.create({
     borderColor: BORDER_SUGGESTIONS,
     flex: 1,
   },
-  // On web the page scrolls (no bounded height); flex:1 makes this stretch.
   cardWeb: { flexGrow: 0, flexShrink: 0, flexBasis: "auto" },
   separator: {
     height: 1,

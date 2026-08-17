@@ -273,15 +273,15 @@ const styles = StyleSheet.create({
     shadowRadius: 8,
   },
   addText: {
+    fontFamily: "Inter_600SemiBold",
     fontSize: 14,
     letterSpacing: 1,
     textTransform: "uppercase",
-    fontWeight: 800,
   },
   evaluateText: {
+    fontFamily: "Inter_600SemiBold",
     color: "#FFFFFF",
     fontSize: 18,
-    fontWeight: "800",
     letterSpacing: 0.8,
 
     textShadowColor: "rgba(0,0,0,0.8)",
@@ -289,9 +289,9 @@ const styles = StyleSheet.create({
     textShadowRadius: 3,
   },
   inactiveText: {
+    fontFamily: "Inter_600SemiBold",
     color: BORDER_DEFAULT,
     fontSize: 18,
-    fontWeight: "800",
     letterSpacing: 0.8,
   },
 });

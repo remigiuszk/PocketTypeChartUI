@@ -200,7 +200,7 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     alignItems: "center",
     gap: 8,
-    paddingVertical: 8,
+    paddingVertical: 16,
     paddingHorizontal: 16,
     borderRadius: 10,
     borderTopWidth: 2,
@@ -208,7 +208,7 @@ const styles = StyleSheet.create({
   },
   webTabCompact: {
     gap: 5,
-    paddingVertical: 6,
+    paddingVertical: 12,
     paddingHorizontal: 8,
   },
   webTabActive: {

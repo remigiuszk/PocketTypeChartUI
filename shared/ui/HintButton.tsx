@@ -67,6 +67,7 @@ export const HintButton = ({
     <>
       <Pressable
         onPress={open}
+        hitSlop={{ top: 10, bottom: 10, left: 10, right: 10 }}
         style={({ pressed }) => [styles.triggerBtn, pressed && styles.pressed, style]}
       >
         <FontAwesome5 name="question" size={10} color={ACCENT} />
@@ -159,7 +160,7 @@ const styles = StyleSheet.create({
     borderRadius: 11,
     backgroundColor: BG_INTERNAL,
     borderWidth: 1.5,
-    borderColor: BORDER_DEFAULT,
+    borderColor: ACCENT,
     alignItems: "center",
     justifyContent: "center",
   },

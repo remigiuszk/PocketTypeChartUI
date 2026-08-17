@@ -60,6 +60,7 @@ export const ResistanceBreakdownSection = ({ items }: Props) => {
                   : styles.memberCard
               }
               iconSize={IS_WEB ? (isCompact ? 18 : 26) : undefined}
+              compact={IS_WEB && isCompact}
               member={{
                 id: item.id,
                 name: item.name,
@@ -137,11 +138,11 @@ const styles = StyleSheet.create({
   memberCardWeb: {
     flexShrink: 0,
     flexGrow: 0,
-    width: 155,
+    width: 170,
     overflow: "hidden",
   },
   memberCardWebCompact: {
-    width: 100,
+    width: 120,
   },
   pill: {
     paddingHorizontal: 9,

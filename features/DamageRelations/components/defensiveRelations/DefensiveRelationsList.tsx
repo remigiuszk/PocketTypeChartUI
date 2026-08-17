@@ -24,7 +24,9 @@ export const DefensiveRelationsList = ({ relationList }: Props) => {
     superEffective.length > 0 ? { multiplier: 2, list: superEffective } : null,
     notVeryEffective.length > 0 ? { multiplier: 0.5, list: notVeryEffective } : null,
     immunities.length > 0 ? { multiplier: 0, list: immunities } : null,
-  ].filter((s): s is { multiplier: number; list: DefensiveDamageRelationModel[] } => s !== null);
+  ].filter(
+    (s): s is { multiplier: number; list: DefensiveDamageRelationModel[] } => s !== null,
+  );
 
   return (
     <View style={styles.container}>
