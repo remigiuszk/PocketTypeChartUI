@@ -1,6 +1,11 @@
 import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
 
-import { ALL_ENDPOINT, BASE_URL, DAMAGERELATIONS_ENDPOINT } from "../../constants";
+import {
+  ALL_ENDPOINT,
+  BASE_URL,
+  DAMAGERELATIONS_ENDPOINT,
+  resolveSpriteUrl,
+} from "../../constants";
 import { DamageRelationFullModel, TypingEffectivenessModel } from "./types";
 
 export const damageRelationsApi = createApi({
@@ -18,7 +23,27 @@ export const damageRelationsApi = createApi({
         };
       },
       transformResponse: (res) => {
-        return res as TypingEffectivenessModel;
+        const result = res as TypingEffectivenessModel;
+        return {
+          defensiveDamageRelations: result.defensiveDamageRelations.map((relation) => ({
+            ...relation,
+            attackingType: {
+              ...relation.attackingType,
+              sprite: resolveSpriteUrl(relation.attackingType.sprite),
+            },
+          })),
+          offensiveDamageRelations: result.offensiveDamageRelations.map((relation) => ({
+            ...relation,
+            attackingMoveType: {
+              ...relation.attackingMoveType,
+              sprite: resolveSpriteUrl(relation.attackingMoveType.sprite),
+            },
+            defendingType: {
+              ...relation.defendingType,
+              sprite: resolveSpriteUrl(relation.defendingType.sprite),
+            },
+          })),
+        };
       },
     }),
     getAllRelations: builder.query<DamageRelationFullModel[], void>({

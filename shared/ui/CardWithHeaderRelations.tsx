@@ -3,7 +3,14 @@ import MaterialCommunityIcons from "@expo/vector-icons/MaterialCommunityIcons";
 import { ReactNode } from "react";
 import { StyleProp, StyleSheet, View, ViewStyle } from "react-native";
 
-import { BG_CARD, BORDER_INTERNAL, PADDING, TEXT_300 } from "../../constants";
+import {
+  BG_CARD,
+  BORDER_INTERNAL,
+  DEFENSIVE_ACCENT,
+  OFFENSIVE_ACCENT,
+  PADDING,
+  TEXT_300,
+} from "../../constants";
 import { Title } from "../typohraphy/Title";
 import { TwoTypesHeader } from "./TwoTypesHeader";
 
@@ -24,8 +31,15 @@ export const CardWithHeaderRelations = ({
   style,
   sprites,
 }: CardProps) => {
+  const accentColor =
+    iconName === "shield"
+      ? DEFENSIVE_ACCENT
+      : iconName === "sword"
+        ? OFFENSIVE_ACCENT
+        : undefined;
+
   return (
-    <View style={[styles.card, style]}>
+    <View style={[styles.card, accentColor ? { borderTopColor: accentColor } : null, style]}>
       <View
         style={[
           styles.headerContainer,
@@ -43,14 +57,14 @@ export const CardWithHeaderRelations = ({
               style={styles.iconShield}
               name="shield"
               size={36}
-              color={TEXT_300}
+              color={accentColor ?? TEXT_300}
             />
           ) : iconName === "sword" ? (
             <MaterialCommunityIcons
               style={styles.iconSword}
               name="sword"
               size={36}
-              color={TEXT_300}
+              color={accentColor ?? TEXT_300}
             />
           ) : null}
           <View
@@ -61,7 +75,7 @@ export const CardWithHeaderRelations = ({
                 : { alignItems: "center" },
             ]}
           >
-            <Title>{title}</Title>
+            <Title color={accentColor}>{title}</Title>
             <TwoTypesHeader sprites={sprites} message={subtitle}></TwoTypesHeader>
           </View>
         </View>
@@ -75,6 +89,8 @@ const styles = StyleSheet.create({
   card: {
     width: "100%",
     borderRadius: 16,
+    borderTopWidth: 3,
+    borderTopColor: "transparent",
     overflow: "hidden",
     backgroundColor: BG_CARD,
     shadowColor: "#000000",

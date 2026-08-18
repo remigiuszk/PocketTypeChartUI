@@ -37,6 +37,9 @@ export const TEXT_SHADOW: string = "rgb(11, 130, 163)";
 
 export const WARNING: string = "#ffce85";
 
+export const DEFENSIVE_ACCENT: string = "#5AA9E6";
+export const OFFENSIVE_ACCENT: string = "#E8785A";
+
 export const STRENGTHS_BG: string = "rgba(107, 255, 139, 0.1)";
 export const STRENGTHS_BORDER: string = "rgba(107, 255, 149, 0.25)";
 export const STRENGTHS_CONTENT: string = "#abfec7";

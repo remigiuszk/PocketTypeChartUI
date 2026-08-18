@@ -1,6 +1,6 @@
 import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
 
-import { BASE_URL, POKETYPES_ENDPOINT } from "../../constants";
+import { BASE_URL, POKETYPES_ENDPOINT, resolveSpriteUrl } from "../../constants";
 import { PokeTypeModel } from "./types";
 
 export const pokeTypesApi = createApi({
@@ -18,7 +18,10 @@ export const pokeTypesApi = createApi({
       },
       transformResponse: (res: any) => {
         console.log(res);
-        return res as PokeTypeModel[];
+        return (res as PokeTypeModel[]).map((type) => ({
+          ...type,
+          sprite: resolveSpriteUrl(type.sprite),
+        }));
       },
     }),
   }),
