@@ -3,6 +3,7 @@ import { useEffect, useState } from "react";
 import { Pressable, StyleSheet, TextInput, View, ViewStyle } from "react-native";
 
 import { BG_BUTTON, ERROR_CONTENT, TEXT_100 } from "../../../../../constants";
+import { IS_WEB } from "../../../../../shared/layout/platform";
 
 type Props = {
   style?: ViewStyle | ViewStyle[];
@@ -10,6 +11,15 @@ type Props = {
   hasError?: boolean;
   onNameChange: (name: string) => void;
 };
+
+// react-native-web renders TextInput as a plain <input>, which picks up the
+// browser's own default focus ring on top of the wrapper's border — the
+// wrapper already communicates focus/error state, so this suppresses the
+// duplicate ring. RN's typed `outlineStyle` only allows solid/dotted/dashed
+// (it's meant for RN's native focus-ring feature), but on web this is just a
+// generic CSS property passthrough, so the value is cast past that RN-only
+// restriction.
+const webInputStyle = { outlineStyle: "none", boxShadow: "none" } as unknown as ViewStyle;
 
 export const MemberName = ({ style, memberName, hasError, onNameChange }: Props) => {
   const [localName, setLocalName] = useState(memberName);
@@ -27,7 +37,7 @@ export const MemberName = ({ style, memberName, hasError, onNameChange }: Props)
       <Pressable style={[styles.wrapper, hasError && styles.wrapperError]}>
         <View style={{ width: 18 }} />
         <TextInput
-          style={styles.input}
+          style={[styles.input, IS_WEB && webInputStyle]}
           value={localName}
           placeholder="Enter member name"
           placeholderTextColor="#4e4e62"

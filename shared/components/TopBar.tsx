@@ -4,12 +4,8 @@ import { Image, Pressable, StyleSheet, useWindowDimensions, View } from "react-n
 import { ACCENT, BG_ROOT, BORDER_INTERNAL } from "../../constants";
 import { IS_WEB } from "../layout/platform";
 import { MutedText } from "../typohraphy/MutedText";
-import { Subtitle } from "../typohraphy/Subtitle";
-import DefaultButton from "../ui/DefaultButton";
 
 type Props = {
-  typesSelected?: boolean;
-  clearSelection: () => void;
   teamBuilderOpen?: boolean;
   switchViews?: () => void;
 };
@@ -18,12 +14,7 @@ type Props = {
 // row with labels, so the labels are dropped and the tabs go icon-only.
 const WEB_COMPACT_BREAKPOINT = 480;
 
-export const TopBar = ({
-  typesSelected,
-  clearSelection,
-  teamBuilderOpen = false,
-  switchViews,
-}: Props) => {
+export const TopBar = ({ teamBuilderOpen = false, switchViews }: Props) => {
   const { width } = useWindowDimensions();
   const isCompact = width < WEB_COMPACT_BREAKPOINT;
 
@@ -56,18 +47,7 @@ export const TopBar = ({
           />
         </View>
 
-        <View style={styles.webAction}>
-          {typesSelected && (
-            <DefaultButton
-              style={[styles.webButton, isCompact && styles.webButtonCompact]}
-              click={clearSelection}
-            >
-              <Subtitle style={[styles.buttonText, isCompact && styles.buttonTextCompact]}>
-                CLEAR SELECTED
-              </Subtitle>
-            </DefaultButton>
-          )}
-        </View>
+        <View style={styles.webAction} />
       </View>
     );
   }
@@ -81,13 +61,6 @@ export const TopBar = ({
             source={require("../../assets/img/icon.png")}
           ></Image>
         </View>
-      </View>
-      <View style={styles.options}>
-        {typesSelected && (
-          <DefaultButton style={styles.button} click={clearSelection}>
-            <Subtitle style={styles.buttonText}>CLEAR SELECTED</Subtitle>
-          </DefaultButton>
-        )}
       </View>
     </View>
   );
@@ -150,16 +123,6 @@ const styles = StyleSheet.create({
     height: "157%",
     resizeMode: "contain",
   },
-  options: {
-    flex: 1,
-    justifyContent: "center",
-    alignItems: "flex-end",
-    flexWrap: "wrap",
-    height: "100%",
-  },
-  button: { width: "90%", padding: 4 },
-  buttonText: { color: BG_ROOT, fontWeight: 800, fontSize: 12 },
-
   // --- Web header ---
   webContainer: {
     width: "100%",
@@ -229,11 +192,9 @@ const styles = StyleSheet.create({
   webTabLabelActive: {
     color: ACCENT,
   },
+  // Empty spacer, symmetric with `webBrand`, so `webTabs` stays centered
+  // in the header now that there's nothing rendered on the right.
   webAction: {
     flex: 1,
-    alignItems: "flex-end",
   },
-  webButton: { paddingVertical: 6, paddingHorizontal: 14 },
-  webButtonCompact: { paddingVertical: 4, paddingHorizontal: 8 },
-  buttonTextCompact: { fontSize: 10 },
 });

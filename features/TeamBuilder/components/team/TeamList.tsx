@@ -1,6 +1,12 @@
 import { Feather } from "@expo/vector-icons";
 import * as Crypto from "expo-crypto";
-import { useEffect, useRef, useState } from "react";
+import {
+  forwardRef,
+  useEffect,
+  useImperativeHandle,
+  useRef,
+  useState,
+} from "react";
 import { Animated, Pressable, StyleSheet } from "react-native";
 
 import {
@@ -27,11 +33,20 @@ const ADD_BORDER_ACTIVE = MEMBERS_COLORS[0]; // brand teal #1BC5BE
 
 type Props = {
   onAnalyze: (teamMembers: TeamMemberModel[]) => void;
+  onMembersChange?: (count: number) => void;
 };
 
-export const TeamList = ({ onAnalyze }: Props) => {
+export type TeamListHandle = {
+  clearAll: () => void;
+};
+
+export const TeamList = forwardRef<TeamListHandle, Props>(function TeamList(
+  { onAnalyze, onMembersChange },
+  ref,
+) {
   const [showModal, setShowModal] = useState<boolean>(false);
   const [memberToDelete, setMemberToDelete] = useState<TeamMemberModel | null>(null);
+  const [confirmClearAll, setConfirmClearAll] = useState<boolean>(false);
   const [addActive, setAddActive] = useState<boolean>(false);
   const [isEditing, setIsEditing] = useState<boolean>(false);
   const [teamMembers, setTeamMembers] = useState<TeamMemberModel[]>([]);
@@ -80,6 +95,19 @@ export const TeamList = ({ onAnalyze }: Props) => {
     setMemberToDelete(null);
   }
 
+  function confirmClear() {
+    setTeamMembers([]);
+    setConfirmClearAll(false);
+  }
+
+  function cancelClear() {
+    setConfirmClearAll(false);
+  }
+
+  useImperativeHandle(ref, () => ({
+    clearAll: () => setConfirmClearAll(true),
+  }));
+
   function onConfirm(
     id: string,
     newMember: TeamMemberModel,
@@ -116,6 +144,10 @@ export const TeamList = ({ onAnalyze }: Props) => {
     if (!didLoad.current) return;
     saveTeamMembers(teamMembers);
   }, [teamMembers]);
+
+  useEffect(() => {
+    onMembersChange?.(teamMembers.length);
+  }, [teamMembers, onMembersChange]);
 
   useEffect(() => {
     (async () => {
@@ -166,6 +198,16 @@ export const TeamList = ({ onAnalyze }: Props) => {
         destructive={true}
         onConfirm={confirmDelete}
         onCancel={cancelDelete}
+      ></ConfirmModal>
+      <ConfirmModal
+        visible={confirmClearAll}
+        title="Clear entire team"
+        message={`This removes all ${teamMembers.length} team members. This can't be undone.`}
+        confirmLabel="Yes, clear team"
+        cancelLabel="No"
+        destructive={true}
+        onConfirm={confirmClear}
+        onCancel={cancelClear}
       ></ConfirmModal>
       {teamMembers.map((member: TeamMemberModel) => (
         <TeamMember
@@ -229,7 +271,7 @@ export const TeamList = ({ onAnalyze }: Props) => {
       )}
     </Card>
   );
-};
+});
 
 const styles = StyleSheet.create({
   card: { padding: 8 },

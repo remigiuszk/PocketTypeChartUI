@@ -44,49 +44,40 @@ export const Typing = ({ switchViews }: Props) => {
   }
 
   return (
-    <Screen
-      teamBuilderOpen={false}
-      switchViews={switchViews}
-      typesSelected={selectedType && selectedType.length > 0}
-      clearSelection={clearSelection}
-    >
-      <View
-        style={[
-          styles.content,
-          !IS_WEB && styles.contentNative,
-          IS_WEB && styles.contentWeb,
-        ]}
-      >
-        <View style={styles.typesContainer}>
-          <TeamBuilderHeader
-            title="TYPE CHART"
-            subtitle="Select up to 2 types and check their type relations"
-          />
-          <PokeTypeList
-            data={data}
-            isFetching={isFetching}
-            error={error}
-            isLoading={isLoading}
-            refetch={refetch}
-            memberTypes={normalizedSelected}
-            onToggle={toggleType}
-          />
-        </View>
-        {selectedType.length > 0 ? (
-          <ContentScroll>
+    <Screen teamBuilderOpen={false} switchViews={switchViews}>
+      <ContentScroll>
+        <View style={[styles.content, IS_WEB && styles.contentWeb]}>
+          <View style={styles.typesContainer}>
+            <TeamBuilderHeader
+              title="TYPE CHART"
+              subtitle="Select up to 2 types and check their type relations"
+              selectionCount={selectedType.length}
+              selectionMax={2}
+              onClearSelection={clearSelection}
+            />
+            <PokeTypeList
+              data={data}
+              isFetching={isFetching}
+              error={error}
+              isLoading={isLoading}
+              refetch={refetch}
+              memberTypes={normalizedSelected}
+              onToggle={toggleType}
+            />
+          </View>
+          {selectedType.length > 0 ? (
             <Relations selectedTypes={normalizedSelected}></Relations>
-          </ContentScroll>
-        ) : (
-          data && data.length > 0 && <NoTypesSelected></NoTypesSelected>
-        )}
-      </View>
+          ) : (
+            data && data.length > 0 && <NoTypesSelected></NoTypesSelected>
+          )}
+        </View>
+      </ContentScroll>
     </Screen>
   );
 };
 
 const styles = StyleSheet.create({
   content: { margin: 12, gap: 16 },
-  contentNative: { flex: 1 },
   contentWeb: { maxWidth: WEB_CONTENT_WIDTH, alignSelf: "center", width: "100%" },
   typesContainer: { alignItems: "stretch", gap: 16 },
 });

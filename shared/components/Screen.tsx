@@ -11,8 +11,6 @@ import { WebFooter } from "./WebFooter";
 type Props = {
   teamBuilderOpen: boolean;
   switchViews: () => void;
-  typesSelected?: boolean;
-  clearSelection?: () => void;
   children: ReactNode;
 };
 
@@ -21,21 +19,8 @@ type Props = {
 //   content centered/capped via PageContainer, and a store-badge footer. No
 //   bottom NavBar.
 // - Native: today's layout — TopBar, flex content, bottom NavBar.
-export const Screen = ({
-  teamBuilderOpen,
-  switchViews,
-  typesSelected,
-  clearSelection,
-  children,
-}: Props) => {
-  const topBar = (
-    <TopBar
-      teamBuilderOpen={teamBuilderOpen}
-      switchViews={switchViews}
-      typesSelected={typesSelected}
-      clearSelection={clearSelection ?? (() => {})}
-    />
-  );
+export const Screen = ({ teamBuilderOpen, switchViews, children }: Props) => {
+  const topBar = <TopBar teamBuilderOpen={teamBuilderOpen} switchViews={switchViews} />;
 
   if (IS_WEB) {
     return (

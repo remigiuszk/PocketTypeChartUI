@@ -40,6 +40,7 @@ export const PokeTypeList = ({
   onToggle,
 }: PokeTypeListProps) => {
   const selectedTypes = memberTypes ?? [];
+  const hasSelection = selectedTypes.length > 0;
   const [availWidth, setAvailWidth] = useState<number>(
     () => Dimensions.get("window").width,
   );
@@ -50,6 +51,7 @@ export const PokeTypeList = ({
     <PokeType
       pokeType={item}
       isSelected={selectedTypes?.some((x) => x.id === item.id)}
+      anySelected={hasSelection}
       onPress={() => onToggle(item)}
     />
   );
