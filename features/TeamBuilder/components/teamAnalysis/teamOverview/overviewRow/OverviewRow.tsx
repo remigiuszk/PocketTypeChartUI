@@ -31,23 +31,30 @@ function toBreakdownItems(
   breakdown: MemberResistanceBreakdown[] | undefined,
 ): MemberBreakdownItem[] | undefined {
   if (!breakdown?.length) return undefined;
-  return breakdown.map(({ member, resistedTypes }) => {
-    const worstResist = resistedTypes.reduce((a, b) =>
-      a.multiplier <= b.multiplier ? a : b,
-    );
-    const defendingTypes = resistedTypes
-      .map((r) => r.defendingType)
-      .filter((t, i, arr) => arr.findIndex((x) => x.id === t.id) === i);
-    return {
-      id: member.id,
-      name: member.name,
-      types: member.types,
-      iconId: member.iconId,
-      iconColor: member.iconColor,
-      resistedTypeIds: resistedTypes.map((r) => r.type.id),
-      multiplier: worstResist.multiplier,
-      defendingTypes,
-    };
+  return breakdown.flatMap(({ member, resistedTypes }) => {
+    const groupsByMultiplier = new Map<number, typeof resistedTypes>();
+    for (const resisted of resistedTypes) {
+      const existing = groupsByMultiplier.get(resisted.multiplier) ?? [];
+      groupsByMultiplier.set(resisted.multiplier, [...existing, resisted]);
+    }
+
+    return Array.from(groupsByMultiplier.entries())
+      .sort(([a], [b]) => a - b)
+      .map(([multiplier, types]) => {
+        const defendingTypes = types
+          .map((r) => r.defendingType)
+          .filter((t, i, arr) => arr.findIndex((x) => x.id === t.id) === i);
+        return {
+          id: `${member.id}-${multiplier}`,
+          name: member.name,
+          types: member.types,
+          iconId: member.iconId,
+          iconColor: member.iconColor,
+          resistedTypeIds: types.map((r) => r.type.id),
+          multiplier,
+          defendingTypes,
+        };
+      });
   });
 }
 
@@ -272,7 +279,7 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     flexWrap: "wrap",
     alignItems: "center",
-    gap: 0,
+    gap: 3,
   },
   typeListRow: {
     flexDirection: "row",

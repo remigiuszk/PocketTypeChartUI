@@ -10,9 +10,6 @@ export const POKETYPES_ENDPOINT: string = "/poketypes";
 export const DAMAGERELATIONS_ENDPOINT: string = "/damagerelations";
 export const ALL_ENDPOINT: string = "/all";
 
-// The backend now serves sprites itself (cached, to avoid hammering the
-// upstream PokeAPI/GitHub rate limits) and returns them as a path relative
-// to the API origin, e.g. "/api/poketypes/5/sprite", rather than a full URL.
 const API_ORIGIN: string = BASE_URL.replace(/\/api\/?$/, "");
 
 export const resolveSpriteUrl = (sprite: string): string =>

@@ -9,6 +9,13 @@ type PokeTypeProps = {
   onPress: () => void;
 };
 
+// The web tile's outer box height is computed in PokeTypeList to preserve this
+// same margin, so the sprite (which fills the box exactly) keeps its intended
+// 200:44 aspect ratio and rounded corners regardless of gap size. Native derives
+// its own height straight from aspectRatio (post-margin), so it doesn't need
+// that extra math, but shares this constant to keep the gap identical.
+export const TILE_MARGIN = 1.5;
+
 export const PokeType = ({ pokeType, isSelected, onPress }: PokeTypeProps) => {
   return (
     <Pressable
@@ -33,7 +40,7 @@ export const PokeType = ({ pokeType, isSelected, onPress }: PokeTypeProps) => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    margin: 3,
+    margin: TILE_MARGIN,
     height: Platform.OS === "web" ? undefined : 0,
     borderRadius: 6,
     overflow: "hidden",

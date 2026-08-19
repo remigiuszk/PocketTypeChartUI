@@ -7,7 +7,7 @@ import { Error } from "../../../shared/components/Error";
 import { Loading } from "../../../shared/components/Loading";
 import { IS_WEB } from "../../../shared/layout/platform";
 import { PokeTypeModel } from "../types";
-import { PokeType } from "./PokeType";
+import { PokeType, TILE_MARGIN } from "./PokeType";
 
 type PokeTypeListProps = {
   memberTypes: PokeTypeModel[];
@@ -59,10 +59,20 @@ export const PokeTypeList = ({
     const fit = Math.max(2, Math.floor(availWidth / WEB_TARGET_TILE_WIDTH));
     const columns = balancedColumns(types.length, fit);
     const tileWidth = Math.min(WEB_TARGET_TILE_WIDTH, Math.floor(availWidth / columns));
+    // Firefox fails to resolve aspectRatio on a flex:1 child whose container has
+    // no definite height (see PokeType.tsx), so give the tile an explicit pixel
+    // height here rather than relying on aspectRatio to derive it from width.
+    // The margin eats into the tile's inner box on both axes, so the ratio is
+    // derived from the post-margin width and then padded back out — otherwise a
+    // non-zero margin distorts the inner box's aspect ratio and the sprite
+    // letterboxes instead of filling its rounded-corner clip exactly.
+    const innerWidth = tileWidth - TILE_MARGIN * 2;
+    const innerHeight = Math.round(innerWidth * (44 / 200));
+    const tileHeight = innerHeight + TILE_MARGIN * 2;
     webGrid = (
       <View style={[styles.webGrid, { width: tileWidth * columns }]}>
         {types.map((item) => (
-          <View key={String(item.id)} style={{ width: tileWidth }}>
+          <View key={String(item.id)} style={{ width: tileWidth, height: tileHeight }}>
             {renderTile(item)}
           </View>
         ))}
