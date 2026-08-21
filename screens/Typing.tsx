@@ -12,11 +12,7 @@ import { Screen } from "../shared/components/Screen";
 import { IS_WEB } from "../shared/layout/platform";
 import { TeamBuilderHeader } from "../shared/typohraphy/TeamBuilderHeader";
 
-type Props = {
-  switchViews: () => void;
-};
-
-export const Typing = ({ switchViews }: Props) => {
+export const Typing = () => {
   const [selectedType, setSelectedType] = useState<PokeTypeModel[]>([]);
 
   const { data, isLoading, isFetching, error, refetch } = useGetAllPokeTypesQuery();
@@ -44,7 +40,7 @@ export const Typing = ({ switchViews }: Props) => {
   }
 
   return (
-    <Screen teamBuilderOpen={false} switchViews={switchViews}>
+    <Screen>
       <ContentScroll>
         <View style={[styles.content, IS_WEB && styles.contentWeb]}>
           <View style={styles.typesContainer}>

@@ -9,23 +9,14 @@ import { TopBar } from "./TopBar";
 import { WebFooter } from "./WebFooter";
 
 type Props = {
-  teamBuilderOpen: boolean;
-  switchViews: () => void;
-  children: ReactNode;
+  children?: ReactNode;
 };
 
-// App shell shared by both screens.
-// - Web: full-width TopBar (with nav moved in), a single page-level ScrollView,
-//   content centered/capped via PageContainer, and a store-badge footer. No
-//   bottom NavBar.
-// - Native: today's layout — TopBar, flex content, bottom NavBar.
-export const Screen = ({ teamBuilderOpen, switchViews, children }: Props) => {
-  const topBar = <TopBar teamBuilderOpen={teamBuilderOpen} switchViews={switchViews} />;
-
+export const Screen = ({ children }: Props) => {
   if (IS_WEB) {
     return (
       <View style={styles.container}>
-        {topBar}
+        <TopBar />
         <ScrollView style={styles.flex} contentContainerStyle={styles.webContent}>
           <PageContainer>{children}</PageContainer>
           <WebFooter />
@@ -36,9 +27,9 @@ export const Screen = ({ teamBuilderOpen, switchViews, children }: Props) => {
 
   return (
     <View style={styles.container}>
-      {topBar}
+      <TopBar />
       <View style={styles.flex}>{children}</View>
-      <NavBar teamBuilderOpen={teamBuilderOpen} switchViews={switchViews} />
+      <NavBar />
     </View>
   );
 };

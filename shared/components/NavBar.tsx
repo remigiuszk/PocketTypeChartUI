@@ -1,48 +1,37 @@
 import FontAwesome6 from "@expo/vector-icons/FontAwesome6";
+import { NavigationProp, useNavigation, useNavigationState } from "@react-navigation/native";
 import { Pressable, StyleSheet, View } from "react-native";
 
 import { ACCENT, BG_ROOT } from "../../constants";
+import { TABS } from "../../navigation/tabs";
+import { RootTabParamList } from "../../navigation/types";
 import { MutedText } from "../typohraphy/MutedText";
 
-type Props = {
-  teamBuilderOpen: boolean;
-  switchViews: () => void;
-};
+export const NavBar = () => {
+  const navigation = useNavigation<NavigationProp<RootTabParamList>>();
+  const activeRoute = useNavigationState((state) => state.routes[state.index].name);
 
-export const NavBar = ({ teamBuilderOpen, switchViews }: Props) => {
   return (
     <View style={styles.container}>
-      <Pressable
-        style={({ pressed }) => [
-          styles.button,
-          !teamBuilderOpen && styles.selected,
-          pressed && styles.pressed,
-        ]}
-        onPress={teamBuilderOpen ? switchViews : null}
-      >
-        <FontAwesome6
-          name="fire-flame-curved"
-          size={16}
-          color={!teamBuilderOpen ? ACCENT : "#555"}
-        />
-        <MutedText style={[styles.label, !teamBuilderOpen && styles.labelActive]}>
-          Type Chart
-        </MutedText>
-      </Pressable>
-
-      <Pressable
-        style={({ pressed }) => [
-          styles.button,
-          teamBuilderOpen && styles.selected,
-          pressed && styles.pressed,
-        ]}
-        onPress={!teamBuilderOpen ? switchViews : null}
-      >
-        <FontAwesome6 name="users" size={16} color={teamBuilderOpen ? ACCENT : "#555"} />
-        <MutedText style={[styles.label, teamBuilderOpen && styles.labelActive]}>
-          Team Builder
-        </MutedText>
-      </Pressable>
+      {TABS.map((tab) => {
+        const active = activeRoute === tab.name;
+        return (
+          <Pressable
+            key={tab.name}
+            style={({ pressed }) => [
+              styles.button,
+              active && styles.selected,
+              pressed && styles.pressed,
+            ]}
+            onPress={active ? undefined : () => navigation.navigate(tab.name)}
+          >
+            <FontAwesome6 name={tab.icon} size={16} color={active ? ACCENT : "#555"} />
+            <MutedText style={[styles.label, active && styles.labelActive]}>
+              {tab.label}
+            </MutedText>
+          </Pressable>
+        );
+      })}
     </View>
   );
 };

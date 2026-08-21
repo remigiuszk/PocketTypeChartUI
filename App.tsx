@@ -5,18 +5,18 @@ import {
   Inter_600SemiBold,
   useFonts,
 } from "@expo-google-fonts/inter";
+import { NavigationContainer } from "@react-navigation/native";
 import * as NavigationBar from "expo-navigation-bar";
 import * as SplashScreen from "expo-splash-screen";
 import { StatusBar } from "expo-status-bar";
-import React, { useEffect, useState } from "react";
+import React, { useEffect } from "react";
 import { Platform, StyleSheet } from "react-native";
 import { SafeAreaProvider, SafeAreaView } from "react-native-safe-area-context";
 import { Provider } from "react-redux";
 
 import { BG_ROOT } from "./constants/colors";
 import { useGetAllPokeTypesQuery } from "./features/TypeSelection/query";
-import { TeamBuilder } from "./screens/TeamBuilder";
-import { Typing } from "./screens/Typing";
+import { RootTabs } from "./navigation/RootTabs";
 import { AppSplash } from "./shared/components/AppSplash";
 import { IS_WEB } from "./shared/layout/platform";
 import { store } from "./state/store";
@@ -31,7 +31,6 @@ const DEBUG_ALWAYS_SHOW_SPLASH = false;
 // anything else mounts — the add-member flow has no loading state of its
 // own and renders an empty type list if poketypes haven't arrived yet.
 const AppContent = () => {
-  const [teamBuilderOpen, setTeamBuilderOpen] = useState<boolean>(false);
   const [fontsLoaded] = useFonts({
     Inter_300Light,
     Inter_400Regular,
@@ -53,10 +52,6 @@ const AppContent = () => {
     }
   }, []);
 
-  function switchViews() {
-    setTeamBuilderOpen(!teamBuilderOpen);
-  }
-
   if (DEBUG_ALWAYS_SHOW_SPLASH || !appReady) {
     return <AppSplash />;
   }
@@ -65,11 +60,9 @@ const AppContent = () => {
     <>
       <StatusBar translucent={false} backgroundColor={BG_ROOT} />
       <SafeAreaView edges={["top", "left", "right", "bottom"]} style={[styles.container]}>
-        {teamBuilderOpen ? (
-          <TeamBuilder switchViews={switchViews}></TeamBuilder>
-        ) : (
-          <Typing switchViews={switchViews}></Typing>
-        )}
+        <NavigationContainer>
+          <RootTabs />
+        </NavigationContainer>
       </SafeAreaView>
     </>
   );

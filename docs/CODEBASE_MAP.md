@@ -93,7 +93,7 @@ pocket-type-chart/
 
 **Entry point:** `index.ts` → `App.tsx`
 
-`App.tsx` does three things at startup: loads Inter fonts via `expo-font`, holds the splash screen until fonts resolve, then renders `<Provider store={store}><SafeAreaProvider>`. It owns a single `teamBuilderOpen: boolean` state that determines which screen renders. Font loading is the only splash-screen gate — a silent failure means the splash never hides.
+`App.tsx` does three things at startup: loads Inter fonts via `expo-font`, holds the splash screen until fonts resolve, then renders `<Provider store={store}><SafeAreaProvider>`. It renders a `NavigationContainer` wrapping `RootTabs` (`navigation/RootTabs.tsx`), a bottom tab navigator (`@react-navigation/bottom-tabs`) with three screens — `Typing`, `TeamBuilder`, `PokemonSearch` — that determines which screen is active. Font loading is the only splash-screen gate — a silent failure means the splash never hides.
 
 **Known issues in `App.tsx`:**
 - `appContainer` style is defined but never applied.
@@ -247,7 +247,7 @@ OverviewRowData[]  →  WeaknessesContainer (Weakness rows only)
 
 | File | Purpose |
 |------|---------|
-| `NavBar.tsx` | Two-tab bottom nav: "Type Chart" / "Team Builder". Active tab is non-pressable. |
+| `NavBar.tsx` | Three-tab bottom nav (native): "Type Chart" / "Team Builder" / "Pokemon Search", driven by `navigation/tabs.ts` + React Navigation hooks. Active tab is non-pressable. |
 | `TopBar.tsx` | App header with conditional "CLEAR SELECTED" button. References `"Raleway-Thin"` (not loaded). |
 | `Error.tsx` | Full-screen error state with retry button. Component name shadows global `Error`. |
 | `Loading.tsx` | Centered activity spinner. |
@@ -345,7 +345,7 @@ sequenceDiagram
 - **ESLint:** Expo recommended + `simple-import-sort` + `unused-imports` + strict hooks rules. Arrow-function component style enforced.
 - **Components:** Named arrow-function exports (`export const X = () => {}`), except `DefaultButton` which is a default export.
 - **Services:** Factory function pattern returning a methods object — `fooService(args)` → `{ calculate(), ... }`.
-- **No navigation library:** Screen switching is a boolean in `App.tsx`. `NavBar` receives `switchViews` callback from root.
+- **Navigation library:** `@react-navigation/native` + `@react-navigation/bottom-tabs`. `RootTabs` (`navigation/RootTabs.tsx`) hides the default tab bar (`tabBar={() => null}`); `NavBar`/`TopBar` render the tab UI themselves and drive it via `useNavigation`/`useNavigationState`, sourced from the shared `navigation/tabs.ts` list.
 - **No path aliases:** All imports use relative paths.
 - **Constants barrel:** `constants/index.ts` re-exports most constants; `constants/icons.ts` is the exception and must be imported directly.
 
@@ -389,10 +389,11 @@ sequenceDiagram
 **To add a new member icon:**
 1. Add an entry to the `MEMBER_ICONS` array in `constants/icons.ts`
 
-**To add a new screen:**
+**To add a new screen/tab:**
 1. Create the screen component in `screens/`
-2. Add a toggle state in `App.tsx`
-3. Add a tab to `shared/components/NavBar.tsx`
+2. Add the route to `RootTabParamList` in `navigation/types.ts`
+3. Register a `Tab.Screen` for it in `navigation/RootTabs.tsx`
+4. Add an entry (name, icon, labels) to `navigation/tabs.ts` — `NavBar`/`TopBar` pick it up automatically
 
 **To modify the base API URL:**
 1. Edit `constants/http.ts` — uncomment the appropriate `BASE_URL` variant (LAN or Azure)

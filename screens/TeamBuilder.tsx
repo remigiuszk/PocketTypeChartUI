@@ -10,11 +10,7 @@ import { IS_WEB } from "../shared/layout/platform";
 import { TeamBuilderHeader } from "../shared/typohraphy/TeamBuilderHeader";
 import { Card } from "../shared/ui/Card";
 
-type Props = {
-  switchViews: () => void;
-};
-
-export const TeamBuilder = ({ switchViews }: Props) => {
+export const TeamBuilder = () => {
   const [analysisOn, setAnalysisOn] = useState<boolean>(false);
   const [currentTeam, setCurrentTeam] = useState<TeamMemberModel[]>([]);
   const [memberCount, setMemberCount] = useState<number>(0);
@@ -30,7 +26,7 @@ export const TeamBuilder = ({ switchViews }: Props) => {
   }
 
   return (
-    <Screen teamBuilderOpen={true} switchViews={switchViews}>
+    <Screen>
       {analysisOn ? (
         <TeamAnalysis onChangeTeam={onChangeTeam} currentTeam={currentTeam}></TeamAnalysis>
       ) : (

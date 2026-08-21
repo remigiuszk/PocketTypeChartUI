@@ -18,13 +18,16 @@ There is no explicit lint command in package.json — ESLint is configured via `
 
 ## Architecture
 
-**What the app does:** A Pokemon type chart and team-builder for Expo/React Native. Two main views:
+**What the app does:** A Pokemon type chart and team-builder for Expo/React Native. Three tabs:
 1. **Typing screen** — select 1–2 Pokemon types, view offensive/defensive matchups.
 2. **TeamBuilder screen** — build a team of up to 6 Pokemon, name members, assign types, then view team coverage analysis.
+3. **PokemonSearch screen** — search by Pokemon (placeholder, layout not yet implemented).
 
 ### Navigation
 
-No React Navigation library. `App.tsx` holds a `teamBuilderOpen` boolean and renders either `Typing.tsx` or `TeamBuilder.tsx`. The `NavBar` component toggles between them.
+Uses `@react-navigation/native` + `@react-navigation/bottom-tabs`. `App.tsx` wraps `RootTabs` (`navigation/RootTabs.tsx`) in a `NavigationContainer`. `RootTabs` is a bottom tab navigator with three screens — `Typing`, `TeamBuilder`, `PokemonSearch` — and its default tab bar disabled (`tabBar={() => null}`), since tabs are rendered by the app's own `TopBar`/`NavBar` components instead. Because the tab navigator keeps unfocused screens mounted, each screen's state now survives switching tabs.
+
+Tab metadata (route name, icon, label) lives in `navigation/tabs.ts` as the single source `TopBar` and `NavBar` both render from; route param types are in `navigation/types.ts`. `TopBar`/`NavBar` read the active tab and navigate via `useNavigation`/`useNavigationState` — they take no props.
 
 ### State management
 
