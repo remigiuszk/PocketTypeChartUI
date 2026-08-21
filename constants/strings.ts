@@ -119,3 +119,12 @@ export const MORE_DETAILS_HINT_NO_EFF: string =
 export const APP_AD_TAGLINE: string = "Prefer it on your phone? Get the native app.";
 export const APP_STORE_URL: string = "#"; // TODO: App Store listing URL
 export const PLAY_STORE_URL: string = "#"; // TODO: Google Play listing URL
+
+export const POKEMON_SEARCH_TITLE: string = "Search by Pokemon coming soon...";
+export const POKEMON_SEARCH_BODY: string =
+  "This tab is still in development. We're working on letting you search and browse Pokemon directly — check back soon!";
+export const POKEMON_SEARCH_DISCORD_PROMPT: string =
+  "For updates, questions, or feedback, join our Discord:";
+export const DISCORD_URL: string = "#"; // TODO: Discord invite link
+export const BUY_ME_A_COFFEE_PROMPT: string = "Support development:";
+export const BUY_ME_A_COFFEE_URL: string = "https://buymeacoffee.com/remonedev";
