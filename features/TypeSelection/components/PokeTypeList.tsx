@@ -1,7 +1,7 @@
 import { SerializedError } from "@reduxjs/toolkit";
 import { FetchBaseQueryError } from "@reduxjs/toolkit/query";
 import { useState } from "react";
-import { Dimensions, FlatList, StyleSheet, View } from "react-native";
+import { Dimensions, StyleSheet, View } from "react-native";
 
 import { Error } from "../../../shared/components/Error";
 import { Loading } from "../../../shared/components/Loading";
@@ -20,6 +20,15 @@ type PokeTypeListProps = {
 };
 
 const WEB_TARGET_TILE_WIDTH = 150;
+const NATIVE_COLUMNS = 3;
+
+const chunk = <T,>(items: T[], size: number): T[][] => {
+  const rows: T[][] = [];
+  for (let i = 0; i < items.length; i += size) {
+    rows.push(items.slice(i, i + size));
+  }
+  return rows;
+};
 
 const balancedColumns = (count: number, maxCols: number): number => {
   const cap = Math.max(2, maxCols);
@@ -95,14 +104,21 @@ export const PokeTypeList = ({
         {webGrid}
       </View>
     ) : (
-      <FlatList
-        style={styles.container}
-        data={types}
-        keyExtractor={(item) => String(item.id)}
-        renderItem={({ item }) => renderTile(item)}
-        numColumns={3}
-        columnWrapperStyle={styles.column}
-      />
+      // A plain chunked grid rather than FlatList: the list is small and
+      // bounded (one screen of Pokemon types), so virtualization buys nothing,
+      // and this screen already nests inside a ScrollView (ContentScroll) —
+      // a same-orientation VirtualizedList in there breaks windowing.
+      <View style={styles.container}>
+        {chunk(types, NATIVE_COLUMNS).map((row, index) => (
+          <View key={index} style={styles.column}>
+            {row.map((item) => (
+              <View key={String(item.id)} style={styles.nativeTile}>
+                {renderTile(item)}
+              </View>
+            ))}
+          </View>
+        ))}
+      </View>
     );
 
   return <View style={styles.wrapper}>{content}</View>;
@@ -112,8 +128,10 @@ const styles = StyleSheet.create({
   wrapper: { borderRadius: 12 },
   container: {},
   column: {
+    flexDirection: "row",
     justifyContent: "center",
   },
+  nativeTile: { flex: 1 },
   // Full-width measuring box that centers the (narrower) balanced grid.
   webMeasure: { width: "100%", alignItems: "center" },
   webGrid: {

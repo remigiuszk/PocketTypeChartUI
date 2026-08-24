@@ -27,7 +27,6 @@ export const Screen = ({ children }: Props) => {
 
   return (
     <View style={styles.container}>
-      <TopBar />
       <View style={styles.flex}>{children}</View>
       <NavBar />
     </View>

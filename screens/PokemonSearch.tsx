@@ -40,7 +40,7 @@ export const PokemonSearch = () => {
           <Subtitle style={styles.header}>{POKEMON_SEARCH_TITLE}</Subtitle>
           <Image
             style={styles.image}
-            source={require("../assets/img/construction.jpg")}
+            source={require("../assets/img/construction.png")}
           />
           <Subtitle style={styles.body}>{POKEMON_SEARCH_BODY}</Subtitle>
 

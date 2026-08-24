@@ -30,7 +30,9 @@
       "package": "com.remonedev.pockettypechart"
     },
     "web": {
-      "favicon": "./assets/favicon.png"
+      "favicon": "./assets/favicon.png",
+      "description": "Instant Pokémon type matchups and a 6-member team builder — spot weaknesses, coverage gaps, and safe switches before you battle.",
+      "themeColor": "#0d1012"
     },
     "androidNavigationBar": {
       "backgroundColor": "#000000",
