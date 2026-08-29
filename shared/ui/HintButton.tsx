@@ -19,10 +19,12 @@ import {
   BG_BUTTON,
   BG_CARD,
   BG_INTERNAL,
+  BG_STRENGTHS,
   BORDER_DEFAULT,
   BORDER_INTERNAL,
   TEXT_300,
   TEXT_MUTED,
+  TEXT_STRENGTHS,
 } from "../../constants";
 import { IS_WEB } from "../layout/platform";
 
@@ -41,6 +43,7 @@ type Props = {
   accentColor: string;
   icon: React.ReactNode;
   suggestedTypes?: SpriteItem[];
+  bestSuggestedTypeIds?: number[];
   breakdown?: BreakdownSection;
 };
 
@@ -52,6 +55,7 @@ export const HintButton = ({
   accentColor,
   icon,
   suggestedTypes,
+  bestSuggestedTypeIds,
   breakdown,
 }: Props) => {
   const [visible, setVisible] = useState(false);
@@ -112,16 +116,23 @@ export const HintButton = ({
               {hasSuggestedTypes && (
                 <View style={styles.section}>
                   <Text style={styles.sectionLabel}>Consider adding</Text>
-                  <View style={styles.spriteList}>
-                    {suggestedTypes!.map((t) => (
-                      <View key={t.id} style={styles.spriteWrap}>
-                        <Image
-                          style={styles.sprite}
-                          source={{ uri: t.sprite }}
-                          resizeMode="contain"
-                        />
-                      </View>
-                    ))}
+                  <View style={[styles.spriteList, styles.spriteListBest]}>
+                    {suggestedTypes!.map((t) => {
+                      const isBest = bestSuggestedTypeIds?.includes(t.id);
+                      return (
+                        <View key={t.id} style={styles.spriteWrapOuter}>
+                          {isBest && <View style={styles.bestFrame} />}
+                          {isBest && <Text style={styles.bestLabel}>Best coverage</Text>}
+                          <View style={styles.spriteWrap}>
+                            <Image
+                              style={styles.sprite}
+                              source={{ uri: t.sprite }}
+                              resizeMode="contain"
+                            />
+                          </View>
+                        </View>
+                      );
+                    })}
                   </View>
                 </View>
               )}
@@ -257,9 +268,38 @@ const styles = StyleSheet.create({
     flexWrap: "wrap",
     gap: 5,
   },
+  spriteListBest: {
+    paddingTop: 14,
+  },
+  spriteWrapOuter: {
+    position: "relative",
+  },
+  bestFrame: {
+    position: "absolute",
+    top: -3,
+    left: -3,
+    right: -3,
+    bottom: -3,
+    borderWidth: 1.5,
+    borderColor: TEXT_STRENGTHS,
+    borderRadius: 6,
+    backgroundColor: BG_STRENGTHS,
+  },
+  bestLabel: {
+    position: "absolute",
+    top: -13,
+    left: 0,
+    right: 0,
+    textAlign: "center",
+    fontSize: 9,
+    fontFamily: "Inter_600SemiBold",
+    color: TEXT_STRENGTHS,
+    textTransform: "uppercase",
+    letterSpacing: 0.3,
+  },
   spriteWrap: {
+    width: 22 * (200 / 44),
     height: 22,
-    aspectRatio: 200 / 44,
     borderRadius: 4,
     overflow: "hidden",
   },

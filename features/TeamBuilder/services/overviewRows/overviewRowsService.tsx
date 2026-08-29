@@ -360,7 +360,27 @@ export const overviewRowsService = (
             .map((r) => r.attackingTypeId),
         ),
       );
-      const suggestedTypes = allTypes.filter((t) => suggestedTypeIds.has(t.id));
+
+      const scoredSuggestions = Array.from(suggestedTypeIds).map((typeId) => {
+        const coverageScore = group.reduce((product, s) => {
+          const multiplier =
+            allRelations.find(
+              (r) => r.attackingTypeId === typeId && r.defendingTypeId === s.defendingTypeId,
+            )?.multiplier ?? 1;
+          return product * multiplier;
+        }, 1);
+        return { type: allTypes.find((t) => t.id === typeId)!, coverageScore };
+      });
+      scoredSuggestions.sort((a, b) => b.coverageScore - a.coverageScore);
+
+      const suggestedTypes = scoredSuggestions.map((s) => s.type);
+      const topScore = scoredSuggestions[0]?.coverageScore;
+      const allTied = scoredSuggestions.every((s) => s.coverageScore === topScore);
+      const bestSuggestedTypeIds = allTied
+        ? []
+        : scoredSuggestions
+            .filter((s) => s.coverageScore === topScore)
+            .map((s) => s.type.id);
 
       const allResists = [
         ...stats.relations.offensiveRelations.notVeryEffective,
@@ -397,6 +417,7 @@ export const overviewRowsService = (
         .setLeadType(leadType)
         .setAffectedMembers(members.filter((m) => affectedMemberIds.has(m.id)))
         .setSuggestedTypes(suggestedTypes, members)
+        .setBestSuggestedTypeIds(bestSuggestedTypeIds)
         .setMemberResistanceBreakdown(memberBreakdowns)
         .build();
 

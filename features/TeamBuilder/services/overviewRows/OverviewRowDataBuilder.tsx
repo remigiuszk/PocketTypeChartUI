@@ -63,6 +63,11 @@ export class OverviewRowDataBuilder {
     return this;
   }
 
+  setBestSuggestedTypeIds(ids: number[]) {
+    this.data.bestSuggestedTypeIds = ids;
+    return this;
+  }
+
   setCollapsible(value: boolean) {
     this.data.collapsible = value;
     return this;

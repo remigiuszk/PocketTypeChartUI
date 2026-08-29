@@ -5,6 +5,7 @@ import { Image, Pressable, StyleSheet, Text, View, ViewStyle } from "react-nativ
 import {
   ACCENT,
   BG_INTERNAL,
+  BG_STRENGTHS,
   BORDER_DEFAULT,
   TEXT_MUTED,
   TEXT_STRENGTHS,
@@ -32,27 +33,26 @@ function toBreakdownItems(
 ): MemberBreakdownItem[] | undefined {
   if (!breakdown?.length) return undefined;
   return breakdown.flatMap(({ member, resistedTypes }) => {
-    const groupsByMultiplier = new Map<number, typeof resistedTypes>();
+    const groups = new Map<string, typeof resistedTypes>();
     for (const resisted of resistedTypes) {
-      const existing = groupsByMultiplier.get(resisted.multiplier) ?? [];
-      groupsByMultiplier.set(resisted.multiplier, [...existing, resisted]);
+      const key = `${resisted.multiplier}-${resisted.defendingType.id}`;
+      const existing = groups.get(key) ?? [];
+      groups.set(key, [...existing, resisted]);
     }
 
-    return Array.from(groupsByMultiplier.entries())
-      .sort(([a], [b]) => a - b)
-      .map(([multiplier, types]) => {
-        const defendingTypes = types
-          .map((r) => r.defendingType)
-          .filter((t, i, arr) => arr.findIndex((x) => x.id === t.id) === i);
+    return Array.from(groups.values())
+      .sort((a, b) => a[0].multiplier - b[0].multiplier)
+      .map((types) => {
+        const { multiplier, defendingType } = types[0];
         return {
-          id: `${member.id}-${multiplier}`,
+          id: `${member.id}-${multiplier}-${defendingType.id}`,
           name: member.name,
           types: member.types,
           iconId: member.iconId,
           iconColor: member.iconColor,
           resistedTypeIds: types.map((r) => r.type.id),
           multiplier,
-          defendingTypes,
+          defendingTypes: [defendingType],
         };
       });
   });
@@ -135,6 +135,7 @@ export const OverviewRow = ({ style, rowData }: Props) => {
               accentColor={accentColor}
               icon={hintIcon}
               suggestedTypes={rowData.suggestedTypes}
+              bestSuggestedTypeIds={rowData.bestSuggestedTypeIds}
               breakdown={breakdownSection}
             />
           </View>
@@ -219,12 +220,19 @@ export const OverviewRow = ({ style, rowData }: Props) => {
             {(rowData.suggestedTypes?.length ?? 0) > 0 && (
               <View>
                 <Text style={styles.expandedLabel}>Consider adding:</Text>
-                <View style={styles.spriteRow}>
-                  {rowData.suggestedTypes!.map((type) => (
-                    <View key={type.id} style={styles.typeListBadge}>
-                      <Image style={styles.typeImage} source={{ uri: type.sprite }} />
-                    </View>
-                  ))}
+                <View style={[styles.spriteRow, styles.suggestedTypesRow]}>
+                  {rowData.suggestedTypes!.map((type) => {
+                    const isBest = rowData.bestSuggestedTypeIds?.includes(type.id);
+                    return (
+                      <View key={type.id} style={styles.suggestedTypeWrap}>
+                        {isBest && <View style={styles.bestFrame} />}
+                        {isBest && <Text style={styles.bestLabel}>Best coverage</Text>}
+                        <View style={styles.typeListBadge}>
+                          <Image style={styles.typeImage} source={{ uri: type.sprite }} />
+                        </View>
+                      </View>
+                    );
+                  })}
                 </View>
               </View>
             )}
@@ -288,8 +296,8 @@ const styles = StyleSheet.create({
     gap: 4,
   },
   typeListBadge: {
+    width: 18 * (200 / 44),
     height: 18,
-    aspectRatio: 200 / 44,
     borderRadius: 5,
     overflow: "hidden",
   },
@@ -347,6 +355,36 @@ const styles = StyleSheet.create({
   spriteRow: {
     flexDirection: "row",
     flexWrap: "wrap",
+    alignItems: "flex-start",
     gap: 4,
+  },
+  suggestedTypesRow: {
+    paddingTop: 14,
+  },
+  suggestedTypeWrap: {
+    position: "relative",
+  },
+  bestFrame: {
+    position: "absolute",
+    top: -3,
+    left: -3,
+    right: -3,
+    bottom: -3,
+    borderWidth: 1.5,
+    borderColor: TEXT_STRENGTHS,
+    borderRadius: 7,
+    backgroundColor: BG_STRENGTHS,
+  },
+  bestLabel: {
+    position: "absolute",
+    top: -13,
+    left: 0,
+    right: 0,
+    textAlign: "center",
+    fontSize: 9,
+    fontFamily: "Inter_600SemiBold",
+    color: TEXT_STRENGTHS,
+    textTransform: "uppercase",
+    letterSpacing: 0.3,
   },
 });

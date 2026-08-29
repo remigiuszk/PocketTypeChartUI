@@ -24,6 +24,7 @@ export type OverviewRowData = {
   typeList?: PokeTypeModel[];
   affectedMembers?: TeamMemberModel[];
   suggestedTypes?: PokeTypeModel[];
+  bestSuggestedTypeIds?: number[];
   collapsible?: boolean;
   collapsibleLabel?: string;
   memberResistanceBreakdown?: MemberResistanceBreakdown[];
