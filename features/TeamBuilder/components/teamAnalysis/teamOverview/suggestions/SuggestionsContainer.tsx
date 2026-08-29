@@ -56,9 +56,9 @@ const styles = StyleSheet.create({
   },
   cardWeb: { flexGrow: 0, flexShrink: 0, flexBasis: "auto" },
   separator: {
-    height: 1,
-    backgroundColor: BORDER_SUGGESTIONS,
-    marginVertical: 6,
+    height: 2,
+    backgroundColor: `${TEXT_SUGGESTIONS}40`,
+    marginVertical: 14,
     marginHorizontal: 8,
   },
   headerContainer: {
@@ -78,7 +78,7 @@ const styles = StyleSheet.create({
   },
   header: {
     color: TEXT_SUGGESTIONS,
-    fontSize: 16,
+    fontSize: 20,
     fontWeight: 800,
   },
   content: { margin: 6 },

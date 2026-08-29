@@ -58,9 +58,9 @@ const styles = StyleSheet.create({
   // collapses the card. Size to content instead.
   cardWeb: { flexGrow: 0, flexShrink: 0, flexBasis: "auto" },
   separator: {
-    height: 1,
-    backgroundColor: BORDER_WEAKNESSES,
-    marginVertical: 6,
+    height: 2,
+    backgroundColor: `${TEXT_WEAKNESSES_CRITICAL}40`,
+    marginVertical: 14,
     marginHorizontal: 8,
   },
   headerContainer: {
@@ -80,7 +80,7 @@ const styles = StyleSheet.create({
   },
   header: {
     color: TEXT_WEAKNESSES_CRITICAL,
-    fontSize: 16,
+    fontSize: 20,
     fontWeight: 800,
   },
   content: { margin: 6 },

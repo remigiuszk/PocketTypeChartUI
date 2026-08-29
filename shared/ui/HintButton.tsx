@@ -1,7 +1,8 @@
 import { FontAwesome5 } from "@expo/vector-icons";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { ReactNode } from "react";
 import {
+  Animated,
   Dimensions,
   Image,
   Modal,
@@ -26,7 +27,7 @@ import {
   TEXT_MUTED,
   TEXT_STRENGTHS,
 } from "../../constants";
-import { IS_WEB } from "../layout/platform";
+import { IS_WEB, typeImageSize } from "../layout/platform";
 
 type SpriteItem = { id: number; sprite: string };
 
@@ -39,6 +40,8 @@ type Props = {
   style?: StyleProp<ViewStyle>;
   title: string;
   leadType?: SpriteItem[];
+  typeList?: SpriteItem[];
+  typeListLabel?: string;
   hintText: string;
   accentColor: string;
   icon: React.ReactNode;
@@ -51,6 +54,8 @@ export const HintButton = ({
   style,
   title,
   leadType,
+  typeList,
+  typeListLabel,
   hintText,
   accentColor,
   icon,
@@ -59,6 +64,7 @@ export const HintButton = ({
   breakdown,
 }: Props) => {
   const [visible, setVisible] = useState(false);
+  const [scale] = useState(() => new Animated.Value(1));
 
   const screenWidth = Dimensions.get("window").width;
 
@@ -66,26 +72,42 @@ export const HintButton = ({
   const close = () => setVisible(false);
 
   const hasSuggestedTypes = !!suggestedTypes && suggestedTypes.length > 0;
+  const hasTypeList = !!typeList && typeList.length > 0;
+  const bestSuggested =
+    suggestedTypes?.filter((t) => bestSuggestedTypeIds?.includes(t.id)) ?? [];
+  const otherSuggested =
+    suggestedTypes?.filter((t) => !bestSuggestedTypeIds?.includes(t.id)) ?? [];
+  const hasBestSuggestion = bestSuggested.length > 0;
+
+  useEffect(() => {
+    const pulse = Animated.loop(
+      Animated.sequence([
+        Animated.timing(scale, { toValue: 1.15, duration: 600, useNativeDriver: true }),
+        Animated.timing(scale, { toValue: 1, duration: 600, useNativeDriver: true }),
+      ]),
+    );
+    pulse.start();
+    return () => pulse.stop();
+  }, [scale]);
 
   return (
     <>
-      <Pressable
-        onPress={open}
-        hitSlop={{ top: 10, bottom: 10, left: 10, right: 10 }}
-        style={({ pressed }) => [styles.triggerBtn, pressed && styles.pressed, style]}
-      >
-        <FontAwesome5 name="question" size={10} color={ACCENT} />
-      </Pressable>
+      <Animated.View style={{ transform: [{ scale }] }}>
+        <Pressable
+          onPress={open}
+          hitSlop={{ top: 10, bottom: 10, left: 10, right: 10 }}
+          style={({ pressed }) => [styles.triggerBtn, pressed && styles.pressed, style]}
+        >
+          <FontAwesome5 name="question" size={13} color={ACCENT} />
+        </Pressable>
+      </Animated.View>
 
       <Modal visible={visible} transparent animationType="none" onRequestClose={close}>
         <View style={styles.overlay}>
           <Pressable style={StyleSheet.absoluteFillObject} onPress={close} />
 
           <View
-            style={[
-              styles.card,
-              IS_WEB ? styles.cardWeb : { width: screenWidth - 48 },
-            ]}
+            style={[styles.card, IS_WEB ? styles.cardWeb : { width: screenWidth - 48 }]}
           >
             <View style={[styles.accentBar, { backgroundColor: accentColor }]} />
 
@@ -94,16 +116,19 @@ export const HintButton = ({
               {icon}
               <View style={styles.headerTitleRow}>
                 <Text style={styles.headerTitle}>{title}</Text>
-                {leadType &&
-                  leadType.map((type) => (
-                    <View key={type.id} style={styles.leadTypeContainer}>
-                      <Image
-                        style={styles.leadTypeImage}
-                        source={{ uri: type.sprite }}
-                        resizeMode="contain"
-                      />
-                    </View>
-                  ))}
+                {leadType && leadType.length > 0 && (
+                  <View style={styles.leadTypeGroup}>
+                    {leadType.map((type) => (
+                      <View key={type.id} style={styles.leadTypeContainer}>
+                        <Image
+                          style={styles.leadTypeImage}
+                          source={{ uri: type.sprite }}
+                          resizeMode="contain"
+                        />
+                      </View>
+                    ))}
+                  </View>
+                )}
               </View>
             </View>
 
@@ -113,26 +138,60 @@ export const HintButton = ({
                 <Text style={styles.hintText}>{hintText}</Text>
               </View>
 
+              {hasTypeList && (
+                <View style={styles.section}>
+                  <Text style={styles.sectionLabel}>{typeListLabel ?? "Types"}</Text>
+                  <View style={styles.spriteList}>
+                    {typeList!.map((t) => (
+                      <View key={t.id} style={styles.spriteWrap}>
+                        <Image
+                          style={styles.sprite}
+                          source={{ uri: t.sprite }}
+                          resizeMode="contain"
+                        />
+                      </View>
+                    ))}
+                  </View>
+                </View>
+              )}
+
               {hasSuggestedTypes && (
                 <View style={styles.section}>
                   <Text style={styles.sectionLabel}>Consider adding</Text>
-                  <View style={[styles.spriteList, styles.spriteListBest]}>
-                    {suggestedTypes!.map((t) => {
-                      const isBest = bestSuggestedTypeIds?.includes(t.id);
-                      return (
-                        <View key={t.id} style={styles.spriteWrapOuter}>
-                          {isBest && <View style={styles.bestFrame} />}
-                          {isBest && <Text style={styles.bestLabel}>Best coverage</Text>}
-                          <View style={styles.spriteWrap}>
-                            <Image
-                              style={styles.sprite}
-                              source={{ uri: t.sprite }}
-                              resizeMode="contain"
-                            />
-                          </View>
+                  <View
+                    style={[
+                      styles.spriteList,
+                      hasBestSuggestion && styles.spriteListBest,
+                    ]}
+                  >
+                    {bestSuggested.length > 0 && (
+                      <View style={styles.bestGroup}>
+                        <View style={styles.bestFrame} />
+                        <Text style={styles.bestLabel} numberOfLines={1}>
+                          Best coverage
+                        </Text>
+                        <View style={styles.bestGroupRow}>
+                          {bestSuggested.map((t) => (
+                            <View key={t.id} style={styles.spriteWrap}>
+                              <Image
+                                style={styles.sprite}
+                                source={{ uri: t.sprite }}
+                                resizeMode="contain"
+                              />
+                            </View>
+                          ))}
                         </View>
-                      );
-                    })}
+                      </View>
+                    )}
+                    {otherSuggested.map((t) => (
+                      <View key={t.id} style={styles.spriteWrap}>
+                        <Image
+                          style={styles.sprite}
+                          source={{ uri: t.sprite }}
+                          resizeMode="contain"
+                        />
+                      </View>
+                    ))}
                   </View>
                 </View>
               )}
@@ -166,9 +225,9 @@ export const HintButton = ({
 
 const styles = StyleSheet.create({
   triggerBtn: {
-    width: 22,
-    height: 22,
-    borderRadius: 11,
+    width: 28,
+    height: 28,
+    borderRadius: 14,
     backgroundColor: BG_INTERNAL,
     borderWidth: 1.5,
     borderColor: ACCENT,
@@ -222,15 +281,21 @@ const styles = StyleSheet.create({
   },
   headerTitle: {
     flexShrink: 1,
-    fontSize: 13,
+    fontSize: 15,
     fontFamily: "Inter_600SemiBold",
     color: TEXT_300,
-    lineHeight: 18,
+    lineHeight: 20,
+  },
+  leadTypeGroup: {
+    flexDirection: "row",
+    flexWrap: "nowrap",
+    alignItems: "center",
+    gap: 5,
   },
   leadTypeContainer: {
-    height: 18,
+    height: typeImageSize(21),
     aspectRatio: 200 / 44,
-    borderRadius: 4,
+    borderRadius: 5,
     overflow: "hidden",
   },
   leadTypeImage: {
@@ -250,7 +315,7 @@ const styles = StyleSheet.create({
     borderBottomWidth: 0,
   },
   sectionLabel: {
-    fontSize: 11,
+    fontSize: 13,
     fontFamily: "Inter_500Medium",
     color: TEXT_MUTED,
     textTransform: "uppercase",
@@ -258,10 +323,10 @@ const styles = StyleSheet.create({
     marginBottom: 8,
   },
   hintText: {
-    fontSize: 13,
+    fontSize: 15,
     fontFamily: "Inter_400Regular",
     color: TEXT_MUTED,
-    lineHeight: 21,
+    lineHeight: 23,
   },
   spriteList: {
     flexDirection: "row",
@@ -269,10 +334,15 @@ const styles = StyleSheet.create({
     gap: 5,
   },
   spriteListBest: {
-    paddingTop: 14,
+    paddingTop: 24,
   },
-  spriteWrapOuter: {
+  bestGroup: {
     position: "relative",
+  },
+  bestGroupRow: {
+    flexDirection: "row",
+    flexWrap: "nowrap",
+    gap: 6,
   },
   bestFrame: {
     position: "absolute",
@@ -287,20 +357,20 @@ const styles = StyleSheet.create({
   },
   bestLabel: {
     position: "absolute",
-    top: -13,
-    left: 0,
-    right: 0,
+    top: -21,
+    left: -30,
+    right: -30,
     textAlign: "center",
-    fontSize: 9,
+    fontSize: 13,
     fontFamily: "Inter_600SemiBold",
     color: TEXT_STRENGTHS,
     textTransform: "uppercase",
     letterSpacing: 0.3,
   },
   spriteWrap: {
-    width: 22 * (200 / 44),
-    height: 22,
-    borderRadius: 4,
+    width: typeImageSize(21) * (200 / 44),
+    height: typeImageSize(21),
+    borderRadius: 5,
     overflow: "hidden",
   },
   sprite: {
@@ -330,7 +400,7 @@ const styles = StyleSheet.create({
     opacity: 0.75,
   },
   closeBtnText: {
-    fontSize: 14,
+    fontSize: 15,
     fontFamily: "Inter_500Medium",
     color: TEXT_300,
   },

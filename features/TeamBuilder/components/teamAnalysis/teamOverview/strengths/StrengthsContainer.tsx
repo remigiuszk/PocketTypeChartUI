@@ -57,9 +57,9 @@ const styles = StyleSheet.create({
   // On web the page scrolls (no bounded height); flex:1 collapses the card.
   cardWeb: { flexGrow: 0, flexShrink: 0, flexBasis: "auto" },
   separator: {
-    height: 1,
-    backgroundColor: BORDER_STRENGTHS,
-    marginVertical: 6,
+    height: 2,
+    backgroundColor: `${TEXT_STRENGTHS}40`,
+    marginVertical: 14,
     marginHorizontal: 8,
   },
   headerContainer: {
@@ -79,7 +79,7 @@ const styles = StyleSheet.create({
   },
   header: {
     color: TEXT_STRENGTHS,
-    fontSize: 16,
+    fontSize: 20,
     fontWeight: 800,
   },
   content: { margin: 6 },

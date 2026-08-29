@@ -8,7 +8,7 @@ import {
   TEXT_WEAKNESSES_CRITICAL,
   TEXT_WEAKNESSES_WEAK,
 } from "../../../../../../constants";
-import { IS_WEB } from "../../../../../../shared/layout/platform";
+import { IS_WEB, typeImageSize } from "../../../../../../shared/layout/platform";
 import { PokeTypeModel } from "../../../../../TypeSelection/types";
 import { MemberPreview } from "../../membersPreview/MemberPreview";
 
@@ -162,13 +162,13 @@ const styles = StyleSheet.create({
     gap: 4,
   },
   typeContainer: {
-    height: 18,
+    height: typeImageSize(21),
     aspectRatio: 200 / 44,
-    borderRadius: 4,
+    borderRadius: 5,
     overflow: "hidden",
   },
   typeContainerCompact: {
-    height: 14,
+    height: typeImageSize(16),
   },
   typeImage: {
     width: "100%",

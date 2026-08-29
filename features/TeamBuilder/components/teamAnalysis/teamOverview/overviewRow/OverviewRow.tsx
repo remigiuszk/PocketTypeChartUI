@@ -13,6 +13,7 @@ import {
   TEXT_WEAKNESSES_CRITICAL,
   TEXT_WEAKNESSES_WEAK,
 } from "../../../../../../constants";
+import { typeImageSize } from "../../../../../../shared/layout/platform";
 import { BodyText } from "../../../../../../shared/typohraphy/BodyText";
 import { ValueText } from "../../../../../../shared/typohraphy/ValueText";
 import { BreakdownSection, HintButton } from "../../../../../../shared/ui/HintButton";
@@ -82,6 +83,16 @@ export const OverviewRow = ({ style, rowData }: Props) => {
     (rowData.suggestedTypes?.length ?? 0) > 0 ||
     (rowData.memberResistanceBreakdown?.length ?? 0) > 0;
 
+  const bestSuggested =
+    rowData.suggestedTypes?.filter((type) =>
+      rowData.bestSuggestedTypeIds?.includes(type.id),
+    ) ?? [];
+  const otherSuggested =
+    rowData.suggestedTypes?.filter(
+      (type) => !rowData.bestSuggestedTypeIds?.includes(type.id),
+    ) ?? [];
+  const hasBestSuggestion = bestSuggested.length > 0;
+
   const accentColor = useMemo(() => {
     if (rowData.type === OverviewRowType.Suggestion) return TEXT_SUGGESTIONS;
     if (rowData.type === OverviewRowType.Strength) return TEXT_STRENGTHS;
@@ -116,21 +127,25 @@ export const OverviewRow = ({ style, rowData }: Props) => {
       <View style={styles.content}>
         <View style={styles.headerContainer}>
           <View style={styles.headerContent}>
-            <ValueText style={{ textAlign: "left", fontSize: 14 }}>
+            <ValueText style={{ textAlign: "left", fontSize: 18, marginRight: 10 }}>
               {rowData.header}
             </ValueText>
-            {!isCollapsible &&
-              rowData.leadType &&
-              rowData.leadType.map((type) => (
-                <View key={type.id} style={styles.leadTypeContainer}>
-                  <Image style={styles.typeImage} source={{ uri: type.sprite }} />
-                </View>
-              ))}
+            {!isCollapsible && rowData.leadType && rowData.leadType.length > 0 && (
+              <View style={styles.leadTypeGroup}>
+                {rowData.leadType.map((type) => (
+                  <View key={type.id} style={styles.leadTypeContainer}>
+                    <Image style={styles.typeImage} source={{ uri: type.sprite }} />
+                  </View>
+                ))}
+              </View>
+            )}
           </View>
           <View style={styles.hintContainer}>
             <HintButton
               title={rowData.header}
-              leadType={rowData.leadType}
+              leadType={!isCollapsible ? rowData.leadType : undefined}
+              typeList={isCollapsible ? (rowData.leadType ?? rowData.typeList) : undefined}
+              typeListLabel={rowData.collapsibleLabel}
               hintText={rowData.hintText}
               accentColor={accentColor}
               icon={hintIcon}
@@ -154,7 +169,7 @@ export const OverviewRow = ({ style, rowData }: Props) => {
                 ]}
               />
             </View>
-            <ValueText style={{ color: accentColor }}>
+            <ValueText style={{ color: accentColor, fontSize: 16 }}>
               {rowData.progressBarActual!} / {rowData.progressBarTotal!}
             </ValueText>
           </View>
@@ -162,13 +177,17 @@ export const OverviewRow = ({ style, rowData }: Props) => {
 
         {isCollapsible ? (
           rowData.subText ? (
-            <BodyText style={{ textAlign: "left", marginRight: 15, color: TEXT_MUTED }}>
+            <BodyText
+              style={{ textAlign: "left", marginRight: 15, color: TEXT_MUTED, fontSize: 16 }}
+            >
               {rowData.subText}
             </BodyText>
           ) : null
         ) : rowData.typeList && rowData.typeList.length > 0 ? (
           <View style={styles.typeListRow}>
-            <BodyText style={{ color: TEXT_MUTED }}>{rowData.subText}</BodyText>
+            <BodyText style={{ color: TEXT_MUTED, fontSize: 16 }}>
+              {rowData.subText}
+            </BodyText>
             {rowData.typeList.map((type) => (
               <View key={type.id} style={styles.typeListBadge}>
                 <Image style={styles.typeImage} source={{ uri: type.sprite }} />
@@ -176,7 +195,9 @@ export const OverviewRow = ({ style, rowData }: Props) => {
             ))}
           </View>
         ) : (
-          <BodyText style={{ textAlign: "left", marginRight: 15, color: TEXT_MUTED }}>
+          <BodyText
+            style={{ textAlign: "left", marginRight: 15, color: TEXT_MUTED, fontSize: 16 }}
+          >
             {rowData.subText}
           </BodyText>
         )}
@@ -220,19 +241,35 @@ export const OverviewRow = ({ style, rowData }: Props) => {
             {(rowData.suggestedTypes?.length ?? 0) > 0 && (
               <View>
                 <Text style={styles.expandedLabel}>Consider adding:</Text>
-                <View style={[styles.spriteRow, styles.suggestedTypesRow]}>
-                  {rowData.suggestedTypes!.map((type) => {
-                    const isBest = rowData.bestSuggestedTypeIds?.includes(type.id);
-                    return (
-                      <View key={type.id} style={styles.suggestedTypeWrap}>
-                        {isBest && <View style={styles.bestFrame} />}
-                        {isBest && <Text style={styles.bestLabel}>Best coverage</Text>}
-                        <View style={styles.typeListBadge}>
-                          <Image style={styles.typeImage} source={{ uri: type.sprite }} />
-                        </View>
+                <View
+                  style={[
+                    styles.spriteRow,
+                    hasBestSuggestion && styles.suggestedTypesRow,
+                  ]}
+                >
+                  {bestSuggested.length > 0 && (
+                    <View style={styles.bestGroup}>
+                      <View style={styles.bestFrame} />
+                      <Text style={styles.bestLabel} numberOfLines={1}>
+                        Best coverage
+                      </Text>
+                      <View style={styles.bestGroupRow}>
+                        {bestSuggested.map((type) => (
+                          <View key={type.id} style={styles.suggestedTypeBadge}>
+                            <Image
+                              style={styles.typeImage}
+                              source={{ uri: type.sprite }}
+                            />
+                          </View>
+                        ))}
                       </View>
-                    );
-                  })}
+                    </View>
+                  )}
+                  {otherSuggested.map((type) => (
+                    <View key={type.id} style={styles.suggestedTypeBadge}>
+                      <Image style={styles.typeImage} source={{ uri: type.sprite }} />
+                    </View>
+                  ))}
                 </View>
               </View>
             )}
@@ -293,20 +330,32 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     flexWrap: "wrap",
     alignItems: "center",
-    gap: 4,
+    gap: 5,
   },
   typeListBadge: {
-    width: 18 * (200 / 44),
-    height: 18,
+    width: typeImageSize(21) * (200 / 44),
+    height: typeImageSize(21),
     borderRadius: 5,
     overflow: "hidden",
+  },
+  suggestedTypeBadge: {
+    width: typeImageSize(21) * (200 / 44),
+    height: typeImageSize(21),
+    borderRadius: 5,
+    overflow: "hidden",
+  },
+  leadTypeGroup: {
+    flexDirection: "row",
+    flexWrap: "nowrap",
+    alignItems: "center",
+    gap: 5,
   },
   leadTypeContainer: {
     flexDirection: "row",
     alignItems: "stretch",
     overflow: "hidden",
-    borderRadius: 4,
-    height: 18,
+    borderRadius: 5,
+    height: typeImageSize(21),
     shadowColor: "#000000",
     shadowOffset: {
       width: 0,
@@ -336,7 +385,7 @@ const styles = StyleSheet.create({
     opacity: 0.7,
   },
   toggleBtnText: {
-    fontSize: 12,
+    fontSize: 14,
     fontFamily: "Inter_500Medium",
     color: ACCENT,
   },
@@ -345,7 +394,7 @@ const styles = StyleSheet.create({
     gap: 10,
   },
   expandedLabel: {
-    fontSize: 11,
+    fontSize: 13,
     fontFamily: "Inter_500Medium",
     color: TEXT_MUTED,
     textTransform: "uppercase",
@@ -356,13 +405,19 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     flexWrap: "wrap",
     alignItems: "flex-start",
-    gap: 4,
+    gap: 5,
   },
   suggestedTypesRow: {
-    paddingTop: 14,
+    paddingTop: 24,
   },
-  suggestedTypeWrap: {
+  bestGroup: {
     position: "relative",
+  },
+  bestGroupRow: {
+    flexDirection: "row",
+    flexWrap: "nowrap",
+    alignItems: "flex-start",
+    gap: 5,
   },
   bestFrame: {
     position: "absolute",
@@ -377,11 +432,11 @@ const styles = StyleSheet.create({
   },
   bestLabel: {
     position: "absolute",
-    top: -13,
-    left: 0,
-    right: 0,
+    top: -21,
+    left: -30,
+    right: -30,
     textAlign: "center",
-    fontSize: 9,
+    fontSize: 13,
     fontFamily: "Inter_600SemiBold",
     color: TEXT_STRENGTHS,
     textTransform: "uppercase",
