@@ -26,6 +26,7 @@ import {
   TEXT_300,
   TEXT_MUTED,
   TEXT_STRENGTHS,
+  TEXT_SUGGESTIONS,
 } from "../../constants";
 import { IS_WEB, typeImageSize } from "../layout/platform";
 
@@ -35,6 +36,13 @@ export type BreakdownSection = {
   label: string;
   content: ReactNode;
 };
+
+const SectionLabel = ({ text, color }: { text: string; color: string }) => (
+  <View style={styles.labelRow}>
+    <View style={[styles.labelDot, { backgroundColor: color }]} />
+    <Text style={styles.labelText}>{text}</Text>
+  </View>
+);
 
 type Props = {
   style?: StyleProp<ViewStyle>;
@@ -140,7 +148,7 @@ export const HintButton = ({
 
               {hasTypeList && (
                 <View style={styles.section}>
-                  <Text style={styles.sectionLabel}>{typeListLabel ?? "Types"}</Text>
+                  <SectionLabel text={typeListLabel ?? "Types"} color={accentColor} />
                   <View style={styles.spriteList}>
                     {typeList!.map((t) => (
                       <View key={t.id} style={styles.spriteWrap}>
@@ -157,7 +165,7 @@ export const HintButton = ({
 
               {hasSuggestedTypes && (
                 <View style={styles.section}>
-                  <Text style={styles.sectionLabel}>Consider adding</Text>
+                  <SectionLabel text="Consider adding" color={TEXT_SUGGESTIONS} />
                   <View
                     style={[
                       styles.spriteList,
@@ -198,7 +206,7 @@ export const HintButton = ({
 
               {breakdown && (
                 <View style={[styles.section, styles.sectionLast]}>
-                  <Text style={styles.sectionLabel}>{breakdown.label}</Text>
+                  <SectionLabel text={breakdown.label} color={accentColor} />
                   {breakdown.content}
                 </View>
               )}
@@ -314,13 +322,23 @@ const styles = StyleSheet.create({
   sectionLast: {
     borderBottomWidth: 0,
   },
-  sectionLabel: {
-    fontSize: 13,
-    fontFamily: "Inter_500Medium",
-    color: TEXT_MUTED,
+  labelRow: {
+    flexDirection: "row",
+    alignItems: "center",
+    gap: 8,
+    marginBottom: 9,
+  },
+  labelDot: {
+    width: 5,
+    height: 5,
+    borderRadius: 2.5,
+  },
+  labelText: {
+    fontSize: 14,
+    fontFamily: "Inter_600SemiBold",
+    color: TEXT_300,
     textTransform: "uppercase",
-    letterSpacing: 0.7,
-    marginBottom: 8,
+    letterSpacing: 0.5,
   },
   hintText: {
     fontSize: 15,

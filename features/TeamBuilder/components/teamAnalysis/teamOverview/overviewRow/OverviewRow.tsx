@@ -4,9 +4,8 @@ import { Image, Pressable, StyleSheet, Text, View, ViewStyle } from "react-nativ
 
 import {
   ACCENT,
-  BG_INTERNAL,
   BG_STRENGTHS,
-  BORDER_DEFAULT,
+  TEXT_300,
   TEXT_MUTED,
   TEXT_STRENGTHS,
   TEXT_SUGGESTIONS,
@@ -58,6 +57,13 @@ function toBreakdownItems(
       });
   });
 }
+
+const SectionLabel = ({ text, color }: { text: string; color: string }) => (
+  <View style={styles.labelRow}>
+    <View style={[styles.labelDot, { backgroundColor: color }]} />
+    <Text style={styles.labelText}>{text}</Text>
+  </View>
+);
 
 type Props = {
   style?: ViewStyle | ViewStyle[];
@@ -205,11 +211,13 @@ export const OverviewRow = ({ style, rowData }: Props) => {
         {showToggleButton && (
           <Pressable
             onPress={() => setExpanded((e) => !e)}
+            hitSlop={{ top: 8, bottom: 8, left: 8, right: 8 }}
             style={({ pressed }) => [
               styles.toggleBtn,
               pressed && styles.toggleBtnPressed,
             ]}
           >
+            <Feather name={expanded ? "eye-off" : "eye"} size={16} color={ACCENT} />
             <Text style={styles.toggleBtnText}>
               {expanded ? "Hide potential fix" : "View potential fix"}
             </Text>
@@ -220,7 +228,7 @@ export const OverviewRow = ({ style, rowData }: Props) => {
           <View style={styles.expandedSection}>
             {isCollapsible && rowData.collapsibleLabel && (
               <View>
-                <Text style={styles.expandedLabel}>{rowData.collapsibleLabel}</Text>
+                <SectionLabel text={rowData.collapsibleLabel} color={accentColor} />
                 <View style={styles.spriteRow}>
                   {(rowData.leadType ?? rowData.typeList ?? []).map((type) => (
                     <View key={type.id} style={styles.typeListBadge}>
@@ -233,14 +241,14 @@ export const OverviewRow = ({ style, rowData }: Props) => {
 
             {breakdownItems && (
               <View>
-                <Text style={styles.expandedLabel}>Per member breakdown</Text>
+                <SectionLabel text="Per member breakdown" color={accentColor} />
                 <ResistanceBreakdownSection items={breakdownItems} />
               </View>
             )}
 
             {(rowData.suggestedTypes?.length ?? 0) > 0 && (
               <View>
-                <Text style={styles.expandedLabel}>Consider adding:</Text>
+                <SectionLabel text="Consider adding:" color={TEXT_SUGGESTIONS} />
                 <View
                   style={[
                     styles.spriteRow,
@@ -374,32 +382,43 @@ const styles = StyleSheet.create({
   toggleBtn: {
     marginTop: 8,
     alignSelf: "flex-start",
-    paddingVertical: 5,
-    paddingHorizontal: 10,
-    backgroundColor: BG_INTERNAL,
-    borderRadius: 6,
-    borderWidth: 1,
-    borderColor: BORDER_DEFAULT,
+    flexDirection: "row",
+    alignItems: "center",
+    gap: 7,
+    paddingVertical: 6,
   },
   toggleBtnPressed: {
     opacity: 0.7,
   },
   toggleBtnText: {
-    fontSize: 14,
-    fontFamily: "Inter_500Medium",
+    fontSize: 15,
+    fontFamily: "Inter_600SemiBold",
     color: ACCENT,
+    borderBottomWidth: 1.5,
+    borderBottomColor: "rgba(126, 184, 247, 0.45)",
+    paddingBottom: 2,
   },
   expandedSection: {
     marginTop: 10,
     gap: 10,
   },
-  expandedLabel: {
-    fontSize: 13,
-    fontFamily: "Inter_500Medium",
-    color: TEXT_MUTED,
+  labelRow: {
+    flexDirection: "row",
+    alignItems: "center",
+    gap: 8,
+    marginBottom: 9,
+  },
+  labelDot: {
+    width: 5,
+    height: 5,
+    borderRadius: 2.5,
+  },
+  labelText: {
+    fontSize: 14,
+    fontFamily: "Inter_600SemiBold",
+    color: TEXT_300,
     textTransform: "uppercase",
-    letterSpacing: 0.7,
-    marginBottom: 6,
+    letterSpacing: 0.5,
   },
   spriteRow: {
     flexDirection: "row",
