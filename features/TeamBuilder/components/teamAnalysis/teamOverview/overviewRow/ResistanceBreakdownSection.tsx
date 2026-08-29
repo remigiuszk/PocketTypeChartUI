@@ -1,4 +1,4 @@
-import { Image, ScrollView, StyleSheet, Text, useWindowDimensions, View } from "react-native";
+import { Image, StyleSheet, Text, useWindowDimensions, View } from "react-native";
 
 import {
   BG_CARD,
@@ -42,16 +42,9 @@ export const ResistanceBreakdownSection = ({ items }: Props) => {
         const pillColor = isCritical ? TEXT_WEAKNESSES_CRITICAL : TEXT_WEAKNESSES_WEAK;
         const pillBg = isCritical ? BG_WEAKNESSES : BG_WEAKNESS_WEAK;
         return (
-          <ScrollView
+          <View
             key={item.id}
-            horizontal
-            showsHorizontalScrollIndicator={false}
-            style={styles.rowScroll}
-            contentContainerStyle={[
-              styles.row,
-              IS_WEB && styles.rowWeb,
-              isCompact && styles.rowWebCompact,
-            ]}
+            style={[styles.row, IS_WEB && styles.rowWeb, isCompact && styles.rowWebCompact]}
           >
             <MemberPreview
               style={
@@ -98,7 +91,7 @@ export const ResistanceBreakdownSection = ({ items }: Props) => {
                 </View>
               ))}
             </View>
-          </ScrollView>
+          </View>
         );
       })}
     </View>
@@ -108,10 +101,6 @@ export const ResistanceBreakdownSection = ({ items }: Props) => {
 const styles = StyleSheet.create({
   list: {
     gap: IS_WEB ? 8 : 6,
-  },
-  rowScroll: {
-    flexGrow: 0,
-    width: "100%",
   },
   row: {
     flexDirection: "row",

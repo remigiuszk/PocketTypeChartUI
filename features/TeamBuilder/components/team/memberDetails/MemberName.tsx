@@ -28,8 +28,17 @@ export const MemberName = ({ style, memberName, hasError, onNameChange }: Props)
     setLocalName(memberName);
   }, [memberName]);
 
+  const handleChange = (text: string) => {
+    setLocalName(text);
+    onNameChange(text);
+  };
+
+  // Trims once the user is done editing, so a trailing space doesn't get
+  // stripped out from under them mid-keystroke.
   const commitChange = () => {
-    onNameChange(localName.trim());
+    const trimmed = localName.trim();
+    setLocalName(trimmed);
+    onNameChange(trimmed);
   };
 
   return (
@@ -41,7 +50,7 @@ export const MemberName = ({ style, memberName, hasError, onNameChange }: Props)
           value={localName}
           placeholder="Enter member name"
           placeholderTextColor="#4e4e62"
-          onChangeText={setLocalName}
+          onChangeText={handleChange}
           onBlur={commitChange}
           onEndEditing={commitChange}
         ></TextInput>

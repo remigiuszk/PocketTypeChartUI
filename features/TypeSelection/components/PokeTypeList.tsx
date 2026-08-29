@@ -108,16 +108,32 @@ export const PokeTypeList = ({
       // bounded (one screen of Pokemon types), so virtualization buys nothing,
       // and this screen already nests inside a ScrollView (ContentScroll) —
       // a same-orientation VirtualizedList in there breaks windowing.
-      <View style={styles.container}>
-        {chunk(types, NATIVE_COLUMNS).map((row, index) => (
-          <View key={index} style={styles.column}>
-            {row.map((item) => (
-              <View key={String(item.id)} style={styles.nativeTile}>
-                {renderTile(item)}
-              </View>
-            ))}
-          </View>
-        ))}
+      <View
+        style={styles.container}
+        onLayout={(e) => setAvailWidth(e.nativeEvent.layout.width)}
+      >
+        {(() => {
+          // flex:1 + aspectRatio on a row child is unreliable on Android's Yoga
+          // (same bug class as the Firefox issue noted above for web), leaving
+          // the grid narrower than its container and left-anchored instead of
+          // centered. Measuring the width and sizing tiles in pixels sidesteps it.
+          const tileWidth = Math.floor(availWidth / NATIVE_COLUMNS);
+          const innerWidth = tileWidth - TILE_MARGIN * 2;
+          const innerHeight = Math.round(innerWidth * (44 / 200));
+          const tileHeight = innerHeight + TILE_MARGIN * 2;
+          return chunk(types, NATIVE_COLUMNS).map((row, index) => (
+            <View key={index} style={styles.column}>
+              {row.map((item) => (
+                <View
+                  key={String(item.id)}
+                  style={{ width: tileWidth, height: tileHeight }}
+                >
+                  {renderTile(item)}
+                </View>
+              ))}
+            </View>
+          ));
+        })()}
       </View>
     );
 
@@ -131,7 +147,6 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     justifyContent: "center",
   },
-  nativeTile: { flex: 1 },
   // Full-width measuring box that centers the (narrower) balanced grid.
   webMeasure: { width: "100%", alignItems: "center" },
   webGrid: {

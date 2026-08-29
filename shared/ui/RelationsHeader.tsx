@@ -1,7 +1,7 @@
 import Feather from "@expo/vector-icons/Feather";
 import { StyleSheet, View } from "react-native";
 
-import { TEXT_300, WARNING } from "../../constants";
+import { FONTS, TEXT_500, WARNING } from "../../constants";
 import { Subtitle } from "../typohraphy/Subtitle";
 
 type Props = {
@@ -71,11 +71,12 @@ const styles = StyleSheet.create({
   },
   titleTextStyle: {
     fontSize: 16,
-    color: TEXT_300,
-    fontWeight: 200,
+    color: TEXT_500,
+    fontFamily: FONTS.regular,
   },
   subTitileTextStyle: {
     fontSize: 11,
     fontWeight: 600,
+    marginLeft: 1,
   },
 });

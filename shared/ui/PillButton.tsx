@@ -64,14 +64,19 @@ export const PillButton = ({
       ]}
     >
       <Feather name={icon} size={18} color={tint.content} />
-      <Subtitle style={{ fontSize: 14, color: tint.content }}>{label}</Subtitle>
+      <Subtitle
+        style={{ fontSize: 14, color: tint.content, flexShrink: 1 }}
+        numberOfLines={1}
+      >
+        {label}
+      </Subtitle>
     </Pressable>
   );
 };
 
 const styles = StyleSheet.create({
   pill: {
-    width: "40%",
+    flexShrink: 1,
     height: 46,
     flexDirection: "row",
     alignItems: "center",
@@ -79,5 +84,6 @@ const styles = StyleSheet.create({
     gap: 9,
     borderRadius: 999,
     borderWidth: 1.5,
+    paddingHorizontal: 18,
   },
 });

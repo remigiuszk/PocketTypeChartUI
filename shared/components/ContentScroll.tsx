@@ -10,7 +10,7 @@ export const ContentScroll = ({ children, style, ...rest }: ScrollViewProps) => 
     return <View style={style}>{children}</View>;
   }
   return (
-    <ScrollView style={style} {...rest}>
+    <ScrollView style={style} showsVerticalScrollIndicator={false} {...rest}>
       {children}
     </ScrollView>
   );

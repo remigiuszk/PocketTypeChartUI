@@ -2,6 +2,7 @@ import { Image, StyleProp, StyleSheet, Text, View, ViewStyle } from "react-nativ
 
 import { BG_BUTTON, BORDER_DEFAULT, TEXT_100 } from "../../../../../constants";
 import { MEMBER_ICONS } from "../../../../../constants/icons";
+import { IS_WEB } from "../../../../../shared/layout/platform";
 import { TwoTypesHeader } from "../../../../../shared/ui/TwoTypesHeader";
 import { TeamMemberModel } from "../../../types";
 
@@ -30,13 +31,18 @@ export const MemberPreview = ({
       style={[styles.container, inResistanceContext && styles.containerResistance, style]}
     >
       <IconComp name={icon.name} size={iconSize} color={member.iconColor} />
-      <View style={styles.nameTypeContainer}>
+      <View
+        style={[
+          styles.nameTypeContainer,
+          inResistanceContext && !IS_WEB && styles.nameTypeContainerResistance,
+        ]}
+      >
         <Text
           numberOfLines={1}
           ellipsizeMode="tail"
           adjustsFontSizeToFit
           minimumFontScale={0.6}
-          style={[styles.text, style]}
+          style={styles.text}
         >
           {member.name}
         </Text>
@@ -100,6 +106,18 @@ const styles = StyleSheet.create({
     flex: 1,
     gap: 2,
     minWidth: 0,
+  },
+  // On native, inside ResistanceBreakdownSection's row, there's no bounded
+  // "available space" to grow into — flex:1 there instead expands to fill
+  // nearly the whole screen width, stranding the multiplier pill and any
+  // later defending-type badges off past the visible edge. Size to content.
+  // (Web isn't affected: ResistanceBreakdownSection gives the card an explicit
+  // width there, and removing flex:1 on web instead breaks the name text —
+  // its ellipsis/overflow-hidden truncation collapses to zero width without a
+  // flex-resolved size to measure against, unlike native's Yoga.)
+  nameTypeContainerResistance: {
+    flex: 0,
+    flexShrink: 0,
   },
   text: {
     fontWeight: 600,

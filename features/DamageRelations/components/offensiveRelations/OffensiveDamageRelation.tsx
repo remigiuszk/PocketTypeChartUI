@@ -1,6 +1,7 @@
 import { Image, StyleSheet, View } from "react-native";
 
-import { ACCENT, BG_CARD } from "../../../../constants";
+import { ACCENT, BG_CARD, FONTS } from "../../../../constants";
+import { IS_ANDROID } from "../../../../shared/layout/platform";
 import { Subtitle } from "../../../../shared/typohraphy/Subtitle";
 import { OffensiveDamageRelationModel } from "../../types";
 
@@ -69,14 +70,21 @@ const styles = StyleSheet.create({
     width: 32,
   },
   multiplierText: {
-    fontWeight: 900,
+    // A raw numeric fontWeight over Subtitle's unregistered base font renders
+    // very differently per platform (iOS honors 900 as a true Black weight;
+    // Android's synthetic bold is more moderate), so use a real loaded family.
+    // Android still renders that family visibly thinner than iOS at the same
+    // size, so nudge it back up with an explicit weight on Android only.
+    fontFamily: FONTS.medium,
+    ...(IS_ANDROID && { fontWeight: "700" as const }),
     fontSize: 13,
     color: BG_CARD,
     paddingHorizontal: 1,
     letterSpacing: 0.1,
   },
   multiplierTextSmall: {
-    fontWeight: 900,
+    fontFamily: FONTS.medium,
+    ...(IS_ANDROID && { fontWeight: "700" as const }),
     fontSize: 11,
     color: BG_CARD,
     paddingHorizontal: 1,

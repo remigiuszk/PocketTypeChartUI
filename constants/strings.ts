@@ -6,7 +6,8 @@ export type TeamOverviewRowTextData = {
 
 export const OVERVIEW_STRINGS = {
   immunities: {
-    header: (count: number) => `Your team has ${count} immunities!`,
+    header: (count: number) =>
+      count === 1 ? "Your team has only 1 immunity!" : `Your team has ${count} immunities!`,
     lowSubText: "No immunity coverage on your team.",
     suggestionText: "Adding one more might make your team stronger.",
     highSubText: "Your team has great immunity coverage!",
