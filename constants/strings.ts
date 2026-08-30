@@ -126,6 +126,6 @@ export const POKEMON_SEARCH_BODY: string =
   "This tab is still in development. We're working on letting you search and browse Pokemon directly — check back soon!";
 export const POKEMON_SEARCH_DISCORD_PROMPT: string =
   "For updates, questions, or feedback, join our Discord:";
-export const DISCORD_URL: string = "#"; // TODO: Discord invite link
+export const DISCORD_URL: string = "https://discord.gg/vv79g9u9rM";
 export const BUY_ME_A_COFFEE_PROMPT: string = "Support development:";
 export const BUY_ME_A_COFFEE_URL: string = "https://buymeacoffee.com/remonedev";
